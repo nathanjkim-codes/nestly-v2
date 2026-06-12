@@ -1,5 +1,5 @@
 function Header() {
-  return <div>Nestly Header</div>;
+  return <div className="header">Nestly Header</div>;
 }
 
 export default Header;

@@ -4,10 +4,10 @@ import Dashboard from "./components/Dashboard.jsx";
 
 function App() {
   return (
-    <div>
+    <div className="app-shell">
       <Sidebar />
 
-      <main>
+      <main className="main-content">
         <Header />
         <Dashboard />
       </main>

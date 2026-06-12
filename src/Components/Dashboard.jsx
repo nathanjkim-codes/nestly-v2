@@ -1,5 +1,5 @@
 function Dashboard() {
-  return <div>Nestly Dashboard</div>;
+  return <div className="dashboard">Nestly Dashboard</div>;
 }
 
 export default Dashboard;
