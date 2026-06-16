@@ -1,17 +1,17 @@
-function ChildOverview(props) {
+function ChildOverview({ child }) {
   return (
     <div className="child-overview">
       <div className="child-overview-info">
-        <h2>{props.child.name}</h2>
+        <h2>{child.name}</h2>
         <p>
-          {props.child.age} • {props.child.gender}
+          {child.age} • {child.gender}
         </p>
-        <p>Born {props.child.birthDate}</p>
+        <p>Born {child.birthDate}</p>
       </div>
       <div className="ai-insight">
-        <h4>{props.child.insight.title}</h4>
-        <h3>{props.child.insight.message}</h3>
-        <p>{props.child.insight.description}</p>
+        <h4>{child.insight.title}</h4>
+        <h3>{child.insight.message}</h3>
+        <p>{child.insight.description}</p>
       </div>
     </div>
   );

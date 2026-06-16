@@ -1,7 +1,13 @@
-function StatsGrid() {
+function StatsGrid({ stats }) {
   return (
     <div className="stats-grid">
-      <div className="stat-card"></div>
+      {stats.map((stat) => (
+        <div className="stat-card">
+          <p>{stat.title}</p>
+          <h2>{stat.value}</h2>
+          <p>{stat.trend}</p>
+        </div>
+      ))}
     </div>
   );
 }
