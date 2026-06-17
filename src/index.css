@@ -109,3 +109,41 @@ body {
 .notification-button:hover {
   background-color: #111827;
 }
+
+.stats-grid {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 16px;
+  padding: 0;
+}
+
+.stat-card {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  border-radius: 14px;
+  border: 1px solid #1e293b;
+  background-color: #0b1020;
+  padding: 20px;
+  gap: 8px;
+}
+
+.stat-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #94a3b8;
+}
+
+.stat-value {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.stat-trend {
+  font-size: 13px;
+  font-weight: 500;
+  color: #60a5fa;
+}

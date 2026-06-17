@@ -15,21 +15,41 @@ function Dashboard() {
   };
 
   const stats = [
-    { title: "Growth", value: "35.2 in", trend: "↑ 0.6 in this month" },
+    {
+      id: "growth",
+      title: "Growth",
+      value: "35.2 in",
+      trend: "↑ 0.6 in this month",
+    },
 
-    { title: "Weight", value: "28.4 lbs", trend: "↑ 0.8 lbs this month" },
+    {
+      id: "weight",
+      title: "Weight",
+      value: "28.4 lbs",
+      trend: "↑ 0.8 lbs this month",
+    },
 
-    { title: "Sleep", value: "9h 20m", trend: "↑ 45m vs last week" },
+    {
+      id: "sleep",
+      title: "Sleep",
+      value: "9h 20m",
+      trend: "↑ 45m vs last week",
+    },
 
-    { title: "Feeding", value: "3 times", trend: "↓ 1 vs last week" },
+    {
+      id: "feeding",
+      title: "Feeding",
+      value: "3 times",
+      trend: "↓ 1 vs last week",
+    },
 
-    { title: "Mood", value: "Good", trend: "Mostly positive" },
+    { id: "mood", title: "Mood", value: "Good", trend: "Mostly positive" },
   ];
 
   return (
     <div className="dashboard">
       <ChildOverview child={selectedChild} />
-      <StatsGrid />
+      <StatsGrid stats={stats} />
     </div>
   );
 }

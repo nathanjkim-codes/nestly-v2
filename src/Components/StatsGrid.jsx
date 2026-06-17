@@ -1,10 +1,12 @@
 import StatCard from "./StatCard.jsx";
 
 function StatsGrid({ stats }) {
+  console.log(stats);
+
   return (
     <div className="stats-grid">
       {stats.map((stat) => (
-        <StatCard stat={stat} />
+        <StatCard key={stat.id} stat={stat} />
       ))}
     </div>
   );
