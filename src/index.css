@@ -10,6 +10,7 @@ body {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
+  background-color: #050a16;
 }
 
 .main-content {
@@ -31,6 +32,7 @@ body {
 .header {
   display: flex;
   flex-direction: row;
+  width: 100%;
   justify-content: space-between;
   align-items: center;
 }
@@ -45,12 +47,14 @@ body {
   margin: 0;
   font-size: 24px;
   line-height: 1.2;
+  color: #ffffff;
 }
 
 .header-subtitle {
   margin: 0;
   font-size: 14px;
   line-height: 1.4;
+  color: #94a3b8;
 }
 
 .header-actions {
@@ -110,18 +114,88 @@ body {
   background-color: #111827;
 }
 
+.child-overview {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 160px;
+  height: auto;
+  align-items: center;
+  border-radius: 14px;
+  border: 1px solid #000000;
+  background-color: #0b1020;
+  padding: 28px 32px;
+}
+
+.child-overview-info {
+  display: flex;
+  flex-direction: column;
+  border: none;
+  gap: 6px;
+}
+
+.child-name {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.child-age {
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.child-birthdate {
+  font-size: 16px;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
+.ai-insight {
+  display: flex;
+  flex-direction: column;
+  width: 320px;
+  min-height: 110px;
+  border-radius: 14px;
+  border: 1px solid #1e293b;
+  background-color: #111827;
+  padding: 16px 16px;
+  gap: 10px;
+}
+
+.insight-title {
+  font-size: 14px;
+  font-weight: 400;
+  color: #60a5fa;
+}
+
+.insight-message {
+  font-size: 16px;
+  font-weight: 400;
+  color: #ffffff;
+}
+
+.insight-description {
+  font-size: 16px;
+  font-weight: 400;
+  color: #94a3b8;
+}
+
 .stats-grid {
   display: flex;
   flex-direction: row;
   align-items: center;
+  width: 100%;
   gap: 16px;
   padding: 0;
 }
 
 .stat-card {
   display: flex;
-  flex: 1;
   flex-direction: column;
+  flex: 1;
   align-items: flex-start;
   border-radius: 14px;
   border: 1px solid #1e293b;
@@ -134,16 +208,19 @@ body {
   font-size: 14px;
   font-weight: 500;
   color: #94a3b8;
+  margin: 0;
 }
 
 .stat-value {
   font-size: 24px;
   font-weight: 700;
   color: #ffffff;
+  margin: 0;
 }
 
 .stat-trend {
   font-size: 13px;
   font-weight: 500;
   color: #60a5fa;
+  margin: 0;
 }
