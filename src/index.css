@@ -13,6 +13,12 @@ body {
   background-color: #050a16;
 }
 
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
 .main-content {
   display: flex;
   flex: 1;
@@ -123,7 +129,7 @@ body {
   height: auto;
   align-items: center;
   border-radius: 14px;
-  border: 1px solid #000000;
+  border: 1px solid #1e293b;
   background-color: #0b1020;
   padding: 28px 32px;
 }
@@ -131,7 +137,6 @@ body {
 .child-overview-info {
   display: flex;
   flex-direction: column;
-  border: none;
   gap: 6px;
 }
 
@@ -221,6 +226,131 @@ body {
 .stat-trend {
   font-size: 13px;
   font-weight: 500;
+  color: #60a5fa;
+  margin: 0;
+}
+
+.dashboard-charts {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  padding: 0;
+  gap: 16px;
+}
+
+.growth-chart-card {
+  display: flex;
+  flex-direction: column;
+  flex: 2;
+  min-height: 360px;
+  background-color: #0b1020;
+  border-radius: 14px;
+  border: 1px solid #1e293b;
+  padding: 20px;
+  gap: 16px;
+}
+
+.chart-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px 10px;
+  align-items: center;
+}
+
+.chart-title {
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  margin: 0;
+}
+
+.chart-view-button {
+  background: none;
+  border: none;
+  padding: 0;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #60a5fa;
+
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.chart-view-button:hover {
+  color: #93c5fd;
+}
+
+.chart-legend {
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+}
+
+.legend-height {
+  font-size: 13px;
+  font-weight: 500;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.legend-weight {
+  font-size: 13px;
+  font-weight: 500;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.line-chart-area {
+  width: 100%;
+  height: 145px;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  background-color: #111827;
+}
+
+.growth-summary-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+}
+
+.summary-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  background-color: #0f172a;
+  padding: 12px 12px;
+  gap: 2px;
+}
+
+.summary-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #94a3b8;
+  margin: 0;
+}
+
+.summary-value {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.summary-percentile {
+  font-size: 11px;
+  font-weight: 400;
+  color: #60a5fa;
+  margin: 0;
+}
+
+.summary-trend {
+  font-size: 11px;
+  font-weight: 400;
   color: #60a5fa;
   margin: 0;
 }

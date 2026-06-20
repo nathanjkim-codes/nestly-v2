@@ -1,5 +1,6 @@
 import ChildOverview from "./ChildOverview.jsx";
 import StatsGrid from "./StatsGrid.jsx";
+import DashboardCharts from "./DashboardCharts.jsx";
 
 function Dashboard() {
   const selectedChild = {
@@ -50,6 +51,7 @@ function Dashboard() {
     <div className="dashboard">
       <ChildOverview child={selectedChild} />
       <StatsGrid stats={stats} />
+      <DashboardCharts />
     </div>
   );
 }
