@@ -1,6 +1,6 @@
 function GrowthChartCard() {
   return (
-    <div className="growth-chart-card">
+    <div className="chart-card growth-chart-card">
       <div className="chart-header">
         <h3 className="chart-title">Growth over time</h3>
         <button className="chart-view-button">View all</button>
@@ -9,8 +9,8 @@ function GrowthChartCard() {
         <p className="legend-height">◆ Height (in)</p>
         <p className="legend-weight">● Weight (lbs)</p>
       </div>
-      <div className="line-chart-area"></div>
-      <div className="growth-summary-row">
+      <div className="growth-chart-area"></div>
+      <div className="summary-row">
         <div className="summary-card">
           <p className="summary-label">Height</p>
           <h3 className="summary-value">35.2 in</h3>
