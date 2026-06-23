@@ -3,7 +3,7 @@ function GrowthChartCard() {
     <div className="dashboard-card growth-chart-card">
       <div className="chart-header">
         <h3 className="card-title">Growth over time</h3>
-        <button className="chart-view-button">View all</button>
+        <button className="card-action-button">View all</button>
       </div>
       <div className="chart-legend">
         <p className="legend-height">◆ Height (in)</p>

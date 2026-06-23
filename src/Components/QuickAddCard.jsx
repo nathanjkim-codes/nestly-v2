@@ -34,3 +34,5 @@ function QuickAddCard() {
     </div>
   );
 }
+
+export default QuickAddCard;
