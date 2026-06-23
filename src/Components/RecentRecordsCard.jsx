@@ -1,9 +1,9 @@
 function RecentRecordsCard() {
   return (
-    <div className="chart-card recent-records-card">
+    <div className="dashboard-card recent-records-card">
       <div className="chart-header">
-        <h3 className="chart-title">Recent Records</h3>
-        <button className="chart-view-button">View all</button>
+        <h3 className="card-title">Recent Records</h3>
+        <button className="card-action-button">View all</button>
       </div>
 
       <div className="records-list">

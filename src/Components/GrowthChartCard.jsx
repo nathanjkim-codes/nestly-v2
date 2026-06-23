@@ -1,8 +1,8 @@
 function GrowthChartCard() {
   return (
-    <div className="chart-card growth-chart-card">
+    <div className="dashboard-card growth-chart-card">
       <div className="chart-header">
-        <h3 className="chart-title">Growth over time</h3>
+        <h3 className="card-title">Growth over time</h3>
         <button className="chart-view-button">View all</button>
       </div>
       <div className="chart-legend">

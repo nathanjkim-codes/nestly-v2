@@ -1,9 +1,9 @@
 function SleepChartCard() {
   return (
-    <div className="chart-card sleep-chart-card">
+    <div className="dashboard-card sleep-chart-card">
       <div className="chart-header">
-        <h3 className="chart-title">Sleep This Week</h3>
-        <button className="chart-view-button">View all</button>
+        <h3 className="card-title">Sleep This Week</h3>
+        <button className="card-action-button">View all</button>
       </div>
       <div className="chart-legend">
         <p className="legend-sleep-info">Avg 9h 20m</p>
