@@ -513,3 +513,43 @@ body {
   font-weight: 500;
   color: #94a3b8;
 }
+
+.quick-add-card {
+  flex: 1;
+}
+
+.quick-add-actions {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+}
+
+.quick-add-button {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid #1e293b;
+  background-color: #111827;
+  padding: 12px;
+  gap: 8px;
+
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.quick-add-button:hover {
+  background-color: #0f172a;
+}
+
+.quick-add-icon {
+  font-size: 22px;
+}
+
+.quick-add-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
