@@ -242,7 +242,6 @@ body {
   display: flex;
   flex-direction: column;
 
-  min-height: 360px;
   background-color: #0b1020;
   border-radius: 14px;
   border: 1px solid #1e293b;
@@ -284,10 +283,12 @@ body {
 
 .growth-chart-card {
   flex: 2;
+  min-height: 360px;
 }
 
 .sleep-chart-card {
   flex: 1;
+  min-height: 360px;
 }
 
 .legend-sleep-info {
@@ -373,6 +374,7 @@ body {
 
 .recent-records-card {
   flex: 1;
+  min-height: 360px;
 }
 
 .records-list {
@@ -450,6 +452,7 @@ body {
 
 .weekly-summary-card {
   flex: 2;
+  min-height: 180px;
 }
 
 .summary-list {
@@ -517,6 +520,7 @@ body {
 
 .quick-add-card {
   flex: 1;
+  min-height: 180px;
 }
 
 .quick-add-actions {
