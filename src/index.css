@@ -27,14 +27,6 @@ body {
   gap: 24px;
 }
 
-.sidebar {
-  display: flex;
-  flex-direction: column;
-  width: 260px;
-  padding: 24px;
-  gap: 16px;
-}
-
 .header {
   display: flex;
   flex-direction: row;
@@ -557,4 +549,98 @@ body {
   font-size: 14px;
   font-weight: 600;
   color: #cbd5e1;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  padding: 24px;
+  gap: 24px;
+  background-color: #070d1d;
+  border-right: 1px solid #1e293b;
+}
+
+.logo-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 32px;
+  margin-left: 16px;
+}
+
+.logo-box {
+  width: 62px;
+  height: 64px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.logo-image {
+  width: 82px;
+  height: 82px;
+  object-fit: contain;
+}
+
+.app-title {
+  font-size: 30px;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.sidebar-menu {
+  margin-top: 24px;
+}
+
+.sidebar-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.sidebar-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: none;
+  border: none;
+  padding: 12px 14px;
+  gap: 12px;
+  width: 100%;
+  border-radius: 12px;
+  color: #94a3b8;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.sidebar-item:hover {
+  background-color: #111827;
+  color: #ffffff;
+}
+
+.sidebar-item.active {
+  background-color: #1d2a78;
+  color: #ffffff;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  font-size: 18px;
+}
+
+.sidebar-label {
+  font-size: 15px;
+  font-weight: 500;
+  text-align: left;
 }
