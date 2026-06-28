@@ -17,11 +17,23 @@ function ChildSelector({
     setIsOpen(false);
   };
 
+  const childList = children.map((child) => (
+    <button
+      className="child-list-btn"
+      key={child.id}
+      onClick={() => handleSelectChild(child.id)}
+    >
+      {child.name}
+    </button>
+  ));
+
   return (
-    <div className="child-selector">
-      <button className="child-selector-btn" onClick={toggleDropdown}>
+    <div className="child-dropdown-container">
+      <button className="child-dropdown-btn" onClick={toggleDropdown}>
         {selectedChild?.name} {isOpen ? "▲" : "▼"}
       </button>
+
+      <div className="child-dropdown-list">{isOpen && childList}</div>
     </div>
   );
 }
