@@ -36,8 +36,8 @@ function App() {
       <Sidebar />
 
       <main className="main-content">
-        <Header />
-        <Dashboard />
+        <Header selectedChild={selectedChild} />
+        <Dashboard selectedChild={selectedChild} />
       </main>
     </div>
   );

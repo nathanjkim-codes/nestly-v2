@@ -3,19 +3,7 @@ import StatsGrid from "./StatsGrid.jsx";
 import DashboardCharts from "./DashboardCharts.jsx";
 import DashboardActions from "./DashboardActions.jsx";
 
-function Dashboard() {
-  const selectedChild = {
-    name: "Emma",
-    age: "3 years",
-    gender: "Girl",
-    birthDate: "Mar 10 2023",
-    insight: {
-      title: "✨ AI Insight",
-      message: "Emma is growing well 🌱",
-      description: "Sleep and nutrition patterns look balanced.",
-    },
-  };
-
+function Dashboard({ selectedChild }) {
   const stats = [
     {
       id: "growth",
