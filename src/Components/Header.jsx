@@ -1,3 +1,5 @@
+import ChildSelector from "./ChildSelector.jsx";
+
 function Header({
   children,
   selectedChildId,
@@ -9,12 +11,19 @@ function Header({
       <div className="header-info">
         <h1 className="header-title">Good morning, Sarah! 👋</h1>
         <p className="header-subtitle">
-          Here's how {selectedChild.name} is doing today.
+          Here's how {selectedChild.profile.name} is doing today.
         </p>
       </div>
       <div className="header-actions">
         <button className="add-record-button">+ Add Record</button>
-        <button className="child-selector">{selectedChild.name} ▼</button>
+
+        <ChildSelector
+          children={children}
+          selectedChildId={selectedChildId}
+          setSelectedChildId={setSelectedChildId}
+          selectedChild={selectedChild}
+        />
+
         <button className="notification-button">🔔</button>
       </div>
     </div>

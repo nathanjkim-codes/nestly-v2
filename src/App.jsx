@@ -8,20 +8,64 @@ function App() {
   const children = [
     {
       id: 1,
-      name: "Emma",
-      birth: "6-3-2023",
-      height: "22 in",
-      weight: "7.5 lbs",
-      sleep: "14 hrs",
+
+      profile: {
+        name: "Emma",
+        age: "3 years, 2 months",
+        gender: "Girl",
+        birthDate: "6-3-2023",
+        profileImage: "...",
+      },
+
+      currentStats: {
+        height: "22 in",
+        weight: "7.5 lbs",
+        sleep: "12hrs",
+      },
+
+      insight: {
+        title: "✨ AI Insight",
+        message: "Emma is growing well!🌱",
+        description: "Her sleep and nutrition patterns look balanced.",
+      },
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
+      vaccinations: [],
+      milestones: [],
+      reports: [],
     },
 
     {
       id: 2,
-      name: "Evelyn",
-      birth: "3-24-2026",
-      height: "20in",
-      weight: "7 lbs",
-      sleep: "13 hrs",
+
+      profile: {
+        name: "Evelyn",
+        age: "6 months",
+        gender: "Girl",
+        birthDate: "3-23-2023",
+        profileImage: "...",
+      },
+
+      currentStats: {
+        height: "25.75 in",
+        weight: "18 lbs",
+        sleep: "14hrs",
+      },
+
+      insight: {
+        title: "✨ AI Insight",
+        message: "Evelyn is growing well!🌱",
+        description: "Her sleep and nutrition patterns look balanced.",
+      },
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
+      vaccinations: [],
+      milestones: [],
+      reports: [],
     },
   ];
 
@@ -36,7 +80,12 @@ function App() {
       <Sidebar />
 
       <main className="main-content">
-        <Header selectedChild={selectedChild} />
+        <Header
+          children={children}
+          selectedChildId={selectedChildId}
+          setSelectedChildId={setSelectedChildId}
+          selectedChild={selectedChild}
+        />
         <Dashboard selectedChild={selectedChild} />
       </main>
     </div>

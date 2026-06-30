@@ -23,14 +23,14 @@ function ChildSelector({
       key={child.id}
       onClick={() => handleSelectChild(child.id)}
     >
-      {child.name}
+      {child.profile.name}
     </button>
   ));
 
   return (
-    <div className="child-dropdown-container">
+    <div className="child-selector">
       <button className="child-dropdown-btn" onClick={toggleDropdown}>
-        {selectedChild?.name} {isOpen ? "▲" : "▼"}
+        {selectedChild?.profile.name} {isOpen ? "▲" : "▼"}
       </button>
 
       <div className="child-dropdown-list">{isOpen && childList}</div>
