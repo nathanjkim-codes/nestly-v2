@@ -1,8 +1,6 @@
 import StatCard from "./StatCard.jsx";
 
 function StatsGrid({ stats }) {
-  console.log(stats);
-
   return (
     <div className="stats-grid">
       {stats.map((stat) => (

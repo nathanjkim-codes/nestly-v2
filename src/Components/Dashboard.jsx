@@ -4,12 +4,14 @@ import DashboardCharts from "./DashboardCharts.jsx";
 import DashboardActions from "./DashboardActions.jsx";
 
 function Dashboard({ selectedChild }) {
+  const currentStats = selectedChild.currentStats;
+
   const stats = [
     {
       id: "growth",
       icon: "📈",
       title: "Growth",
-      value: "35.2 in",
+      value: currentStats.height,
       trend: "↑ 0.6 in this month",
     },
 
@@ -17,7 +19,7 @@ function Dashboard({ selectedChild }) {
       id: "weight",
       icon: "⚖️",
       title: "Weight",
-      value: "28.4 lbs",
+      value: currentStats.weight,
       trend: "↑ 0.8 lbs this month",
     },
 
@@ -25,7 +27,7 @@ function Dashboard({ selectedChild }) {
       id: "sleep",
       icon: "🌙",
       title: "Sleep",
-      value: "9h 20m",
+      value: currentStats.sleep,
       trend: "↑ 45m vs last week",
     },
 
@@ -33,7 +35,7 @@ function Dashboard({ selectedChild }) {
       id: "feeding",
       icon: "🍼",
       title: "Feeding",
-      value: "3 times",
+      value: currentStats.feeding,
       trend: "↓ 1 vs last week",
     },
 
@@ -41,7 +43,7 @@ function Dashboard({ selectedChild }) {
       id: "mood",
       icon: "😊",
       title: "Mood",
-      value: "Good",
+      value: currentStats.mood,
       trend: "Mostly positive",
     },
   ];

@@ -21,6 +21,8 @@ function App() {
         height: "22 in",
         weight: "7.5 lbs",
         sleep: "12hrs",
+        feeding: "2 times",
+        mood: "Needs attention",
       },
 
       insight: {
@@ -52,6 +54,8 @@ function App() {
         height: "25.75 in",
         weight: "18 lbs",
         sleep: "14hrs",
+        feeding: "4 times",
+        mood: "positive",
       },
 
       insight: {
