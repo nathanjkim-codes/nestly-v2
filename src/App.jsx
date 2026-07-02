@@ -19,7 +19,7 @@ function App() {
 
       currentStats: {
         height: "22 in",
-        weight: "7.5 lbs",
+        weight: "26 lbs",
         sleep: "12hrs",
         feeding: "2 times",
         mood: "Needs attention",
@@ -31,7 +31,23 @@ function App() {
         description: "Her sleep and nutrition patterns look balanced.",
       },
 
-      growthRecords: [],
+      growthRecords: [
+        {
+          date: "7-23-2023",
+          height: 26.5,
+          weight: 8,
+        },
+        {
+          date: "8-15-2023",
+          height: 23,
+          weight: 27,
+        },
+        {
+          date: "9-20-2023",
+          height: 23,
+          weight: 27.75,
+        },
+      ],
       sleepRecords: [],
       feedingRecords: [],
       vaccinations: [],
@@ -55,7 +71,7 @@ function App() {
         weight: "18 lbs",
         sleep: "14hrs",
         feeding: "4 times",
-        mood: "positive",
+        mood: "Positive",
       },
 
       insight: {
@@ -64,7 +80,23 @@ function App() {
         description: "Her sleep and nutrition patterns look balanced.",
       },
 
-      growthRecords: [],
+      growthRecords: [
+        {
+          date: "4-15-2023",
+          height: 26,
+          weight: 18,
+        },
+        {
+          date: "5-10-2023",
+          height: 26.5,
+          weight: 18.5,
+        },
+        {
+          date: "6-7-2023",
+          height: 27,
+          weight: 19,
+        },
+      ],
       sleepRecords: [],
       feedingRecords: [],
       vaccinations: [],

@@ -5,6 +5,7 @@ import DashboardActions from "./DashboardActions.jsx";
 
 function Dashboard({ selectedChild }) {
   const currentStats = selectedChild.currentStats;
+  const growthRecords = selectedChild.growthRecords;
 
   const stats = [
     {
@@ -52,7 +53,7 @@ function Dashboard({ selectedChild }) {
     <div className="dashboard">
       <ChildOverview child={selectedChild} />
       <StatsGrid stats={stats} />
-      <DashboardCharts />
+      <DashboardCharts growthRecords={growthRecords} />
       <DashboardActions />
     </div>
   );
