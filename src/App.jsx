@@ -11,7 +11,7 @@ function App() {
 
       profile: {
         name: "Emma",
-        age: "3 years, 2 months",
+        age: "2 months",
         gender: "Girl",
         birthDate: "6-3-2023",
         profileImage: "...",
@@ -34,18 +34,18 @@ function App() {
       growthRecords: [
         {
           date: "7-23-2023",
-          height: 26.5,
-          weight: 8,
+          height: 22.5,
+          weight: 11,
         },
         {
           date: "8-15-2023",
-          height: 23,
-          weight: 27,
+          height: 25,
+          weight: 15,
         },
         {
           date: "9-20-2023",
-          height: 23,
-          weight: 27.75,
+          height: 29,
+          weight: 20,
         },
       ],
       sleepRecords: [],
@@ -88,13 +88,13 @@ function App() {
         },
         {
           date: "5-10-2023",
-          height: 26.5,
-          weight: 18.5,
+          height: 29,
+          weight: 20,
         },
         {
           date: "6-7-2023",
-          height: 27,
-          weight: 19,
+          height: 32,
+          weight: 25,
         },
       ],
       sleepRecords: [],
