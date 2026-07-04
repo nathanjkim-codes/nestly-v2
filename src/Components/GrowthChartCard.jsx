@@ -10,6 +10,45 @@ import {
 
 function GrowthChartCard({ growthRecords }) {
   const latestGrowthRecord = growthRecords[growthRecords.length - 1];
+
+  const hasPreviousRecord = growthRecords.length >= 2;
+
+  const previousGrowthRecord = hasPreviousRecord
+    ? growthRecords[growthRecords.length - 2]
+    : null;
+
+  const heightDifference = hasPreviousRecord
+    ? latestGrowthRecord.height - previousGrowthRecord.height
+    : null;
+
+  const weightDifference = hasPreviousRecord
+    ? latestGrowthRecord.weight - previousGrowthRecord.weight
+    : null;
+
+  const trendHeightUp =
+    hasPreviousRecord &&
+    latestGrowthRecord.height > previousGrowthRecord.height;
+
+  const trendHeightDown =
+    hasPreviousRecord &&
+    latestGrowthRecord.height < previousGrowthRecord.height;
+
+  const trendHeightSame =
+    hasPreviousRecord &&
+    latestGrowthRecord.height === previousGrowthRecord.height;
+
+  let trend;
+
+  if (!hasPreviousRecord) {
+    trend = "No previous measurement";
+  } else if (trendHeightUp) {
+    trend = "up";
+  } else if (trendHeightDown) {
+    trend = "down";
+  } else {
+    trend = "same";
+  }
+
   return (
     <div className="dashboard-card growth-chart-card">
       <div className="chart-header">
@@ -64,7 +103,9 @@ function GrowthChartCard({ growthRecords }) {
           <p className="summary-label">Height</p>
           <h3 className="summary-value">{latestGrowthRecord.height} in</h3>
           <p className="summary-percentile">72nd percentile</p>
-          <p className="summary-trend">↑ 0.6 from last month</p>
+          <p className="summary-trend">
+            {trend} {heightDifference} from last month
+          </p>
         </div>
 
         <div className="summary-card">
