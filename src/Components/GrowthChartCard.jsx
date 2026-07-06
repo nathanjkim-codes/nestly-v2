@@ -40,13 +40,25 @@ function GrowthChartCard({ growthRecords }) {
   let trend;
 
   if (!hasPreviousRecord) {
-    trend = "No previous measurement";
+    trend = "none";
   } else if (trendHeightUp) {
     trend = "up";
   } else if (trendHeightDown) {
     trend = "down";
   } else {
     trend = "same";
+  }
+
+  let trendDisplay;
+
+  if (trend === "none") {
+    trendDisplay = "No previous measurement";
+  } else if (trend === "up") {
+    trendDisplay = "↑";
+  } else if (trend === "down") {
+    trendDisplay = "↓";
+  } else {
+    trendDisplay = "No change";
   }
 
   return (
@@ -104,7 +116,7 @@ function GrowthChartCard({ growthRecords }) {
           <h3 className="summary-value">{latestGrowthRecord.height} in</h3>
           <p className="summary-percentile">72nd percentile</p>
           <p className="summary-trend">
-            {trend} {heightDifference} from last month
+            {trendDisplay} {heightDifference} from last month
           </p>
         </div>
 
