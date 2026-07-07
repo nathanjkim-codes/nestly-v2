@@ -1,4 +1,14 @@
-function SleepChartCard() {
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+} from "recharts";
+
+function SleepChartCard({ sleepRecords }) {
   return (
     <div className="dashboard-card sleep-chart-card">
       <div className="chart-header">
@@ -8,7 +18,25 @@ function SleepChartCard() {
       <div className="chart-legend">
         <p className="legend-sleep-info">Avg 9h 20m</p>
       </div>
-      <div className="sleep-chart-area"></div>
+      <div className="sleep-chart-area">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart
+            data={sleepRecords}
+            margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
+          >
+            <CartesianGrid vertical={false} stroke="#1E293B" />
+            <XAxis dataKey="day" axisLine={false} tickLine={false} />
+            <YAxis
+              axisLine={false}
+              tickLine={false}
+              tick={{ fill: "#94A3B8", fontSize: 12 }}
+              domain={[0, "dataMax + 2"]}
+            />
+            <Tooltip />
+            <Bar dataKey="duration" fill="#4F7CFF" radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
       <div className="summary-row">
         <div className="summary-card">
           <p className="summary-label">Best night</p>

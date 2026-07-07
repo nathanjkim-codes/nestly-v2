@@ -29,36 +29,64 @@ function GrowthChartCard({ growthRecords }) {
     hasPreviousRecord &&
     latestGrowthRecord.height > previousGrowthRecord.height;
 
+  const trendWeightUp =
+    hasPreviousRecord &&
+    latestGrowthRecord.weight > previousGrowthRecord.weight;
+
   const trendHeightDown =
     hasPreviousRecord &&
     latestGrowthRecord.height < previousGrowthRecord.height;
 
-  const trendHeightSame =
+  const trendWeightDown =
     hasPreviousRecord &&
-    latestGrowthRecord.height === previousGrowthRecord.height;
+    latestGrowthRecord.weight < previousGrowthRecord.weight;
 
-  let trend;
+  let trendHeight;
 
   if (!hasPreviousRecord) {
-    trend = "none";
+    trendHeight = "none";
   } else if (trendHeightUp) {
-    trend = "up";
+    trendHeight = "up";
   } else if (trendHeightDown) {
-    trend = "down";
+    trendHeight = "down";
   } else {
-    trend = "same";
+    trendHeight = "same";
   }
 
-  let trendDisplay;
+  let trendWeight;
 
-  if (trend === "none") {
-    trendDisplay = "No previous measurement";
-  } else if (trend === "up") {
-    trendDisplay = "↑";
-  } else if (trend === "down") {
-    trendDisplay = "↓";
+  if (!hasPreviousRecord) {
+    trendWeight = "none";
+  } else if (trendWeightUp) {
+    trendWeight = "up";
+  } else if (trendWeightDown) {
+    trendWeight = "down";
   } else {
-    trendDisplay = "No change";
+    trendWeight = "same";
+  }
+
+  let trendHeightDisplay;
+
+  if (trendHeight === "none") {
+    trendHeightDisplay = "No previous measurement";
+  } else if (trendHeight === "up") {
+    trendHeightDisplay = "↑";
+  } else if (trendHeight === "down") {
+    trendHeightDisplay = "↓";
+  } else {
+    trendHeightDisplay = "No change";
+  }
+
+  let trendWeightDisplay;
+
+  if (trendWeight === "none") {
+    trendWeightDisplay = "No previous measurement";
+  } else if (trendWeight === "up") {
+    trendWeightDisplay = "↑";
+  } else if (trendWeight === "down") {
+    trendWeightDisplay = "↓";
+  } else {
+    trendWeightDisplay = "No change";
   }
 
   return (
@@ -116,7 +144,7 @@ function GrowthChartCard({ growthRecords }) {
           <h3 className="summary-value">{latestGrowthRecord.height} in</h3>
           <p className="summary-percentile">72nd percentile</p>
           <p className="summary-trend">
-            {trendDisplay} {heightDifference} from last month
+            {trendHeightDisplay} {heightDifference} from last month
           </p>
         </div>
 
@@ -124,7 +152,9 @@ function GrowthChartCard({ growthRecords }) {
           <p className="summary-label">Weight</p>
           <h3 className="summary-value">{latestGrowthRecord.weight} lbs</h3>
           <p className="summary-percentile">65th percentile</p>
-          <p className="summary-trend">↑ 0.8 from last month</p>
+          <p className="summary-trend">
+            {trendWeightDisplay} {weightDifference} from last month
+          </p>
         </div>
       </div>
     </div>

@@ -48,7 +48,28 @@ function App() {
           weight: 20,
         },
       ],
-      sleepRecords: [],
+      sleepRecords: [
+        {
+          date: "7-23-2023",
+          day: "Sun",
+          duration: 9.5,
+        },
+        {
+          date: "7-24-2023",
+          day: "Mon",
+          duration: 10,
+        },
+        {
+          date: "7-25-2023",
+          day: "Tue",
+          duration: 8.5,
+        },
+        {
+          date: "7-26-2023",
+          day: "Wed",
+          duration: 9,
+        },
+      ],
       feedingRecords: [],
       vaccinations: [],
       milestones: [],
@@ -97,7 +118,28 @@ function App() {
           weight: 25,
         },
       ],
-      sleepRecords: [],
+      sleepRecords: [
+        {
+          date: "4-15-2023",
+          day: "Sat",
+          duration: 8.5,
+        },
+        {
+          date: "4-16-2023",
+          day: "Sun",
+          duration: 9,
+        },
+        {
+          date: "4-17-2023",
+          day: "Mon",
+          duration: 10.5,
+        },
+        {
+          date: "4-18-2023",
+          day: "Tue",
+          duration: 9.5,
+        },
+      ],
       feedingRecords: [],
       vaccinations: [],
       milestones: [],
