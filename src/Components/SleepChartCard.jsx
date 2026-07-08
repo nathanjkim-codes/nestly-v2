@@ -9,6 +9,8 @@ import {
 } from "recharts";
 
 function SleepChartCard({ sleepRecords }) {
+  const hasSleepRecords = sleepRecords.length >= 1;
+
   const sleepDurationsSum = function (sleepRecords) {
     let durationSum = 0;
     for (let i = 0; i < sleepRecords.length; i++) {
@@ -18,8 +20,9 @@ function SleepChartCard({ sleepRecords }) {
   };
   const totalSleepDuration = sleepDurationsSum(sleepRecords);
 
-  const averageSleepDuration = totalSleepDuration / sleepRecords.length;
-  console.log(averageSleepDuration);
+  const averageSleepDuration = hasSleepRecords
+    ? totalSleepDuration / sleepRecords.length
+    : null;
 
   const formatDecimalHours = function (averageSleepDuration) {
     const sleepHours = Math.floor(averageSleepDuration);
@@ -29,6 +32,31 @@ function SleepChartCard({ sleepRecords }) {
 
   const formattedAverageSleepDuration =
     formatDecimalHours(averageSleepDuration);
+
+  const highestSleepDuration = function (sleepRecords) {
+    if (sleepRecords.length === 0) return null;
+    let highestSleepRecord = sleepRecords[0];
+    for (let i = 1; i < sleepRecords.length; i++) {
+      if (sleepRecords[i].duration > highestSleepRecord.duration)
+        highestSleepRecord = sleepRecords[i];
+    }
+    return highestSleepRecord;
+  };
+  const bestSleepRecord = highestSleepDuration(sleepRecords);
+
+  const formattedBestSleepDuration = hasSleepRecords
+    ? formatDecimalHours(bestSleepRecord.duration)
+    : null;
+
+  const sleepDate = new Date(bestSleepRecord.date);
+
+  const formattedSleepDate = sleepDate.toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
+
+  const bestSleepDay = hasSleepRecords ? bestSleepRecord.day : null;
+  const bestSleepDate = hasSleepRecords ? bestSleepRecord.date : null;
 
   return (
     <div className="dashboard-card sleep-chart-card">
@@ -61,8 +89,10 @@ function SleepChartCard({ sleepRecords }) {
       <div className="summary-row">
         <div className="summary-card">
           <p className="summary-label">Best night</p>
-          <h3 className="summary-value">10h 30m</h3>
-          <p className="summary-trend">May 24 (Fri)</p>
+          <h3 className="summary-value">{formattedBestSleepDuration}</h3>
+          <p className="summary-trend">
+            {formattedSleepDate} ({bestSleepDay})
+          </p>
         </div>
 
         <div className="summary-card">

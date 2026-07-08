@@ -69,6 +69,22 @@ function App() {
           day: "Wed",
           duration: 9,
         },
+        {
+          date: "7-27-2023",
+          day: "Thu",
+          duration: 9.5,
+        },
+        {
+          date: "7-28-2023",
+          day: "Fri",
+          duration: 8,
+        },
+        {
+          date: "7-29-2023",
+          day: "Sat",
+          duration: 9,
+        },
+      
       ],
       feedingRecords: [],
       vaccinations: [],
@@ -138,6 +154,21 @@ function App() {
           date: "4-18-2023",
           day: "Tue",
           duration: 9.5,
+        },
+        {
+          date: "4-19-2023",
+          day: "Wed",
+          duration: 9,
+        },
+        {
+          date: "4-20-2023",
+          day: "Thu",
+          duration: 10,
+        },
+        {
+          date: "4-21-2023",
+          day: "Fri",
+          duration: 8,
         },
       ],
       feedingRecords: [],
