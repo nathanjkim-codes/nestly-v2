@@ -58,6 +58,8 @@ function SleepChartCard({ sleepRecords }) {
   const bestSleepDay = hasSleepRecords ? bestSleepRecord.day : null;
   const bestSleepDate = hasSleepRecords ? bestSleepRecord.date : null;
 
+  const formattedTotalSleepDuration = formatDecimalHours(totalSleepDuration);
+
   return (
     <div className="dashboard-card sleep-chart-card">
       <div className="chart-header">
@@ -97,8 +99,8 @@ function SleepChartCard({ sleepRecords }) {
 
         <div className="summary-card">
           <p className="summary-label">Total (week)</p>
-          <h3 className="summary-value">64h 20m</h3>
-          <p className="summary-trend">↑ 3h 10m this week</p>
+          <h3 className="summary-value">{formattedTotalSleepDuration}</h3>
+          {/* TODO: Add week-over-week sleep trend after previous-week data is available */}
         </div>
       </div>
     </div>
