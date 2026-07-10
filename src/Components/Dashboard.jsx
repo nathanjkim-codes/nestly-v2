@@ -7,6 +7,7 @@ function Dashboard({ selectedChild }) {
   const currentStats = selectedChild.currentStats;
   const growthRecords = selectedChild.growthRecords;
   const sleepRecords = selectedChild.sleepRecords;
+  const feedingRecords = selectedChild.feedingRecords;
 
   const stats = [
     {
@@ -57,6 +58,7 @@ function Dashboard({ selectedChild }) {
       <DashboardCharts
         growthRecords={growthRecords}
         sleepRecords={sleepRecords}
+        feedingRecords={feedingRecords}
       />
 
       <DashboardActions />

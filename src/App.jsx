@@ -85,7 +85,14 @@ function App() {
           duration: 9,
         },
       ],
-      feedingRecords: [],
+      feedingRecords: [
+        {
+          date: "7-29-2023",
+          type: "Bottle",
+          amount: 5,
+          unit: "oz",
+        },
+      ],
       vaccinations: [],
       milestones: [],
       reports: [],
@@ -170,7 +177,14 @@ function App() {
           duration: 8,
         },
       ],
-      feedingRecords: [],
+      feedingRecords: [
+        {
+          date: "4-20-2023",
+          type: "Bottle",
+          amount: 4.5,
+          unit: "oz",
+        },
+      ],
       vaccinations: [],
       milestones: [],
       reports: [],

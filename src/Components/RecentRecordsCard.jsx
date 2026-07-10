@@ -1,4 +1,25 @@
-function RecentRecordsCard() {
+function RecentRecordsCard({ growthRecords, sleepRecords, feedingRecords }) {
+  const hasGrowthRecords = growthRecords.length >= 1;
+  const latestGrowthRecord = hasGrowthRecords
+    ? growthRecords[growthRecords.length - 1]
+    : null;
+
+  const hasSleepRecords = sleepRecords.length >= 1;
+  const latestSleepRecord = hasSleepRecords
+    ? sleepRecords[sleepRecords.length - 1]
+    : null;
+
+  const hasFeedingRecords = feedingRecords.length >= 1;
+  const latestFeedingRecord = hasFeedingRecords
+    ? feedingRecords[feedingRecords.length - 1]
+    : null;
+
+  const recentRecords = [
+    latestGrowthRecord,
+    latestSleepRecord,
+    latestFeedingRecord,
+  ].filter((record) => record !== null);
+
   return (
     <div className="dashboard-card recent-records-card">
       <div className="chart-header">
