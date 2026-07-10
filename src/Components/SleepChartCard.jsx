@@ -30,8 +30,9 @@ function SleepChartCard({ sleepRecords }) {
     return `${sleepHours} hr ${sleepMinutes} m`;
   };
 
-  const formattedAverageSleepDuration =
-    formatDecimalHours(averageSleepDuration);
+  const formattedAverageSleepDuration = hasSleepRecords
+    ? formatDecimalHours(averageSleepDuration)
+    : null;
 
   const highestSleepDuration = function (sleepRecords) {
     if (sleepRecords.length === 0) return null;
@@ -44,19 +45,20 @@ function SleepChartCard({ sleepRecords }) {
   };
   const bestSleepRecord = highestSleepDuration(sleepRecords);
 
+  const bestSleepDay = hasSleepRecords ? bestSleepRecord.day : null;
+  const bestSleepDate = hasSleepRecords ? bestSleepRecord.date : null;
+  const sleepDate = hasSleepRecords ? new Date(bestSleepRecord.date) : null;
+
   const formattedBestSleepDuration = hasSleepRecords
     ? formatDecimalHours(bestSleepRecord.duration)
     : null;
 
-  const sleepDate = new Date(bestSleepRecord.date);
-
-  const formattedSleepDate = sleepDate.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-  });
-
-  const bestSleepDay = hasSleepRecords ? bestSleepRecord.day : null;
-  const bestSleepDate = hasSleepRecords ? bestSleepRecord.date : null;
+  const formattedSleepDate = hasSleepRecords
+    ? sleepDate.toLocaleDateString("en-US", {
+        month: "short",
+        day: "numeric",
+      })
+    : null;
 
   const formattedTotalSleepDuration = formatDecimalHours(totalSleepDuration);
 
@@ -66,43 +68,53 @@ function SleepChartCard({ sleepRecords }) {
         <h3 className="card-title">Sleep This Week</h3>
         <button className="card-action-button">View all</button>
       </div>
-      <div className="chart-legend">
-        <p className="legend-sleep-info">Avg {formattedAverageSleepDuration}</p>
-      </div>
-      <div className="sleep-chart-area">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart
-            data={sleepRecords}
-            margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
-          >
-            <CartesianGrid vertical={false} stroke="#1E293B" />
-            <XAxis dataKey="day" axisLine={false} tickLine={false} />
-            <YAxis
-              axisLine={false}
-              tickLine={false}
-              tick={{ fill: "#94A3B8", fontSize: 12 }}
-              domain={[0, "dataMax + 2"]}
-            />
-            <Tooltip />
-            <Bar dataKey="duration" fill="#4F7CFF" radius={[6, 6, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
-      </div>
-      <div className="summary-row">
-        <div className="summary-card">
-          <p className="summary-label">Best night</p>
-          <h3 className="summary-value">{formattedBestSleepDuration}</h3>
-          <p className="summary-trend">
-            {formattedSleepDate} ({bestSleepDay})
-          </p>
-        </div>
+      {hasSleepRecords ? (
+        <>
+          <div className="chart-legend">
+            <p className="legend-sleep-info">
+              Avg {formattedAverageSleepDuration}
+            </p>
+          </div>
+          <div className="sleep-chart-area">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={sleepRecords}
+                margin={{ top: 10, right: 10, left: -20, bottom: 5 }}
+              >
+                <CartesianGrid vertical={false} stroke="#1E293B" />
+                <XAxis dataKey="day" axisLine={false} tickLine={false} />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94A3B8", fontSize: 12 }}
+                  domain={[0, "dataMax + 2"]}
+                />
+                <Tooltip />
+                <Bar dataKey="duration" fill="#4F7CFF" radius={[6, 6, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="summary-row">
+            <div className="summary-card">
+              <p className="summary-label">Best night</p>
+              <h3 className="summary-value">{formattedBestSleepDuration}</h3>
+              <p className="summary-trend">
+                {formattedSleepDate} ({bestSleepDay})
+              </p>
+            </div>
 
-        <div className="summary-card">
-          <p className="summary-label">Total (week)</p>
-          <h3 className="summary-value">{formattedTotalSleepDuration}</h3>
-          {/* TODO: Add week-over-week sleep trend after previous-week data is available */}
+            <div className="summary-card">
+              <p className="summary-label">Total (week)</p>
+              <h3 className="summary-value">{formattedTotalSleepDuration}</h3>
+              {/* TODO: Add week-over-week sleep trend after previous-week data is available */}
+            </div>
+          </div>
+        </>
+      ) : (
+        <div className="sleep-empty-state">
+          <p>No sleep records this week.</p>
         </div>
-      </div>
+      )}
     </div>
   );
 }
