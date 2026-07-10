@@ -84,7 +84,6 @@ function App() {
           day: "Sat",
           duration: 9,
         },
-      
       ],
       feedingRecords: [],
       vaccinations: [],
