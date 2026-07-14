@@ -43,7 +43,7 @@ function App() {
           weight: 15,
         },
         {
-          date: "9-20-2023",
+          date: "2023-08-23T07:30:00",
           height: 29,
           weight: 20,
         },
@@ -80,14 +80,14 @@ function App() {
           duration: 8,
         },
         {
-          date: "7-29-2023",
+          date: "2023-08-23T09:15:00",
           day: "Sat",
           duration: 9,
         },
       ],
       feedingRecords: [
         {
-          date: "7-29-2023",
+          date: "2023-07-29T12:45:00",
           type: "Bottle",
           amount: 5,
           unit: "oz",
