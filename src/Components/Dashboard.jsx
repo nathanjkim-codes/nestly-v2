@@ -61,7 +61,10 @@ function Dashboard({ selectedChild }) {
         feedingRecords={feedingRecords}
       />
 
-      <DashboardActions />
+      <DashboardActions
+        growthRecords={growthRecords}
+        sleepRecords={sleepRecords}
+      />
     </div>
   );
 }

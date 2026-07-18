@@ -33,54 +33,139 @@ function App() {
 
       growthRecords: [
         {
-          date: "7-23-2023",
+          date: "2023-07-23T07:30:00",
           height: 22.5,
           weight: 11,
         },
         {
-          date: "8-15-2023",
+          date: "2023-08-15T07:30:00",
           height: 25,
           weight: 15,
         },
         {
-          date: "2023-08-23T07:30:00",
+          date: "2023-09-23T07:30:00",
           height: 29,
           weight: 20,
+        },
+        {
+          date: "2023-10-15T07:30:00",
+          height: 30,
+          weight: 21,
+        },
+        {
+          date: "2023-11-17T07:30:00",
+          height: 31.5,
+          weight: 21,
+        },
+        {
+          date: "2023-12-15T07:30:00",
+          height: 31.5,
+          weight: 20,
+        },
+        {
+          date: "2024-01-10T07:30:00",
+          height: 32,
+          weight: 21,
+        },
+        {
+          date: "2024-02-09T07:30:00",
+          height: 32,
+          weight: 21,
+        },
+        {
+          date: "2024-03-16T07:30:00",
+          height: 32.25,
+          weight: 22,
+        },
+        {
+          date: "2024-04-19T07:30:00",
+          height: 32.5,
+          weight: 22,
+        },
+        {
+          date: "2024-05-20T07:30:00",
+          height: 32.5,
+          weight: 21,
+        },
+        {
+          date: "2024-06-16T07:30:00",
+          height: 33,
+          weight: 21,
+        },
+        {
+          date: "2024-07-15T07:30:00",
+          height: 33,
+          weight: 22,
         },
       ],
       sleepRecords: [
         {
-          date: "7-23-2023",
+          date: "2023-07-09T09:00:00",
+          day: "Sun",
+          duration: 10,
+        },
+        {
+          date: "2023-07-10T09:00:00",
+          day: "Mon",
+          duration: 11,
+        },
+        {
+          date: "2023-07-11T09:00:00",
+          day: "Tue",
+          duration: 9,
+        },
+        {
+          date: "2023-07-12T09:00:00",
+          day: "Wed",
+          duration: 10,
+        },
+        {
+          date: "2023-07-13T09:00:00",
+          day: "Thu",
+          duration: 11,
+        },
+        {
+          date: "2023-07-14T09:00:00",
+          day: "Fri",
+          duration: 12,
+        },
+        {
+          date: "2023-07-15T09:00:00",
+          day: "Sat",
+          duration: 10,
+        },
+        {
+          date: "2023-07-23T09:00:00",
           day: "Sun",
           duration: 9.5,
         },
         {
-          date: "7-24-2023",
+          date: "2023-07-24T09:00:00",
           day: "Mon",
           duration: 10,
         },
         {
-          date: "7-25-2023",
+          date: "2023-07-25T09:00:00",
           day: "Tue",
           duration: 8.5,
         },
         {
-          date: "7-26-2023",
+          date: "2023-07-26T09:00:00",
           day: "Wed",
           duration: 9,
         },
         {
-          date: "7-27-2023",
+          date: "2023-07-27T09:00:00",
           day: "Thu",
           duration: 9.5,
         },
         {
-          date: "7-28-2023",
+          date: "2023-07-28T09:00:00",
           day: "Fri",
           duration: 8,
         },
         {
-          date: "2023-08-23T09:15:00",
+          date: "2023-07-29T09:15:00",
           day: "Sat",
           duration: 9,
         },
