@@ -1,3 +1,5 @@
+import { formatDecimalHours } from "../utils/formatDecimalHours";
+
 function WeeklySummaryCard({ growthRecords, sleepRecords }) {
   const hasEnoughGrowthRecords = growthRecords.length >= 2;
   const hasEnoughSleepRecords = sleepRecords.length >= 14;
@@ -44,9 +46,27 @@ function WeeklySummaryCard({ growthRecords, sleepRecords }) {
     ? previousWeeklySleepDurationsSum / previousWeeklySleepRecords.length
     : null;
 
-  const weeklySleepDuration = hasEnoughSleepRecords
+  const weeklySleepDurationDifference = hasEnoughSleepRecords
     ? latestWeekAverageDuration - previousWeekAverageDuration
     : null;
+
+  const formattedLatestWeekAverageDuration = hasEnoughSleepRecords
+    ? formatDecimalHours(latestWeekAverageDuration)
+    : null;
+
+  const formattedWeeklySleepDurationDifference = hasEnoughSleepRecords
+    ? formatDecimalHours(Math.abs(weeklySleepDurationDifference))
+    : null;
+
+  const weeklySleepDifferenceSign =
+    weeklySleepDurationDifference > 0
+      ? "+"
+      : weeklySleepDurationDifference < 0
+        ? "-"
+        : "";
+
+  const heightSign = heightWeeklyDifference > 0 ? "+" : "";
+  const weightSign = weightWeeklyDifference > 0 ? "+" : "";
 
   return (
     <div className="dashboard-card weekly-summary-card">
@@ -61,10 +81,24 @@ function WeeklySummaryCard({ growthRecords, sleepRecords }) {
           <div className="summary-info">
             <p className="summary-title">Growth</p>
             <p className="summary-description">
-              Height +0.6 in, Weight +0.8 lbs
+              Height {heightSign}
+              {heightWeeklyDifference} in, Weight {weightSign}
+              {weightWeeklyDifference} lbs
             </p>
           </div>
           <span className="summary-status-badge">On track</span>
+        </div>
+        <div className="summary-item">
+          <div className="summary-icon">🌙</div>
+          <div className="summary-info">
+            <p className="summary-title">Sleep</p>
+            <p className="summary-description">
+              Avg {formattedLatestWeekAverageDuration},{" "}
+              {weeklySleepDifferenceSign}
+              {formattedWeeklySleepDurationDifference} vs last week
+            </p>
+          </div>
+          <span className="summary-status-badge">Great</span>
         </div>
       </div>
     </div>

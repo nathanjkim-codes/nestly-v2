@@ -8,6 +8,8 @@ import {
   Tooltip,
 } from "recharts";
 
+import { formatDecimalHours } from "../utils/formatDecimalHours";
+
 function SleepChartCard({ sleepRecords }) {
   const hasSleepRecords = sleepRecords.length >= 1;
 
@@ -23,12 +25,6 @@ function SleepChartCard({ sleepRecords }) {
   const averageSleepDuration = hasSleepRecords
     ? totalSleepDuration / sleepRecords.length
     : null;
-
-  const formatDecimalHours = function (averageSleepDuration) {
-    const sleepHours = Math.floor(averageSleepDuration);
-    const sleepMinutes = Math.round((averageSleepDuration - sleepHours) * 60);
-    return `${sleepHours} hr ${sleepMinutes} m`;
-  };
 
   const formattedAverageSleepDuration = hasSleepRecords
     ? formatDecimalHours(averageSleepDuration)
