@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { QuickAddModal } from "../QuickAddModal";
+import { QuickAddModal } from "./QuickAdd/QuickAddModal";
 
 export function QuickAddCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
