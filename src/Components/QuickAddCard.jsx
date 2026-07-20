@@ -1,4 +1,8 @@
-function QuickAddCard() {
+import { useState } from "react";
+import { QuickAddModal } from "../QuickAddModal";
+
+export function QuickAddCard() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   return (
     <div className="dashboard-card quick-add-card">
       <div className="card-header">
@@ -6,7 +10,10 @@ function QuickAddCard() {
       </div>
 
       <div className="quick-add-actions">
-        <button className="quick-add-button">
+        <button
+          className="quick-add-button"
+          onClick={() => setIsModalOpen(true)}
+        >
           <span className="quick-add-icon">🌙</span>
           <span className="quick-add-label">Sleep</span>
         </button>
@@ -31,6 +38,11 @@ function QuickAddCard() {
           <span className="quick-add-label">Note</span>
         </button>
       </div>
+
+      <QuickAddModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
     </div>
   );
 }
