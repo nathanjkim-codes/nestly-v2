@@ -3,6 +3,7 @@ import { QuickAddModal } from "./QuickAdd/QuickAddModal";
 
 export function QuickAddCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
     <div className="dashboard-card quick-add-card">
       <div className="card-header">

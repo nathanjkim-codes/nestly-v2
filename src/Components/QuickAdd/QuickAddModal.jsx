@@ -1,3 +1,5 @@
+import { SleepQuickAdd } from "./SleepQuickAdd";
+
 export function QuickAddModal({ isOpen, onClose }) {
   if (!isOpen) {
     return null;
@@ -7,12 +9,14 @@ export function QuickAddModal({ isOpen, onClose }) {
     <div className="modal-back-drop">
       <div className="modal-box">
         <div className="modal-header">
-          <h3 className="title"></h3>
+          <h3 className="title">Sleep</h3>
           <span className="modal-close-btn" onClick={onClose}>
             ✕
           </span>
         </div>
-        <div className="modal-content"></div>
+        <div className="modal-content">
+          <SleepQuickAdd />
+        </div>
       </div>
     </div>
   );

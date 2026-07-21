@@ -718,3 +718,56 @@ body {
   cursor: pointer;
   font-size: 1.25rem;
 }
+
+.sleep-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.sleep-form label {
+  font-weight: 600;
+  color: white;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sleep-form input,
+.sleep-form textarea {
+  width: 100%;
+  padding: 10px 14px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sleep-form input:focus,
+.sleep-form textarea:focus {
+  border-color: #0070f3;
+  box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
+}
+
+.save-btn {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3b82f6;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.save-btn:hover {
+  background-color: #2563eb;
+}
