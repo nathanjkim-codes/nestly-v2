@@ -1,4 +1,5 @@
 import { SleepQuickAdd } from "./SleepQuickAdd";
+import { FeedingQuickAdd } from "./FeedingQuickAdd";
 
 export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
   if (!isOpen) {
@@ -9,16 +10,22 @@ export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
     switch (selectedQuickAdd) {
       case "sleep":
         return <SleepQuickAdd />;
+      case "feeding":
+        return <FeedingQuickAdd />;
       default:
         return null;
     }
   };
 
+  const selectedQuickAddTitle = selectedQuickAdd
+    ? selectedQuickAdd.charAt(0).toUpperCase() + selectedQuickAdd.slice(1)
+    : "";
+
   return (
     <div className="modal-back-drop">
       <div className="modal-box">
         <div className="modal-header">
-          <h3 className="title">Sleep</h3>
+          <h3 className="title">{selectedQuickAddTitle}</h3>
           <span className="modal-close-btn" onClick={onClose}>
             ✕
           </span>

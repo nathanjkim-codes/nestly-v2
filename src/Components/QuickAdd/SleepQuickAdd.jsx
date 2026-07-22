@@ -4,7 +4,7 @@ export function SleepQuickAdd() {
   };
 
   return (
-    <form className="sleep-form" onSubmit={handleSubmit}>
+    <form className="quick-add-form sleep-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="sleep-date">Date:</label>
         <input type="date" id="sleep-date" required />

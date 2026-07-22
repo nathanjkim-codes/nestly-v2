@@ -719,13 +719,13 @@ body {
   font-size: 1.25rem;
 }
 
-.sleep-form {
+.quick-add-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
 }
 
-.sleep-form label {
+.quick-add-form label {
   font-weight: 600;
   color: white;
 }
@@ -736,8 +736,9 @@ body {
   gap: 8px;
 }
 
-.sleep-form input,
-.sleep-form textarea {
+.quick-add-form input,
+.quick-add-form textarea,
+.quick-add-form select {
   width: 100%;
   padding: 10px 14px;
   font-size: 16px;
@@ -749,8 +750,9 @@ body {
     box-shadow 0.2s ease;
 }
 
-.sleep-form input:focus,
-.sleep-form textarea:focus {
+.quick-add-form input:focus,
+.quick-add-form textarea:focus,
+.quick-add-form select:focus {
   border-color: #0070f3;
   box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.2);
 }

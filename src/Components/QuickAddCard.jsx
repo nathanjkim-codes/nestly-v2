@@ -23,7 +23,13 @@ export function QuickAddCard() {
           <span className="quick-add-label">Sleep</span>
         </button>
 
-        <button className="quick-add-button">
+        <button
+          className="quick-add-button"
+          onClick={() => {
+            setSelectedQuickAdd("feeding");
+            setIsModalOpen(true);
+          }}
+        >
           <span className="quick-add-icon">🍼</span>
           <span className="quick-add-label">Feeding</span>
         </button>
