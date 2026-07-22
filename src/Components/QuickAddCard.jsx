@@ -3,6 +3,7 @@ import { QuickAddModal } from "./QuickAdd/QuickAddModal";
 
 export function QuickAddCard() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedQuickAdd, setSelectedQuickAdd] = useState(null);
 
   return (
     <div className="dashboard-card quick-add-card">
@@ -13,7 +14,10 @@ export function QuickAddCard() {
       <div className="quick-add-actions">
         <button
           className="quick-add-button"
-          onClick={() => setIsModalOpen(true)}
+          onClick={() => {
+            setSelectedQuickAdd("sleep");
+            setIsModalOpen(true);
+          }}
         >
           <span className="quick-add-icon">🌙</span>
           <span className="quick-add-label">Sleep</span>
@@ -43,6 +47,7 @@ export function QuickAddCard() {
       <QuickAddModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
+        selectedQuickAdd={selectedQuickAdd}
       />
     </div>
   );

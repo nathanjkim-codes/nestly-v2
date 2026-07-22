@@ -1,9 +1,18 @@
 import { SleepQuickAdd } from "./SleepQuickAdd";
 
-export function QuickAddModal({ isOpen, onClose }) {
+export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
   if (!isOpen) {
     return null;
   }
+
+  const renderQuickAdd = () => {
+    switch (selectedQuickAdd) {
+      case "sleep":
+        return <SleepQuickAdd />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className="modal-back-drop">
@@ -14,9 +23,7 @@ export function QuickAddModal({ isOpen, onClose }) {
             ✕
           </span>
         </div>
-        <div className="modal-content">
-          <SleepQuickAdd />
-        </div>
+        <div className="modal-content">{renderQuickAdd()}</div>
       </div>
     </div>
   );
