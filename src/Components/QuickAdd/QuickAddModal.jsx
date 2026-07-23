@@ -2,6 +2,7 @@ import { SleepQuickAdd } from "./SleepQuickAdd";
 import { FeedingQuickAdd } from "./FeedingQuickAdd";
 import { GrowthQuickAdd } from "./GrowthQuickAdd";
 import { MoodQuickAdd } from "./MoodQuickAdd";
+import { NoteQuickAdd } from "./NoteQuickAdd";
 
 export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
   if (!isOpen) {
@@ -18,6 +19,8 @@ export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
         return <GrowthQuickAdd />;
       case "mood":
         return <MoodQuickAdd />;
+      case "note":
+        return <NoteQuickAdd />;
       default:
         return null;
     }

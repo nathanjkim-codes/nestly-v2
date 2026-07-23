@@ -56,7 +56,13 @@ export function QuickAddCard() {
           <span className="quick-add-label">Mood</span>
         </button>
 
-        <button className="quick-add-button">
+        <button
+          className="quick-add-button"
+          onClick={() => {
+            setSelectedQuickAdd("note");
+            setIsModalOpen(true);
+          }}
+        >
           <span className="quick-add-icon">📝</span>
           <span className="quick-add-label">Note</span>
         </button>

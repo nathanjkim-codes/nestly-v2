@@ -52,4 +52,5 @@ export function GrowthQuickAdd() {
     </form>
   );
 }
+
 export default GrowthQuickAdd;
