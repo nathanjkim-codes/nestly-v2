@@ -1,5 +1,10 @@
+import { useOutletContext } from "react-router";
+import Dashboard from "../Components/Dashboard";
+
 export function DashboardPage() {
-  return <h3>Dashboard</h3>;
+  const { selectedChild } = useOutletContext();
+
+  return <Dashboard selectedChild={selectedChild} />;
 }
 
 export default DashboardPage;

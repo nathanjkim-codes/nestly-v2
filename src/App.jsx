@@ -1,6 +1,6 @@
-import Sidebar from "./components/Sidebar.jsx";
-import Header from "./components/Header.jsx";
-import Dashboard from "./components/Dashboard.jsx";
+import { Outlet } from "react-router";
+import Sidebar from "./Components/Sidebar/Sidebar";
+import Header from "./Components/Header.jsx";
 import { useState } from "react";
 
 function App() {
@@ -293,7 +293,7 @@ function App() {
           setSelectedChildId={setSelectedChildId}
           selectedChild={selectedChild}
         />
-        <Dashboard selectedChild={selectedChild} />
+        <Outlet context={{ selectedChild }} />
       </main>
     </div>
   );
