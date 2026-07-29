@@ -651,6 +651,8 @@ body {
   gap: 12px;
   width: 100%;
   border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
   color: #94a3b8;
   cursor: pointer;
   transition:

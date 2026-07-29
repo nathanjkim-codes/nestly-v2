@@ -1,3 +1,4 @@
+import { NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 
 function Sidebar() {
@@ -12,45 +13,86 @@ function Sidebar() {
       </div>
       <div className="sidebar-menu">
         <div className="sidebar-list">
-          <button className="sidebar-item active">
+          <NavLink
+            to="/"
+            end
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">🏠</span>
             <span className="sidebar-label">Dashboard</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/children"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">👶</span>
             <span className="sidebar-label">Children</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/growth"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">📈</span>
             <span className="sidebar-label">Growth Records</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/sleep"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">🌙</span>
             <span className="sidebar-label">Sleep Records</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/feeding"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">🍼</span>
             <span className="sidebar-label">Feeding Records</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/analytics"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">📊</span>
             <span className="sidebar-label">Analytics</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/reports"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">📄</span>
             <span className="sidebar-label">Reports</span>
-          </button>
+          </NavLink>
 
-          <button className="sidebar-item">
+          <NavLink
+            to="/settings"
+            className={({ isActive }) =>
+              isActive ? "sidebar-item active" : "sidebar-item"
+            }
+          >
             <span className="sidebar-icon">⚙️</span>
             <span className="sidebar-label">Settings</span>
-          </button>
+          </NavLink>
         </div>
       </div>
     </div>
