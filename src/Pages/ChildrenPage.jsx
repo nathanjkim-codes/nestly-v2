@@ -22,9 +22,9 @@ export function ChildrenPage() {
 
   return (
     <section className="children-page">
-      <h1>Children</h1>
+      <h1 className="children-page-heading">Children</h1>
       <table className="children-page-container">
-        <thead className="children-page-title">
+        <thead className="children-page-header">
           <tr>
             <th>Name</th>
             <th>Age</th>
