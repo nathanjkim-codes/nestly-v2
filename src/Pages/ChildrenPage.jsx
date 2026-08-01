@@ -1,28 +1,40 @@
 import { formatDate } from "../utils/formatDate";
 import { calculateAge } from "../utils/calculateAge";
+import EmmaAvatar from "../assets/avatars/Emma.png";
+import EvelynAvatar from "../assets/avatars/Evelyn.png";
 
 export function ChildrenPage() {
   const children = [
     {
       id: 1,
       name: "Emma",
-      birthDate: "2023-06-3",
+      birthDate: "2023-06-03",
       gender: "Female",
-      avatar: null,
+      avatar: EmmaAvatar,
     },
 
     {
       id: 2,
       name: "Evelyn",
-      birthDate: "2023-3-23",
+      birthDate: "2023-03-23",
       gender: "Female",
-      avatar: null,
+      avatar: EvelynAvatar,
     },
   ];
 
   return (
     <section className="children-page">
-      <h1 className="children-page-heading">Children</h1>
+      <div className="children-page-top">
+        <div className="children-page-title-group">
+          <h1 className="children-page-heading">Children</h1>
+          <p className="children-page-description">
+            Manage your children's profiles.
+          </p>
+        </div>
+
+        <button className="children-page-add-btn">+ Add Child</button>
+      </div>
+
       <table className="children-page-container">
         <thead className="children-page-header">
           <tr>
@@ -39,7 +51,7 @@ export function ChildrenPage() {
             return (
               <tr key={child.id} className="children-page-row">
                 <td className="children-page-cell-name">
-                  <img src="" alt={child.name} />
+                  <img src={child.avatar} alt={`${child.name} avatar`} />
                   <span>{child.name}</span>
                 </td>
 
@@ -52,15 +64,20 @@ export function ChildrenPage() {
                 <td>{formatDate(child.birthDate)}</td>
 
                 <td className="children-page-cell-actions">
-                  <button>View</button>
-                  <button>Edit</button>
-                  <button>Delete</button>
+                  <button className="children-page-view-btn">View</button>
+                  <button className="children-page-edit-btn">Edit</button>
+                  <button className="children-page-delete-btn">Delete</button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <p className="children-page-count">
+        {children.length} {children.length === 1 ? "child" : "children"}
+      </p>
     </section>
   );
 }
+
+export default ChildrenPage;
