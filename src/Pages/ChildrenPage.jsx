@@ -24,19 +24,17 @@ export function ChildrenPage() {
 
   return (
     <section className="children-page">
-      <div className="children-page-top">
-        <div className="children-page-title-group">
-          <h1 className="children-page-heading">Children</h1>
-          <p className="children-page-description">
-            Manage your children's profiles.
-          </p>
+      <div className="page-top">
+        <div className="page-title-group">
+          <h1 className="page-heading">Children</h1>
+          <p className="page-description">Manage your children's profiles.</p>
         </div>
 
-        <button className="children-page-add-btn">+ Add Child</button>
+        <button className="page-add-btn">+ Add Child</button>
       </div>
 
-      <table className="children-page-container">
-        <thead className="children-page-header">
+      <table className="page-container">
+        <thead className="page-header">
           <tr>
             <th>Name</th>
             <th>Age</th>
@@ -45,12 +43,12 @@ export function ChildrenPage() {
             <th>Actions</th>
           </tr>
         </thead>
-        <tbody className="children-page-data">
+        <tbody className="page-data">
           {children.map((child) => {
             const age = calculateAge(child.birthDate);
             return (
-              <tr key={child.id} className="children-page-row">
-                <td className="children-page-cell-name">
+              <tr key={child.id} className="page-row">
+                <td className="page-cell-name">
                   <img src={child.avatar} alt={`${child.name} avatar`} />
                   <span>{child.name}</span>
                 </td>
@@ -63,17 +61,17 @@ export function ChildrenPage() {
 
                 <td>{formatDate(child.birthDate)}</td>
 
-                <td className="children-page-cell-actions">
-                  <button className="children-page-view-btn">View</button>
-                  <button className="children-page-edit-btn">Edit</button>
-                  <button className="children-page-delete-btn">Delete</button>
+                <td className="page-cell-actions">
+                  <button className="page-view-btn">View</button>
+                  <button className="page-edit-btn">Edit</button>
+                  <button className="page-delete-btn">Delete</button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
-      <p className="children-page-count">
+      <p className="page-count">
         {children.length} {children.length === 1 ? "child" : "children"}
       </p>
     </section>
