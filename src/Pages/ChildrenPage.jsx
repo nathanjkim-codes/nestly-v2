@@ -22,6 +22,8 @@ export function ChildrenPage() {
     },
   ];
 
+  const hasChildren = children.length > 0;
+
   return (
     <section className="children-page">
       <div className="page-top">
@@ -44,31 +46,40 @@ export function ChildrenPage() {
           </tr>
         </thead>
         <tbody className="page-data">
-          {children.map((child) => {
-            const age = calculateAge(child.birthDate);
-            return (
-              <tr key={child.id} className="page-row">
-                <td className="page-cell-name">
-                  <img src={child.avatar} alt={`${child.name} avatar`} />
-                  <span>{child.name}</span>
-                </td>
+          {hasChildren ? (
+            children.map((child) => {
+              const age = calculateAge(child.birthDate);
 
-                <td>
-                  {age.years} years {age.months} months
-                </td>
+              return (
+                <tr key={child.id} className="page-row">
+                  <td className="page-cell-name">
+                    <img src={child.avatar} alt={`${child.name} avatar`} />
+                    <span>{child.name}</span>
+                  </td>
 
-                <td>{child.gender}</td>
+                  <td>
+                    {age.years} years {age.months} months
+                  </td>
 
-                <td>{formatDate(child.birthDate)}</td>
+                  <td>{child.gender}</td>
 
-                <td className="page-cell-actions">
-                  <button className="page-view-btn">View</button>
-                  <button className="page-edit-btn">Edit</button>
-                  <button className="page-delete-btn">Delete</button>
-                </td>
-              </tr>
-            );
-          })}
+                  <td>{formatDate(child.birthDate)}</td>
+
+                  <td className="page-cell-actions">
+                    <button className="page-view-btn">View</button>
+                    <button className="page-edit-btn">Edit</button>
+                    <button className="page-delete-btn">Delete</button>
+                  </td>
+                </tr>
+              );
+            })
+          ) : (
+            <tr>
+              <td colSpan="5" className="page-empty-state">
+                No children added yet.
+              </td>
+            </tr>
+          )}
         </tbody>
       </table>
       <p className="page-count">
