@@ -65,10 +65,12 @@ export function ChildrenPage() {
 
                   <td>{formatDate(child.birthDate)}</td>
 
-                  <td className="page-cell-actions">
-                    <button className="page-view-btn">View</button>
-                    <button className="page-edit-btn">Edit</button>
-                    <button className="page-delete-btn">Delete</button>
+                  <td>
+                    <div className="page-cell-actions">
+                      <button className="page-view-btn">View</button>
+                      <button className="page-edit-btn">Edit</button>
+                      <button className="page-delete-btn">Delete</button>
+                    </div>
                   </td>
                 </tr>
               );

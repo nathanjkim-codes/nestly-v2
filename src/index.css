@@ -844,8 +844,77 @@ body {
 }
 
 /* =========================
+   Stat card
+========================= */
+
+.page-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 320px));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.page-stat-card {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 16px 20px;
+  gap: 20px;
+  background-color: #0b1020;
+  border-radius: 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #1e293b;
+}
+
+.page-stat-card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+}
+
+.page-stat-card-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 58px;
+  height: 58px;
+
+  border-radius: 14px;
+  background-color: #111827;
+
+  font-size: 24px;
+}
+
+.page-stat-card-label {
+  margin: 0;
+  font-size: 14px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+.page-stat-card-value {
+  margin: 0;
+  font-size: 24px;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.page-stat-card-time {
+  margin: 0;
+  font-size: 13px;
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* =========================
    Table
 ========================= */
+.table-container {
+  max-height: 500px;
+  overflow-y: auto;
+}
 
 .page-container {
   width: 100%;
@@ -967,8 +1036,6 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  position: relative;
-  top: -17px;
 }
 
 /* =========================

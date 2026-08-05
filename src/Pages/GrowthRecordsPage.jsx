@@ -31,70 +31,80 @@ export function GrowthRecordsPage() {
       <div className="page-stats">
         <div className="page-stat-card">
           <span className="page-stat-card-icon">📏</span>
-          <p className="page-stat-card-title">Latest Height</p>
-          <h3 className="page-stat-card-data">
-            {hasRecord ? `${latestHeightRecord} in` : "No data"}
-          </h3>
-          <p className="page-stat-card-time">
-            {hasRecord ? formatDate(latestDateRecord) : "No records"}
-          </p>
+          <div className="page-stat-card-content">
+            <p className="page-stat-card-label">Latest Height</p>
+            <h3 className="page-stat-card-value">
+              {hasRecord ? `${latestHeightRecord} in` : "No data"}
+            </h3>
+            <p className="page-stat-card-time">
+              {hasRecord ? formatDate(latestDateRecord) : "No records"}
+            </p>
+          </div>
         </div>
 
         <div className="page-stat-card">
           <span className="page-stat-card-icon">⚖️</span>
-          <p className="page-stat-card-title">Latest Weight</p>
-          <h3 className="page-stat-card-data">
-            {hasRecord ? `${latestWeightRecord} lbs` : "No data"}
-          </h3>
-          <p className="page-stat-card-time">
-            {hasRecord ? formatDate(latestDateRecord) : "No records"}
-          </p>
+          <div className="page-stat-card-content">
+            <p className="page-stat-card-label">Latest Weight</p>
+            <h3 className="page-stat-card-value">
+              {hasRecord ? `${latestWeightRecord} lbs` : "No data"}
+            </h3>
+            <p className="page-stat-card-time">
+              {hasRecord ? formatDate(latestDateRecord) : "No records"}
+            </p>
+          </div>
         </div>
 
         <div className="page-stat-card">
           <span className="page-stat-card-icon">📈</span>
-          <p className="page-stat-card-title">Total records</p>
-          <h3 className="page-stat-card-data">{growthRecords.length}</h3>
-          <p className="page-stat-card-time">All time</p>
+          <div className="page-stat-card-content">
+            <p className="page-stat-card-label">Total records</p>
+            <h3 className="page-stat-card-value">{growthRecords.length}</h3>
+            <p className="page-stat-card-time">All time</p>
+          </div>
         </div>
       </div>
 
-      <table className="page-container">
-        <thead className="page-header">
-          <tr>
-            <th>Date</th>
-            <th>Height</th>
-            <th>Weight</th>
-            <th>Note</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody className="page-data">
-          {hasRecord ? (
-            sortedGrowthRecords.map((record) => {
-              return (
-                <tr key={record.id} className="page-row">
-                  <td>{formatDate(record.date)}</td>
-                  <td>{record.height} in</td>
-                  <td>{record.weight} lbs</td>
-                  <td>{record.note || "No note"}</td>
-                  <td className="page-cell-actions">
-                    <button className="page-view-btn">View</button>
-                    <button className="page-edit-btn">Edit</button>
-                    <button className="page-delete-btn">Delete</button>
-                  </td>
-                </tr>
-              );
-            })
-          ) : (
+      <div className="table-container">
+        <table className="page-container">
+          <thead className="page-header">
             <tr>
-              <td colSpan="5" className="page-empty-state">
-                No growth records yet.
-              </td>
+              <th>Date</th>
+              <th>Height</th>
+              <th>Weight</th>
+              <th>Note</th>
+              <th>Actions</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="page-data">
+            {hasRecord ? (
+              sortedGrowthRecords.map((record) => {
+                return (
+                  <tr key={record.id} className="page-row">
+                    <td>{formatDate(record.date)}</td>
+                    <td>{record.height} in</td>
+                    <td>{record.weight} lbs</td>
+                    <td>{record.note || "No note"}</td>
+                    <td>
+                      <div className="page-cell-actions">
+                        <button className="page-view-btn">View</button>
+                        <button className="page-edit-btn">Edit</button>
+                        <button className="page-delete-btn">Delete</button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
+            ) : (
+              <tr>
+                <td colSpan="5" className="page-empty-state">
+                  No growth records yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
       <p className="page-count">
         {growthRecords.length}{" "}
         {growthRecords.length === 1 ? "record" : "records"}
