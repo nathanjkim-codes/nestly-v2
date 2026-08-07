@@ -948,7 +948,7 @@ body {
 }
 
 /* =========================
-   Column Widths
+   Default Column Widths
 ========================= */
 
 .page-header th:nth-child(1) {
@@ -969,6 +969,38 @@ body {
 
 .page-header th:nth-child(5) {
   width: 26%;
+}
+
+/* =========================
+   Feeding Column Widths
+========================= */
+
+.feeding-header th:nth-child(1) {
+  width: 14%;
+}
+
+.feeding-header th:nth-child(2) {
+  width: 11%;
+}
+
+.feeding-header th:nth-child(3) {
+  width: 13%;
+}
+
+.feeding-header th:nth-child(4) {
+  width: 11%;
+}
+
+.feeding-header th:nth-child(5) {
+  width: 12%;
+}
+
+.feeding-header th:nth-child(6) {
+  width: 21%;
+}
+
+.feeding-header th:nth-child(7) {
+  width: 18%;
 }
 
 /* =========================
