@@ -35,7 +35,7 @@ export function FeedingRecordsPage() {
     <section className="feeding-records-page">
       <div className="page-top">
         <div className="page-title-group">
-          <h3 className="page-heading">Feeding Records</h3>
+          <h1 className="page-heading">Feeding Records</h1>
           <p className="page-description">
             Track your child's feeding details and patterns over time
           </p>
