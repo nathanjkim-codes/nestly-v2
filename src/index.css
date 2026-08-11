@@ -1189,10 +1189,15 @@ body {
 /* =========================
    Analytics Page
 ========================= */
+
 .analytics-chart {
   border: 1px solid #1e293b;
   border-radius: 14px;
   padding: 20px;
+}
+
+.page-stats {
+  margin: 14px 0;
 }
 
 .page-stat-card-trend {
@@ -1205,7 +1210,8 @@ body {
   gap: 20px;
 }
 
-.analytics-sleep-header .analytics-feeding-header {
+.analytics-sleep-header,
+.analytics-feeding-header {
   flex-direction: column;
   align-items: flex-start;
   gap: 8px;
@@ -1250,7 +1256,21 @@ body {
   background-color: #4f7cff;
 }
 
+.analytics-growth-chart,
 .analytics-chart-area {
   width: 100%;
-  height: 320px;
+  height: 290px;
+}
+
+.analytics-bottom-charts,
+.analytics-chart-area {
+  height: 170px;
+}
+
+.analytics-bottom-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+
+  margin-top: 12px;
 }
