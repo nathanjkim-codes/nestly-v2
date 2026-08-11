@@ -4,6 +4,8 @@ import {
   CartesianGrid,
   LineChart,
   Line,
+  BarChart,
+  Bar,
   Tooltip,
   ResponsiveContainer,
   XAxis,
@@ -39,6 +41,40 @@ export function AnalyticsPage() {
   const hasSleepRecords = sortedSleepRecords.length > 0;
   const hasFeedingRecords = sortedFeedingRecords.length > 0;
 
+  const today = new Date();
+  const cutoffDate = new Date(today);
+  cutoffDate.setDate(today.getDate() - Number(dateRange));
+
+  const filteredGrowthRecords = sortedGrowthRecords.filter((record) => {
+    if (dateRange === "all") {
+      return true;
+    }
+
+    const recordDate = new Date(record.date);
+
+    return recordDate >= cutoffDate && recordDate <= today;
+  });
+
+  const filteredSleepRecords = sortedSleepRecords.filter((record) => {
+    if (dateRange === "all") {
+      return true;
+    }
+
+    const recordDate = new Date(record.date);
+
+    return recordDate >= cutoffDate && recordDate <= today;
+  });
+
+  const filteredFeedingRecords = sortedFeedingRecords.filter((record) => {
+    if (dateRange === "all") {
+      return true;
+    }
+
+    const recordDate = new Date(record.date);
+
+    return recordDate >= cutoffDate && recordDate <= today;
+  });
+
   return (
     <section className="analytics-page">
       <div className="page-top">
@@ -53,7 +89,7 @@ export function AnalyticsPage() {
         <select
           className="dropdown-range"
           value={dateRange}
-          onChange={handleDateRange}
+          onChange={handleDateRangeChange}
         >
           <option value="30">Last 30 Days</option>
           <option value="7">Last 7 Days</option>
@@ -107,52 +143,133 @@ export function AnalyticsPage() {
       </div>
 
       <div className="analytics-chart analytics-growth-chart">
-        <div className="chart-header">
+        <div className="analytics-chart-header">
           <h3 className="chart-title">Growth Trend</h3>
-          <p className="chart-legend">-- Height</p>
-          <p className="legend-weight">-- Weight</p>
+
+          <div className="chart-legend">
+            <span className="legend-line legend-line-height"></span>
+            <span className="legend-label">Height</span>
+          </div>
+          <div className="chart-legend">
+            <span className="legend-line legend-line-weight"></span>
+            <span className="legend-label">Weight</span>
+          </div>
         </div>
 
         {hasGrowthRecords ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart
-              data={sortedGrowthRecords}
-              margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
-            >
-              <CartesianGrid vertical={false} stroke="#1E293B" />
-              <XAxis
-                dataKey="date"
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#94A3B8", fontSize: 12 }}
-                padding={{ left: 12, right: 12 }}
-                tickMargin={10}
-              />
-              <YAxis
-                axisLine={false}
-                tickLine={false}
-                tick={{ fill: "#94A3B8", fontSize: 12 }}
-                domain={[0, "dataMax + 5"]}
-              />
-              <Tooltip />
+          <div className="analytics-chart-area">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={filteredGrowthRecords}
+                margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
+              >
+                <CartesianGrid vertical={false} stroke="#1E293B" />
+                <XAxis
+                  dataKey="date"
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94A3B8", fontSize: 12 }}
+                  padding={{ left: 12, right: 12 }}
+                  tickMargin={10}
+                />
+                <YAxis
+                  axisLine={false}
+                  tickLine={false}
+                  tick={{ fill: "#94A3B8", fontSize: 12 }}
+                  domain={[0, "dataMax + 5"]}
+                />
+                <Tooltip />
 
-              <Line
-                dataKey="height"
-                stroke="#4F7CFF"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-              />
-              <Line
-                dataKey="weight"
-                stroke="#FF5C9A"
-                strokeWidth={2}
-                dot={{ r: 4 }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
+                <Line
+                  dataKey="height"
+                  stroke="#4F7CFF"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                />
+                <Line
+                  dataKey="weight"
+                  stroke="#FF5C9A"
+                  strokeWidth={2}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
         ) : (
           <div className="chart-empty-state">
-            <p>No growth Records yet.</p>
+            <p className="chart-empty-message">No Growth Records yet.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="analytics-chart analytics-sleep-chart">
+        <div className="analytics-chart-header analytics-sleep-header">
+          <h3 className="chart-title">Sleep Trend</h3>
+
+          <div className="chart-legend">
+            <span className="legend-bar legend-bar-sleep"></span>
+            <span className="legend-label">Total Sleep (hours)</span>
+          </div>
+        </div>
+
+        {hasSleepRecords ? (
+          <div className="analytics-chart-area">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={filteredSleepRecords}
+                margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
+              >
+                <CartesianGrid vertical={false} stroke="#1E293B" />
+
+                <XAxis dataKey="date" axisLine={false} tickLine={false} />
+
+                <YAxis axisLine={false} tickLine={false} />
+
+                <Tooltip />
+
+                <Bar dataKey="duration" fill="#4F7CFF" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="chart-empty-state">
+            <p className="chart-empty-message">No Sleep Records yet.</p>
+          </div>
+        )}
+      </div>
+
+      <div className="analytics-chart analytics-feeding-chart">
+        <div className="analytics-chart-header analytics-feeding-header">
+          <h3 className="chart-title">Feeding Trend</h3>
+
+          <div className="chart-legend">
+            <span className="legend-bar legend-bar-feeding"></span>
+            <span className="legend-label">Amount (oz)</span>
+          </div>
+        </div>
+
+        {hasFeedingRecords ? (
+          <div className="analytics-chart-area">
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart
+                data={filteredFeedingRecords}
+                margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
+              >
+                <CartesianGrid vertical={false} stroke="#1E293B" />
+
+                <XAxis dataKey="date" axisLine={false} tickLine={false} />
+
+                <YAxis axisLine={false} tickLine={false} />
+
+                <Tooltip />
+
+                <Bar dataKey="amount" fill="#4F7CFF" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        ) : (
+          <div className="chart-empty-state">
+            <p className="chart-empty-message">No Feeding Records yet.</p>
           </div>
         )}
       </div>
