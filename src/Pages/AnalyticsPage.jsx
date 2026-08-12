@@ -1,5 +1,6 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { formatDecimal } from "../utils/formatDecimal";
 import {
   CartesianGrid,
   LineChart,
@@ -45,13 +46,14 @@ export function AnalyticsPage() {
   const cutoffDate = new Date(today);
   cutoffDate.setDate(today.getDate() - Number(dateRange));
 
+  const previousCutoffDate = new Date(cutoffDate);
+  previousCutoffDate.setDate(cutoffDate.getDate() - Number(dateRange));
+
   const filteredGrowthRecords = sortedGrowthRecords.filter((record) => {
     if (dateRange === "all") {
       return true;
     }
-
     const recordDate = new Date(record.date);
-
     return recordDate >= cutoffDate && recordDate <= today;
   });
 
@@ -59,9 +61,7 @@ export function AnalyticsPage() {
     if (dateRange === "all") {
       return true;
     }
-
     const recordDate = new Date(record.date);
-
     return recordDate >= cutoffDate && recordDate <= today;
   });
 
@@ -69,11 +69,67 @@ export function AnalyticsPage() {
     if (dateRange === "all") {
       return true;
     }
-
     const recordDate = new Date(record.date);
-
     return recordDate >= cutoffDate && recordDate <= today;
   });
+
+  // =========================
+  // Feeding Analytics
+  // =========================
+
+  const previousFilteredFeedingRecords = sortedFeedingRecords.filter(
+    (record) => {
+      const recordDate = new Date(record.date);
+      return recordDate >= previousCutoffDate && recordDate < cutoffDate;
+    },
+  );
+
+  const hasFilteredFeedingRecords = filteredFeedingRecords.length > 0;
+  const hasPreviousFeedingRecords = previousFilteredFeedingRecords.length > 0;
+
+  const totalFeedingAmount = filteredFeedingRecords.reduce(
+    (total, record) => total + record.amount,
+    0,
+  );
+
+  const totalPreviousFeedingAmount = previousFilteredFeedingRecords.reduce(
+    (total, record) => total + record.amount,
+    0,
+  );
+
+  const averageFeedingAmount = hasFilteredFeedingRecords
+    ? totalFeedingAmount / filteredFeedingRecords.length
+    : null;
+
+  const previousAverageFeedingAmount = hasPreviousFeedingRecords
+    ? totalPreviousFeedingAmount / previousFilteredFeedingRecords.length
+    : null;
+
+  const feedingAmountDifference =
+    averageFeedingAmount !== null && previousAverageFeedingAmount !== null
+      ? averageFeedingAmount - previousAverageFeedingAmount
+      : null;
+
+  const feedingPercentChange =
+    feedingAmountDifference !== null && previousAverageFeedingAmount > 0
+      ? (feedingAmountDifference / previousAverageFeedingAmount) * 100
+      : null;
+
+  // trend logic
+
+  let trendFeeding;
+
+  if (dateRange === "all") {
+    trendFeeding = "All-time average";
+  } else if (!hasPreviousFeedingRecords) {
+    trendFeeding = "No previous data";
+  } else if (feedingPercentChange > 0) {
+    trendFeeding = "↑";
+  } else if (feedingPercentChange < 0) {
+    trendFeeding = "↓";
+  } else {
+    trendFeeding = "No change";
+  }
 
   return (
     <section className="analytics-page">
@@ -132,11 +188,25 @@ export function AnalyticsPage() {
 
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Avg Feeding</p>
-            <h3 className="page-stat-card-value">4.6 oz</h3>
+            <h3 className="page-stat-card-value">
+              {hasFilteredFeedingRecords
+                ? `${formatDecimal(averageFeedingAmount)} oz`
+                : "No data"}
+            </h3>
 
             <div className="page-stat-bottom-content">
-              <p className="page-stat-card-time">vs previous 30 days</p>
-              <span className="page-stat-card-trend">↑ 5%</span>
+              <p className="page-stat-card-time">
+                {dateRange === "all"
+                  ? "All-time average"
+                  : `vs previous ${dateRange} days`}
+              </p>
+              <span className="page-stat-card-trend">
+                {dateRange === "all"
+                  ? ""
+                  : hasPreviousFeedingRecords
+                    ? `${trendFeeding} ${formatDecimal(feedingPercentChange)} %`
+                    : "No previous data"}
+              </span>
             </div>
           </div>
         </div>
