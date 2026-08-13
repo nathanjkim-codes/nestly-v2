@@ -1,6 +1,7 @@
 import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { formatDecimal } from "../utils/formatDecimal";
+import { formatDecimalHours } from "../utils/formatDecimalHours";
 import {
   CartesianGrid,
   LineChart,
@@ -74,6 +75,62 @@ export function AnalyticsPage() {
   });
 
   // =========================
+  // Sleep Analytics
+  // =========================
+
+  const previousFilteredSleepRecords = sortedSleepRecords.filter((record) => {
+    const recordDate = new Date(record.date);
+    return recordDate >= previousCutoffDate && recordDate < cutoffDate;
+  });
+
+  const hasFilteredSleepRecords = filteredSleepRecords.length > 0;
+  const hasPreviousSleepRecords = previousFilteredSleepRecords.length > 0;
+
+  const totalSleepDuration = filteredSleepRecords.reduce(
+    (total, record) => total + record.duration,
+    0,
+  );
+
+  const averageSleepDuration = hasFilteredSleepRecords
+    ? totalSleepDuration / filteredSleepRecords.length
+    : null;
+
+  const totalPreviousSleepDuration = previousFilteredSleepRecords.reduce(
+    (total, record) => total + record.duration,
+    0,
+  );
+
+  const previousAverageSleepDuration = hasPreviousSleepRecords
+    ? totalPreviousSleepDuration / previousFilteredSleepRecords.length
+    : null;
+
+  const sleepDurationDifference =
+    averageSleepDuration !== null && previousAverageSleepDuration !== null
+      ? averageSleepDuration - previousAverageSleepDuration
+      : null;
+
+  const sleepPercentChange =
+    sleepDurationDifference !== null && previousAverageSleepDuration > 0
+      ? (sleepDurationDifference / previousAverageSleepDuration) * 100
+      : null;
+
+  // Sleep trend logic
+
+  let trendSleep;
+
+  if (dateRange === "all") {
+    trendSleep = "All-time average";
+  } else if (!hasPreviousSleepRecords) {
+    trendSleep = "No previous records";
+  } else if (sleepPercentChange > 0) {
+    trendSleep = "↑";
+  } else if (sleepPercentChange < 0) {
+    trendSleep = "↓";
+  } else {
+    trendSleep = "No change";
+  }
+
+  // =========================
   // Feeding Analytics
   // =========================
 
@@ -115,7 +172,7 @@ export function AnalyticsPage() {
       ? (feedingAmountDifference / previousAverageFeedingAmount) * 100
       : null;
 
-  // trend logic
+  // Feeding trend logic
 
   let trendFeeding;
 
@@ -174,11 +231,25 @@ export function AnalyticsPage() {
 
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Avg Sleep</p>
-            <h3 className="page-stat-card-value">9 h 32 m</h3>
+            <h3 className="page-stat-card-value">
+              {hasFilteredSleepRecords
+                ? `${formatDecimalHours(averageSleepDuration)}`
+                : "No data"}
+            </h3>
 
             <div className="page-stat-bottom-content">
-              <p className="page-stat-card-time">vs previous 30 days</p>
-              <span className="page-stat-card-trend">↑ 8%</span>
+              <p className="page-stat-card-time">
+                {dateRange === "all"
+                  ? "All-time average"
+                  : `vs previous ${dateRange} days`}
+              </p>
+              <span className="page-stat-card-trend">
+                {dateRange === "all"
+                  ? ""
+                  : hasPreviousSleepRecords
+                    ? `${trendSleep} ${formatDecimal(sleepPercentChange)} %`
+                    : "No previous data"}
+              </span>
             </div>
           </div>
         </div>
