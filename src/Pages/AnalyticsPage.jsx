@@ -75,6 +75,96 @@ export function AnalyticsPage() {
   });
 
   // =========================
+  // Growth Analytics
+  // =========================
+
+  const previousFilteredGrowthRecords = sortedGrowthRecords.filter((record) => {
+    const recordDate = new Date(record.date);
+
+    return recordDate >= previousCutoffDate && recordDate < cutoffDate;
+  });
+
+  const hasFilteredGrowthRecords = filteredGrowthRecords.length > 0;
+  const hasPreviousFilteredGrowthRecords =
+    previousFilteredGrowthRecords.length > 0;
+
+  const hasEnoughFilteredGrowthRecords = filteredGrowthRecords.length >= 2;
+  const hasEnoughPreviousFilteredGrowthRecords =
+    previousFilteredGrowthRecords.length >= 2;
+
+  const firstGrowthRecord = hasFilteredGrowthRecords
+    ? filteredGrowthRecords[0]
+    : null;
+
+  const latestGrowthRecord = hasFilteredGrowthRecords
+    ? filteredGrowthRecords[filteredGrowthRecords.length - 1]
+    : null;
+
+  const heightGrowth = hasEnoughFilteredGrowthRecords
+    ? latestGrowthRecord.height - firstGrowthRecord.height
+    : null;
+
+  const previousFirstGrowthRecord = hasPreviousFilteredGrowthRecords
+    ? previousFilteredGrowthRecords[0]
+    : null;
+
+  const previousLatestGrowthRecord = hasPreviousFilteredGrowthRecords
+    ? previousFilteredGrowthRecords[previousFilteredGrowthRecords.length - 1]
+    : null;
+
+  const previousHeightGrowth = hasEnoughPreviousFilteredGrowthRecords
+    ? previousLatestGrowthRecord.height - previousFirstGrowthRecord.height
+    : null;
+
+  const growthDifference =
+    heightGrowth !== null && previousHeightGrowth !== null
+      ? heightGrowth - previousHeightGrowth
+      : null;
+
+  const growthPercentChange =
+    growthDifference !== null && previousHeightGrowth > 0
+      ? (growthDifference / previousHeightGrowth) * 100
+      : null;
+
+  // Growth trend logic
+
+  let growthSign;
+
+  if (heightGrowth > 0) {
+    growthSign = "+";
+  } else {
+    growthSign = "";
+  }
+
+  let trendGrowth;
+
+  if (dateRange === "all") {
+    trendGrowth = "All-time record";
+  } else if (!hasEnoughPreviousFilteredGrowthRecords) {
+    trendGrowth = "No previous records";
+  } else if (growthPercentChange === null) {
+    trendGrowth = "Cannot compare";
+  } else if (growthPercentChange > 0) {
+    trendGrowth = "↑";
+  } else if (growthPercentChange < 0) {
+    trendGrowth = "↓";
+  } else {
+    trendGrowth = "No change";
+  }
+
+  let growthTrendDisplay;
+
+  if (dateRange === "all") {
+    growthTrendDisplay = "";
+  } else if (!hasEnoughPreviousFilteredGrowthRecords) {
+    growthTrendDisplay = "No previous data";
+  } else if (growthPercentChange === null) {
+    growthTrendDisplay = "Cannot compare";
+  } else {
+    growthTrendDisplay = `${trendGrowth} ${formatDecimal(growthPercentChange)} %`;
+  }
+
+  // =========================
   // Sleep Analytics
   // =========================
 
@@ -217,11 +307,20 @@ export function AnalyticsPage() {
 
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Growth (Height)</p>
-            <h3 className="page-stat-card-value">+1.5 in</h3>
+            <h3 className="page-stat-card-value">
+              {hasEnoughFilteredGrowthRecords
+                ? `${growthSign}${formatDecimal(heightGrowth)} in`
+                : "No Data"}
+            </h3>
 
             <div className="page-stat-bottom-content">
-              <p className="page-stat-card-time">vs previous 30 days</p>
-              <span className="page-stat-card-trend">↑ 6.3%</span>
+              <p className="page-stat-card-time">
+                {dateRange === "all"
+                  ? "All-time growth"
+                  : `vs previous ${dateRange} days`}
+              </p>
+
+              <span className="page-stat-card-trend">{growthTrendDisplay}</span>
             </div>
           </div>
         </div>
