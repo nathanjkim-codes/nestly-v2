@@ -39,10 +39,6 @@ export function AnalyticsPage() {
     (a, b) => new Date(a.date) - new Date(b.date),
   );
 
-  const hasGrowthRecords = sortedGrowthRecords.length > 0;
-  const hasSleepRecords = sortedSleepRecords.length > 0;
-  const hasFeedingRecords = sortedFeedingRecords.length > 0;
-
   const today = new Date();
   const cutoffDate = new Date(today);
   cutoffDate.setDate(today.getDate() - Number(dateRange));
@@ -396,7 +392,7 @@ export function AnalyticsPage() {
           </div>
         </div>
 
-        {hasGrowthRecords ? (
+        {hasFilteredGrowthRecords ? (
           <div className="analytics-chart-area">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
@@ -453,7 +449,7 @@ export function AnalyticsPage() {
             </div>
           </div>
 
-          {hasSleepRecords ? (
+          {hasFilteredSleepRecords ? (
             <div className="analytics-chart-area">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
@@ -489,7 +485,7 @@ export function AnalyticsPage() {
             </div>
           </div>
 
-          {hasFeedingRecords ? (
+          {hasFilteredFeedingRecords ? (
             <div className="analytics-chart-area">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
