@@ -286,7 +286,7 @@ export function AnalyticsPage() {
         </div>
 
         <select
-          className="dropdown-range"
+          className="dropdown-range analytics-dropdown"
           value={dateRange}
           onChange={handleDateRangeChange}
         >
