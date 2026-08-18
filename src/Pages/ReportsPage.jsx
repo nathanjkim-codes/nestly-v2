@@ -1,9 +1,14 @@
 import { useOutletContext } from "react-router-dom";
 import { Download } from "lucide-react";
 import { useState } from "react";
+import { formatDate } from "../utils/formatDate";
 
 export function ReportsPage() {
   const { selectedChild } = useOutletContext();
+
+  const growthRecords = selectedChild.growthRecords;
+  const sleepRecords = selectedChild.sleepRecords;
+  const feedingRecords = selectedChild.feedingRecords;
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
@@ -142,11 +147,13 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                  {growthRecords.map((record) => (
+                    <tr key={record.id}>
+                      <td>{formatDate(record.date)}</td>
+                      <td>{record.height}</td>
+                      <td>{record.weight}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -166,10 +173,12 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                  {sleepRecords.map((record) => (
+                    <tr key={record.id}>
+                      <td>{formatDate(record.date)}</td>
+                      <td>{record.duration}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
@@ -189,10 +198,12 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  <tr>
-                    <td></td>
-                    <td></td>
-                  </tr>
+                  {feedingRecords.map((record) => (
+                    <tr key={record.id}>
+                      <td>{formatDate(record.date)}</td>
+                      <td>{record.amount}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
