@@ -1,8 +1,22 @@
 import { useOutletContext } from "react-router-dom";
 import { Download } from "lucide-react";
+import { useState } from "react";
 
 export function ReportsPage() {
   const { selectedChild } = useOutletContext();
+
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+
+  const handleFromDateChange = (event) => {
+    setFromDate(event.target.value);
+  };
+
+  const handleToDateChange = (event) => {
+    setToDate(event.target.value);
+  };
+  console.log("From", fromDate);
+  console.log("To", toDate);
 
   return (
     <section className="reports-page">
@@ -38,11 +52,21 @@ export function ReportsPage() {
             <div className="date-range-input">
               <div className="date-input-wrapper">
                 <p>From</p>
-                <input type="date" className="date-input-from" />
+                <input
+                  type="date"
+                  className="date-input-from"
+                  value={fromDate}
+                  onChange={handleFromDateChange}
+                />
               </div>
               <div className="date-input-wrapper">
                 <p>To</p>
-                <input type="date" className="date-input-to" />
+                <input
+                  type="date"
+                  className="date-input-to"
+                  value={toDate}
+                  onChange={handleToDateChange}
+                />
               </div>
             </div>
 
@@ -107,31 +131,72 @@ export function ReportsPage() {
 
         <div className="preview-records">
           <div className="preview-growth-records">
-            <span className="preview-records-icon"></span>
+            <span className="preview-records-icon">📏</span>
             <h3 className="preview-records-label">Growth Records</h3>
 
-            <div className="preview-growth-table">
-              <table></table>
+            <div className="table-container">
+              <table className="records-table">
+                <thead className="table-header">
+                  <tr>
+                    <th>Date</th>
+                    <th>Height</th>
+                    <th>Weight</th>
+                  </tr>
+                </thead>
+                <tbody className="table-data">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <p className="total-records">Total Records: 6</p>
           </div>
 
           <div className="preview-sleep-records">
-            <span className="preview-records-icon"></span>
+            <span className="preview-records-icon">🌙</span>
             <h3 className="preview-records-label">Sleep Records</h3>
 
-            <div className="preview-sleep-table">
-              <table></table>
+            <div className="table-container">
+              <table className="records-table">
+                <thead className="table-header">
+                  <tr>
+                    <th>Date</th>
+                    <th>Duration</th>
+                  </tr>
+                </thead>
+                <tbody className="table-data">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <p className="total-records">Total Records: 28</p>
           </div>
 
           <div className="preview-feeding-records">
-            <span className="preview-records-icon"></span>
+            <span className="preview-records-icon">🍼</span>
             <h3 className="preview-records-label">Feeding Records</h3>
 
-            <div className="preview-feeding-table">
-              <table></table>
+            <div className="table-container">
+              <table className="records-table">
+                <thead className="table-header">
+                  <tr>
+                    <th>Date</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody className="table-data">
+                  <tr>
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <p className="total-records">Total Records: 56</p>
           </div>
