@@ -15,8 +15,6 @@ export function ReportsPage() {
   const handleToDateChange = (event) => {
     setToDate(event.target.value);
   };
-  console.log("From", fromDate);
-  console.log("To", toDate);
 
   return (
     <section className="reports-page">
@@ -82,7 +80,7 @@ export function ReportsPage() {
             <label className="report-options-label">Include in Report</label>
             <div className="include-records-wrapper">
               <input type="checkbox" className="include-check-box" />
-              <label className="include-records-label">Growth records</label>
+              <label className="include-records-label">Growth Records</label>
             </div>
             <div className="include-records-wrapper">
               <input type="checkbox" className="include-check-box" />
