@@ -21,6 +21,31 @@ export function ReportsPage() {
     setToDate(event.target.value);
   };
 
+  const filteredGrowthRecords = growthRecords.filter((record) => {
+    if (fromDate === "" && toDate === "") {
+      return true;
+    }
+    return fromDate <= record.date && record.date <= toDate;
+  });
+
+  const filteredSleepRecords = sleepRecords.filter((record) => {
+    if (fromDate === "" && toDate === "") {
+      return true;
+    }
+    return fromDate <= record.date && record.date <= toDate;
+  });
+
+  const filteredFeedingRecords = feedingRecords.filter((record) => {
+    if (fromDate === "" && toDate === "") {
+      return true;
+    }
+    return fromDate <= record.date && record.date <= toDate;
+  });
+
+  const hasFilteredGrowthRecords = filteredGrowthRecords.length > 0;
+  const hasFilteredSleepRecords = filteredSleepRecords.length > 0;
+  const hasFilteredFeedingRecords = filteredFeedingRecords.length > 0;
+
   return (
     <section className="reports-page">
       <div className="page-top">
@@ -147,13 +172,23 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  {growthRecords.map((record) => (
-                    <tr key={record.id}>
-                      <td>{formatDate(record.date)}</td>
-                      <td>{record.height}</td>
-                      <td>{record.weight}</td>
+                  {hasFilteredGrowthRecords ? (
+                    filteredGrowthRecords.map((record) => {
+                      return (
+                        <tr key={record.id}>
+                          <td>{formatDate(record.date)}</td>
+                          <td>{record.height}</td>
+                          <td>{record.weight}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="3" className="empty-state-message">
+                        No growth records yet.
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -173,12 +208,22 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  {sleepRecords.map((record) => (
-                    <tr key={record.id}>
-                      <td>{formatDate(record.date)}</td>
-                      <td>{record.duration}</td>
+                  {hasFilteredSleepRecords ? (
+                    filteredSleepRecords.map((record) => {
+                      return (
+                        <tr key={record.id}>
+                          <td>{formatDate(record.date)}</td>
+                          <td>{record.duration}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className="empty-state-message">
+                        No Sleep records yet.
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
@@ -198,12 +243,22 @@ export function ReportsPage() {
                   </tr>
                 </thead>
                 <tbody className="table-data">
-                  {feedingRecords.map((record) => (
-                    <tr key={record.id}>
-                      <td>{formatDate(record.date)}</td>
-                      <td>{record.amount}</td>
+                  {hasFilteredFeedingRecords ? (
+                    filteredFeedingRecords.map((record) => {
+                      return (
+                        <tr key={record.id}>
+                          <td>{formatDate(record.date)}</td>
+                          <td>{record.amount}</td>
+                        </tr>
+                      );
+                    })
+                  ) : (
+                    <tr>
+                      <td colSpan="2" className="empty-state-message">
+                        No feeding records yet.
+                      </td>
                     </tr>
-                  ))}
+                  )}
                 </tbody>
               </table>
             </div>
