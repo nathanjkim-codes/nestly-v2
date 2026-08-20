@@ -133,7 +133,6 @@ export function ReportsPage() {
               >
                 Last 6 Months
               </button>
-              <button className="preset-date">Custom</button>
             </div>
           </div>
 
@@ -223,7 +222,9 @@ export function ReportsPage() {
                 </tbody>
               </table>
             </div>
-            <p className="total-records">Total Records: 6</p>
+            <p className="total-records">
+              Total Records: {filteredGrowthRecords.length}
+            </p>
           </div>
 
           <div className="preview-sleep-records">
@@ -258,7 +259,9 @@ export function ReportsPage() {
                 </tbody>
               </table>
             </div>
-            <p className="total-records">Total Records: 28</p>
+            <p className="total-records">
+              Total Records: {filteredSleepRecords.length}
+            </p>
           </div>
 
           <div className="preview-feeding-records">
@@ -293,7 +296,9 @@ export function ReportsPage() {
                 </tbody>
               </table>
             </div>
-            <p className="total-records">Total Records: 56</p>
+            <p className="total-records">
+              Total Records: {filteredFeedingRecords.length}
+            </p>
           </div>
         </div>
 
