@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import { Download } from "lucide-react";
 import { useState } from "react";
 import { formatDate } from "../utils/formatDate";
+import { formatDateForInput } from "../utils/formatDateForInput";
 
 export function ReportsPage() {
   const { selectedChild } = useOutletContext();
@@ -19,6 +20,20 @@ export function ReportsPage() {
 
   const handleToDateChange = (event) => {
     setToDate(event.target.value);
+  };
+
+  const handlePresetDate = (amount, unit) => {
+    const toDateObj = new Date();
+    const fromDateObj = new Date(toDateObj);
+
+    if (unit === "days") {
+      fromDateObj.setDate(toDateObj.getDate() - amount);
+    }
+    if (unit === "months") {
+      fromDateObj.setMonth(toDateObj.getMonth() - amount);
+    }
+    setFromDate(formatDateForInput(fromDateObj));
+    setToDate(formatDateForInput(toDateObj));
   };
 
   const filteredGrowthRecords = growthRecords.filter((record) => {
@@ -39,6 +54,7 @@ export function ReportsPage() {
     if (fromDate === "" && toDate === "") {
       return true;
     }
+
     return fromDate <= record.date && record.date <= toDate;
   });
 
@@ -99,9 +115,24 @@ export function ReportsPage() {
             </div>
 
             <div className="date-preset">
-              <button className="preset-date">Last 30 Days</button>
-              <button className="preset-date">Last 3 Months</button>
-              <button className="preset-date">Last 6 Months</button>
+              <button
+                className="preset-date"
+                onClick={() => handlePresetDate(30, "days")}
+              >
+                Last 30 Days
+              </button>
+              <button
+                className="preset-date"
+                onClick={() => handlePresetDate(3, "months")}
+              >
+                Last 3 Months
+              </button>
+              <button
+                className="preset-date"
+                onClick={() => handlePresetDate(6, "months")}
+              >
+                Last 6 Months
+              </button>
               <button className="preset-date">Custom</button>
             </div>
           </div>
