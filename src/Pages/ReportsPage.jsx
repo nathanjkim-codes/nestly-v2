@@ -174,8 +174,11 @@ export function ReportsPage() {
               maxLength={300}
               placeholder="Routine check-up."
             ></textarea>
+
+            <button type="button" className="generate-report-btn">
+              Generate Report
+            </button>
           </div>
-          <button type="button">Generate Report</button>
         </div>
       </div>
 
@@ -188,7 +191,7 @@ export function ReportsPage() {
         </div>
 
         <div className="preview-records">
-          <div className="preview-growth-records">
+          <div className="preview-record-card preview-growth-records">
             <span className="preview-records-icon">📏</span>
             <h3 className="preview-records-label">Growth Records</h3>
 
@@ -227,7 +230,7 @@ export function ReportsPage() {
             </p>
           </div>
 
-          <div className="preview-sleep-records">
+          <div className="preview-record-card preview-sleep-records">
             <span className="preview-records-icon">🌙</span>
             <h3 className="preview-records-label">Sleep Records</h3>
 
@@ -264,7 +267,7 @@ export function ReportsPage() {
             </p>
           </div>
 
-          <div className="preview-feeding-records">
+          <div className="preview-record-card preview-feeding-records">
             <span className="preview-records-icon">🍼</span>
             <h3 className="preview-records-label">Feeding Records</h3>
 
