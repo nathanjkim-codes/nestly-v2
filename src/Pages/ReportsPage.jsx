@@ -62,6 +62,20 @@ export function ReportsPage() {
   const hasFilteredSleepRecords = filteredSleepRecords.length > 0;
   const hasFilteredFeedingRecords = filteredFeedingRecords.length > 0;
 
+  function getPreviewRecords(records) {
+    const sortedRecord = [...records].sort(
+      (a, b) => new Date(b.date) - new Date(a.date),
+    );
+
+    const previewRecords = sortedRecord.slice(0, 5);
+
+    return previewRecords;
+  }
+
+  const growthPreviewRecords = getPreviewRecords(filteredGrowthRecords);
+  const sleepPreviewRecords = getPreviewRecords(filteredSleepRecords);
+  const feedingPreviewRecords = getPreviewRecords(filteredFeedingRecords);
+
   return (
     <section className="reports-page">
       <div className="page-top">
@@ -185,15 +199,17 @@ export function ReportsPage() {
       <div className="report-preview-container">
         <div className="report-preview">
           <h3 className="reports-heading">Report Preview</h3>
-          <p className="reports-description">
+          <p className="report-description">
             This is how your report will look.
           </p>
         </div>
 
         <div className="preview-records">
           <div className="preview-record-card preview-growth-records">
-            <span className="preview-records-icon">📏</span>
-            <h3 className="preview-records-label">Growth Records</h3>
+            <div className="preview-record-header">
+              <span className="preview-records-icon">📏</span>
+              <h3 className="preview-records-label">Growth Records</h3>
+            </div>
 
             <div className="table-container">
               <table className="records-table">
@@ -206,7 +222,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredGrowthRecords ? (
-                    filteredGrowthRecords.map((record) => {
+                    growthPreviewRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>
@@ -231,8 +247,10 @@ export function ReportsPage() {
           </div>
 
           <div className="preview-record-card preview-sleep-records">
-            <span className="preview-records-icon">🌙</span>
-            <h3 className="preview-records-label">Sleep Records</h3>
+            <div className="preview-record-header">
+              <span className="preview-records-icon">🌙</span>
+              <h3 className="preview-records-label">Sleep Records</h3>
+            </div>
 
             <div className="table-container">
               <table className="records-table">
@@ -244,7 +262,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredSleepRecords ? (
-                    filteredSleepRecords.map((record) => {
+                    sleepPreviewRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>
@@ -268,8 +286,10 @@ export function ReportsPage() {
           </div>
 
           <div className="preview-record-card preview-feeding-records">
-            <span className="preview-records-icon">🍼</span>
-            <h3 className="preview-records-label">Feeding Records</h3>
+            <div className="preview-record-header">
+              <span className="preview-records-icon">🍼</span>
+              <h3 className="preview-records-label">Feeding Records</h3>
+            </div>
 
             <div className="table-container">
               <table className="records-table">
@@ -281,7 +301,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredFeedingRecords ? (
-                    filteredFeedingRecords.map((record) => {
+                    feedingPreviewRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>
@@ -308,7 +328,7 @@ export function ReportsPage() {
         <div className="export-report">
           <div className="export-content-group">
             <h3 className="reports-heading">Export Report</h3>
-            <p className="reports-description">
+            <p className="report-description">
               Download, print, or email this report.
             </p>
           </div>
