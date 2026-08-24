@@ -62,20 +62,6 @@ export function ReportsPage() {
   const hasFilteredSleepRecords = filteredSleepRecords.length > 0;
   const hasFilteredFeedingRecords = filteredFeedingRecords.length > 0;
 
-  function getPreviewRecords(records) {
-    const sortedRecord = [...records].sort(
-      (a, b) => new Date(b.date) - new Date(a.date),
-    );
-
-    const previewRecords = sortedRecord.slice(0, 5);
-
-    return previewRecords;
-  }
-
-  const growthPreviewRecords = getPreviewRecords(filteredGrowthRecords);
-  const sleepPreviewRecords = getPreviewRecords(filteredSleepRecords);
-  const feedingPreviewRecords = getPreviewRecords(filteredFeedingRecords);
-
   return (
     <section className="reports-page">
       <div className="page-top">
@@ -211,7 +197,7 @@ export function ReportsPage() {
               <h3 className="preview-records-label">Growth Records</h3>
             </div>
 
-            <div className="table-container">
+            <div className="table-container report-table-container">
               <table className="records-table">
                 <thead className="table-header">
                   <tr>
@@ -222,7 +208,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredGrowthRecords ? (
-                    growthPreviewRecords.map((record) => {
+                    filteredGrowthRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>
@@ -252,7 +238,7 @@ export function ReportsPage() {
               <h3 className="preview-records-label">Sleep Records</h3>
             </div>
 
-            <div className="table-container">
+            <div className="table-container report-table-container">
               <table className="records-table">
                 <thead className="table-header">
                   <tr>
@@ -262,7 +248,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredSleepRecords ? (
-                    sleepPreviewRecords.map((record) => {
+                    filteredSleepRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>
@@ -291,7 +277,7 @@ export function ReportsPage() {
               <h3 className="preview-records-label">Feeding Records</h3>
             </div>
 
-            <div className="table-container">
+            <div className="table-container report-table-container">
               <table className="records-table">
                 <thead className="table-header">
                   <tr>
@@ -301,7 +287,7 @@ export function ReportsPage() {
                 </thead>
                 <tbody className="table-data">
                   {hasFilteredFeedingRecords ? (
-                    feedingPreviewRecords.map((record) => {
+                    filteredFeedingRecords.map((record) => {
                       return (
                         <tr key={record.id}>
                           <td>{formatDate(record.date)}</td>

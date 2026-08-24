@@ -916,6 +916,11 @@ body {
   overflow-y: auto;
 }
 
+.report-table-container {
+  max-height: 240px;
+  overflow-y: auto;
+}
+
 .page-container {
   width: 100%;
   table-layout: fixed;
@@ -1313,7 +1318,7 @@ body {
 .report-date-range {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 6px;
 }
 
 .report-options-label {
@@ -1469,13 +1474,13 @@ body {
 .report-preview-container {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 }
 
 .report-preview {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .preview-records {
@@ -1567,4 +1572,26 @@ body {
   font-size: 13px;
   font-weight: 400;
   margin: 0;
+}
+
+.export-report {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: #0b1020;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.export-content-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.export-action-group {
+  display: flex;
+  gap: 15px;
 }
