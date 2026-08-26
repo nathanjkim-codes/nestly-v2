@@ -1,4 +1,17 @@
+import { useState } from "react";
+
 export function SettingsPage() {
+  const [selectedUnit, setSelectedUnit] = useState("imperial");
+
+  const handleUnitChange = (event) => {
+    setSelectedUnit(event.target.value);
+  };
+
+  const units =
+    selectedUnit === "imperial"
+      ? { height: "in", weight: "lbs", feeding: "fl oz" }
+      : { height: "cm", weight: "kg", feeding: "mL" };
+
   return (
     <section className="settings-page">
       <div className="page-top">
@@ -31,7 +44,11 @@ export function SettingsPage() {
           </div>
 
           <div className="measurement-units-change">
-            <select className="settings-unit-select">
+            <select
+              className="settings-unit-select"
+              value={selectedUnit}
+              onChange={handleUnitChange}
+            >
               <option value="imperial">Imperial (in, lbs, oz)</option>
               <option value="metric">Metric (cm, kg, mL)</option>
             </select>
