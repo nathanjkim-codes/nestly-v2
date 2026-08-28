@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 export function SettingsPage() {
-  const [selectedUnit, setSelectedUnit] = useState("imperial");
+  const { selectedUnit, setSelectedUnit } = useOutletContext();
 
   const handleUnitChange = (event) => {
     setSelectedUnit(event.target.value);

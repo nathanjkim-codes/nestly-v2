@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Header from "./Components/Header.jsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function App() {
   // Mock Data
@@ -621,6 +621,15 @@ function App() {
   // selectedChild
   const selectedChild = children.find((child) => child.id === selectedChildId);
 
+  // selectedUnit
+  const savedUnit = localStorage.getItem("selectedUnit") || "imperial";
+
+  const [selectedUnit, setSelectedUnit] = useState(savedUnit);
+
+  useEffect(() => {
+    localStorage.setItem("selectedUnit", selectedUnit);
+  }, [selectedUnit]);
+
   return (
     <div className="app-shell">
       <Sidebar />
@@ -632,7 +641,7 @@ function App() {
           setSelectedChildId={setSelectedChildId}
           selectedChild={selectedChild}
         />
-        <Outlet context={{ selectedChild }} />
+        <Outlet context={{ selectedChild, selectedUnit, setSelectedUnit }} />
       </main>
     </div>
   );

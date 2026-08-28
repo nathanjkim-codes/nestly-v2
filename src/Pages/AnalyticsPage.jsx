@@ -2,6 +2,8 @@ import { useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { formatDecimal } from "../utils/formatDecimal";
 import { formatDecimalHours } from "../utils/formatDecimalHours";
+import { measurementUnits } from "../utils/measurementUnits";
+import { measurementConversion } from "../utils/measurementConversion";
 import {
   CartesianGrid,
   LineChart,
@@ -21,7 +23,9 @@ export function AnalyticsPage() {
     setDateRange(e.target.value);
   };
 
-  const { selectedChild } = useOutletContext();
+  const { selectedChild, selectedUnit } = useOutletContext();
+
+  const units = measurementUnits(selectedUnit);
 
   const growthRecords = selectedChild.growthRecords;
   const sleepRecords = selectedChild.sleepRecords;
@@ -305,7 +309,7 @@ export function AnalyticsPage() {
             <p className="page-stat-card-label">Growth (Height)</p>
             <h3 className="page-stat-card-value">
               {hasEnoughFilteredGrowthRecords
-                ? `${growthSign}${formatDecimal(heightGrowth)} in`
+                ? `${growthSign}${formatDecimal(measurementConversion(heightGrowth, selectedUnit))} ${units.height}`
                 : "No Data"}
             </h3>
 
@@ -356,7 +360,7 @@ export function AnalyticsPage() {
             <p className="page-stat-card-label">Avg Feeding</p>
             <h3 className="page-stat-card-value">
               {hasFilteredFeedingRecords
-                ? `${formatDecimal(averageFeedingAmount)} oz`
+                ? `${formatDecimal(averageFeedingAmount)} ${units.feeding}`
                 : "No data"}
             </h3>
 
@@ -481,7 +485,7 @@ export function AnalyticsPage() {
 
             <div className="chart-legend">
               <span className="legend-bar legend-bar-feeding"></span>
-              <span className="legend-label">Amount (oz)</span>
+              <span className="legend-label">Amount ({units.feeding})</span>
             </div>
           </div>
 
