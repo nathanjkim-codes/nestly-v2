@@ -3,7 +3,11 @@ import { useState } from "react";
 import { formatDecimal } from "../utils/formatDecimal";
 import { formatDecimalHours } from "../utils/formatDecimalHours";
 import { measurementUnits } from "../utils/measurementUnits";
-import { measurementConversion } from "../utils/measurementConversion";
+import {
+  heightConversion,
+  weightConversion,
+  feedingConversion,
+} from "../utils/measurementConversion";
 import {
   CartesianGrid,
   LineChart,
@@ -58,6 +62,14 @@ export function AnalyticsPage() {
     return recordDate >= cutoffDate && recordDate <= today;
   });
 
+  const convertedGrowthRecords = filteredGrowthRecords.map((record) => {
+    return {
+      date: record.date,
+      height: heightConversion(record.height, selectedUnit),
+      weight: weightConversion(record.weight, selectedUnit),
+    };
+  });
+
   const filteredSleepRecords = sortedSleepRecords.filter((record) => {
     if (dateRange === "all") {
       return true;
@@ -72,6 +84,13 @@ export function AnalyticsPage() {
     }
     const recordDate = new Date(record.date);
     return recordDate >= cutoffDate && recordDate <= today;
+  });
+
+  const convertedFeedingRecords = filteredFeedingRecords.map((record) => {
+    return {
+      date: record.date,
+      amount: feedingConversion(record.amount, selectedUnit),
+    };
   });
 
   // =========================
@@ -309,7 +328,7 @@ export function AnalyticsPage() {
             <p className="page-stat-card-label">Growth (Height)</p>
             <h3 className="page-stat-card-value">
               {hasEnoughFilteredGrowthRecords
-                ? `${growthSign}${formatDecimal(measurementConversion(heightGrowth, selectedUnit))} ${units.height}`
+                ? `${growthSign}${formatDecimal(heightConversion(heightGrowth, selectedUnit))} ${units.height}`
                 : "No Data"}
             </h3>
 
@@ -360,7 +379,7 @@ export function AnalyticsPage() {
             <p className="page-stat-card-label">Avg Feeding</p>
             <h3 className="page-stat-card-value">
               {hasFilteredFeedingRecords
-                ? `${formatDecimal(averageFeedingAmount)} ${units.feeding}`
+                ? `${formatDecimal(feedingConversion(averageFeedingAmount, selectedUnit))} ${units.feeding}`
                 : "No data"}
             </h3>
 
@@ -388,11 +407,11 @@ export function AnalyticsPage() {
 
           <div className="chart-legend">
             <span className="legend-line legend-line-height"></span>
-            <span className="legend-label">Height</span>
+            <span className="legend-label">Height({units.height})</span>
           </div>
           <div className="chart-legend">
             <span className="legend-line legend-line-weight"></span>
-            <span className="legend-label">Weight</span>
+            <span className="legend-label">Weight({units.weight})</span>
           </div>
         </div>
 
@@ -400,7 +419,7 @@ export function AnalyticsPage() {
           <div className="analytics-chart-area">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
-                data={filteredGrowthRecords}
+                data={convertedGrowthRecords}
                 margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
               >
                 <CartesianGrid vertical={false} stroke="#1E293B" />
@@ -493,7 +512,7 @@ export function AnalyticsPage() {
             <div className="analytics-chart-area">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
-                  data={filteredFeedingRecords}
+                  data={convertedFeedingRecords}
                   margin={{ top: 20, right: 20, left: 0, bottom: 10 }}
                 >
                   <CartesianGrid vertical={false} stroke="#1E293B" />
