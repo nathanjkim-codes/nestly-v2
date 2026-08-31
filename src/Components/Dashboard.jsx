@@ -3,7 +3,7 @@ import StatsGrid from "./StatsGrid.jsx";
 import DashboardCharts from "./DashboardCharts.jsx";
 import DashboardActions from "./DashboardActions.jsx";
 
-function Dashboard({ selectedChild }) {
+function Dashboard({ selectedChild, selectedUnit }) {
   const currentStats = selectedChild.currentStats;
   const growthRecords = selectedChild.growthRecords;
   const sleepRecords = selectedChild.sleepRecords;
@@ -59,6 +59,7 @@ function Dashboard({ selectedChild }) {
         growthRecords={growthRecords}
         sleepRecords={sleepRecords}
         feedingRecords={feedingRecords}
+        selectedUnit={selectedUnit}
       />
 
       <DashboardActions

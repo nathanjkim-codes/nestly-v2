@@ -1,4 +1,10 @@
 import {
+  heightConversion,
+  weightConversion,
+} from "../utils/measurementConversion";
+import { measurementUnits } from "../utils/measurementUnits";
+import { formatDecimal } from "../utils/formatDecimal";
+import {
   ResponsiveContainer,
   LineChart,
   Line,
@@ -8,7 +14,17 @@ import {
   Tooltip,
 } from "recharts";
 
-function GrowthChartCard({ growthRecords }) {
+function GrowthChartCard({ growthRecords, selectedUnit }) {
+  const units = measurementUnits(selectedUnit);
+
+  const convertedGrowthRecords = growthRecords.map((record) => {
+    return {
+      date: record.date,
+      height: heightConversion(record.height, selectedUnit),
+      weight: weightConversion(record.weight, selectedUnit),
+    };
+  });
+
   const hasGrowthRecords = growthRecords.length >= 1;
 
   const latestGrowthRecord = hasGrowthRecords
@@ -102,13 +118,13 @@ function GrowthChartCard({ growthRecords }) {
       {hasGrowthRecords ? (
         <>
           <div className="chart-legend">
-            <p className="legend-height">◆ Height (in)</p>
-            <p className="legend-weight">● Weight (lbs)</p>
+            <p className="legend-height">◆ Height ({units.height})</p>
+            <p className="legend-weight">● Weight ({units.weight})</p>
           </div>
           <div className="growth-chart-area">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart
-                data={growthRecords}
+                data={convertedGrowthRecords}
                 margin={{ top: 30, right: 24, left: -10, bottom: 20 }}
               >
                 <CartesianGrid vertical={false} stroke="#1E293B" />
@@ -147,19 +163,31 @@ function GrowthChartCard({ growthRecords }) {
           <div className="summary-row">
             <div className="summary-card">
               <p className="summary-label">Height</p>
-              <h3 className="summary-value">{latestGrowthRecord.height} in</h3>
+              <h3 className="summary-value">
+                {hasGrowthRecords
+                  ? `${formatDecimal(heightConversion(latestGrowthRecord.height, selectedUnit))} ${units.height}`
+                  : null}
+              </h3>
               <p className="summary-percentile">72nd percentile</p>
               <p className="summary-trend">
-                {trendHeightDisplay} {heightDifference} from last month
+                {hasPreviousRecord
+                  ? `${trendHeightDisplay} ${formatDecimal(heightConversion(heightDifference, selectedUnit))} ${units.height} from last month`
+                  : null}
               </p>
             </div>
 
             <div className="summary-card">
               <p className="summary-label">Weight</p>
-              <h3 className="summary-value">{latestGrowthRecord.weight} lbs</h3>
+              <h3 className="summary-value">
+                {hasGrowthRecords
+                  ? `${formatDecimal(weightConversion(latestGrowthRecord.weight, selectedUnit))} ${units.weight}`
+                  : null}
+              </h3>
               <p className="summary-percentile">65th percentile</p>
               <p className="summary-trend">
-                {trendWeightDisplay} {weightDifference} from last month
+                {hasPreviousRecord
+                  ? `${trendWeightDisplay} ${formatDecimal(weightConversion(weightDifference, selectedUnit))} ${units.weight} from last month`
+                  : null}
               </p>
             </div>
           </div>

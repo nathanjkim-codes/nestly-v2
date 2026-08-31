@@ -417,6 +417,7 @@ function App() {
           height: 26,
           weight: 18,
         },
+
         {
           id: 2,
           date: "2023-05-10T07:30:00",
@@ -460,6 +461,7 @@ function App() {
           weight: 23.3,
         },
       ],
+
       sleepRecords: [
         {
           id: 1,

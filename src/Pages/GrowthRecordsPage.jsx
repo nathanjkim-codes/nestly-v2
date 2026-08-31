@@ -5,6 +5,7 @@ import {
   weightConversion,
 } from "../utils/measurementConversion";
 import { measurementUnits } from "../utils/measurementUnits";
+import { formatDecimal } from "../utils/formatDecimal";
 
 export function GrowthRecordsPage() {
   const { selectedChild, selectedUnit } = useOutletContext();
