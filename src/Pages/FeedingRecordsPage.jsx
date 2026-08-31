@@ -1,9 +1,14 @@
 import { useOutletContext } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 import { formatTime } from "../utils/formatTime";
+import { formatDecimal } from "../utils/formatDecimal";
+import { measurementUnits } from "../utils/measurementUnits";
+import { feedingConversion } from "../utils/measurementConversion";
 
 export function FeedingRecordsPage() {
-  const { selectedChild } = useOutletContext();
+  const { selectedChild, selectedUnit } = useOutletContext();
+
+  const units = measurementUnits(selectedUnit);
 
   const feedingRecords = selectedChild.feedingRecords;
 
@@ -51,7 +56,9 @@ export function FeedingRecordsPage() {
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Latest Feeding</p>
             <h3 className="page-stat-card-value">
-              {hasRecord ? `${latestFeedingRecord} oz` : "No data"}
+              {hasRecord
+                ? `${formatDecimal(feedingConversion(latestFeedingRecord, selectedUnit))} ${units.feeding}`
+                : "No data"}
             </h3>
             <p className="page-stat-card-time">
               {hasRecord
@@ -67,7 +74,9 @@ export function FeedingRecordsPage() {
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Average Amount</p>
             <h3 className="page-stat-card-value">
-              {hasRecord ? `${averageFeedingAmount.toFixed(1)} oz` : "No data"}
+              {hasRecord
+                ? `${formatDecimal(feedingConversion(averageFeedingAmount, selectedUnit))} ${units.feeding}`
+                : "No data"}
             </h3>
             <p className="page-stat-card-time">Across all records</p>
           </div>
@@ -105,7 +114,9 @@ export function FeedingRecordsPage() {
                   <td>{formatTime(record.date)}</td>
                   <td>{record.type}</td>
                   <td>
-                    {record.amount} {record.unit}
+                    {`${formatDecimal(
+                      feedingConversion(record.amount, selectedUnit),
+                    )} ${units.feeding}`}
                   </td>
                   <td>{record.duration} min</td>
                   <td>{record.note || "No note"}</td>
