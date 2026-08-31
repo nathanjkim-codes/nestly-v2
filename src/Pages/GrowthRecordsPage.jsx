@@ -96,12 +96,10 @@ export function GrowthRecordsPage() {
                   <tr key={record.id} className="page-row">
                     <td>{formatDate(record.date)}</td>
                     <td>
-                      {`${formatDecimal(heightConversion(record.height, selectedUnit))} $
-                      {units.height}`}
+                      {`${formatDecimal(heightConversion(record.height, selectedUnit))} ${units.height}`}
                     </td>
                     <td>
-                      {`${formatDecimal(weightConversion(record.weight, selectedUnit))} $
-                      {units.weight}`}
+                      {`${formatDecimal(weightConversion(record.weight, selectedUnit))} ${units.weight}`}
                     </td>
                     <td>{record.note || "No note"}</td>
                     <td>
