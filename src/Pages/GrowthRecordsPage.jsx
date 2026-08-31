@@ -1,8 +1,16 @@
 import { formatDate } from "../utils/formatDate";
 import { useOutletContext } from "react-router-dom";
+import {
+  heightConversion,
+  weightConversion,
+} from "../utils/measurementConversion";
+import { measurementUnits } from "../utils/measurementUnits";
 
 export function GrowthRecordsPage() {
-  const { selectedChild } = useOutletContext();
+  const { selectedChild, selectedUnit } = useOutletContext();
+
+  const units = measurementUnits(selectedUnit);
+
   const growthRecords = selectedChild.growthRecords;
 
   const sortedGrowthRecords = [...growthRecords].sort(
@@ -34,7 +42,9 @@ export function GrowthRecordsPage() {
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Latest Height</p>
             <h3 className="page-stat-card-value">
-              {hasRecord ? `${latestHeightRecord} in` : "No data"}
+              {hasRecord
+                ? `${formatDecimal(heightConversion(latestHeightRecord, selectedUnit))} ${units.height}`
+                : "No data"}
             </h3>
             <p className="page-stat-card-time">
               {hasRecord ? formatDate(latestDateRecord) : "No records"}
@@ -47,7 +57,9 @@ export function GrowthRecordsPage() {
           <div className="page-stat-card-content">
             <p className="page-stat-card-label">Latest Weight</p>
             <h3 className="page-stat-card-value">
-              {hasRecord ? `${latestWeightRecord} lbs` : "No data"}
+              {hasRecord
+                ? `${formatDecimal(weightConversion(latestWeightRecord, selectedUnit))} ${units.weight}`
+                : "No data"}
             </h3>
             <p className="page-stat-card-time">
               {hasRecord ? formatDate(latestDateRecord) : "No records"}
@@ -82,8 +94,14 @@ export function GrowthRecordsPage() {
                 return (
                   <tr key={record.id} className="page-row">
                     <td>{formatDate(record.date)}</td>
-                    <td>{record.height} in</td>
-                    <td>{record.weight} lbs</td>
+                    <td>
+                      {`${formatDecimal(heightConversion(record.height, selectedUnit))} $
+                      {units.height}`}
+                    </td>
+                    <td>
+                      {`${formatDecimal(weightConversion(record.weight, selectedUnit))} $
+                      {units.weight}`}
+                    </td>
                     <td>{record.note || "No note"}</td>
                     <td>
                       <div className="page-cell-actions">
