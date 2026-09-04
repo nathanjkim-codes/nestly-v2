@@ -38,6 +38,130 @@ function Dashboard({ selectedChild, selectedUnit }) {
   const latestSleepRecord = hasSleepRecord ? sortedSleepRecord[0] : null;
   const latestFeedingRecord = hasFeedingRecord ? sortedFeedingRecord[0] : null;
 
+  const latestGrowthRecordDate = hasGrowthRecord
+    ? new Date(sortedGrowthRecord[0].date)
+    : null;
+
+  const latestSleepRecordDate = hasSleepRecord
+    ? new Date(sortedSleepRecord[0].date)
+    : null;
+
+  const previousGrowthMonthDate = hasGrowthRecord
+    ? new Date(
+        latestGrowthRecordDate.getFullYear(),
+        latestGrowthRecordDate.getMonth() - 1,
+        1,
+      )
+    : null;
+
+  const previousGrowthMonthRecords = hasGrowthRecord
+    ? sortedGrowthRecord.filter((record) => {
+        const dateObject = new Date(record.date);
+        return (
+          dateObject.getMonth() === previousGrowthMonthDate.getMonth() &&
+          dateObject.getFullYear() === previousGrowthMonthDate.getFullYear()
+        );
+      })
+    : [];
+
+  const hasPreviousGrowthRecord = previousGrowthMonthRecords.length > 0;
+
+  const latestPreviousGrowthRecord = hasPreviousGrowthRecord
+    ? previousGrowthMonthRecords[0]
+    : null;
+
+  const monthlyHeightDifference = hasPreviousGrowthRecord
+    ? latestGrowthRecord.height - latestPreviousGrowthRecord.height
+    : null;
+
+  const monthlyWeightDifference = hasPreviousGrowthRecord
+    ? latestGrowthRecord.weight - latestPreviousGrowthRecord.weight
+    : null;
+
+  const getStartOfWeekMonday = function getStartOfWeekMonday(
+    latestSleepRecordDate,
+  ) {
+    const sleepRecordDate = new Date(latestSleepRecordDate);
+    const dayOfWeek = sleepRecordDate.getDay();
+
+    const mondayOffset =
+      sleepRecordDate.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+
+    const startOfWeek = new Date(sleepRecordDate.setDate(mondayOffset));
+
+    startOfWeek.setHours(0, 0, 0, 0);
+
+    return startOfWeek;
+  };
+
+  const latestSleepWeekStart = hasSleepRecord
+    ? getStartOfWeekMonday(latestSleepRecordDate)
+    : null;
+
+  const getEndOfWeekSunday = function getEndOfWeekSunday(startOfWeek) {
+    const sleepRecordDate = new Date(startOfWeek);
+
+    const sundayOffset = sleepRecordDate.getDate() + 6;
+
+    const endOfWeek = new Date(sleepRecordDate.setDate(sundayOffset));
+
+    endOfWeek.setHours(23, 59, 59, 999);
+
+    return endOfWeek;
+  };
+
+  const latestSleepWeekEnd = hasSleepRecord
+    ? getEndOfWeekSunday(latestSleepWeekStart)
+    : null;
+
+  const latestSleepWeek = hasSleepRecord
+    ? sleepRecords.filter((record) => {
+        const recordDate = new Date(record.date);
+        return (
+          recordDate >= latestSleepWeekStart && recordDate <= latestSleepWeekEnd
+        );
+      })
+    : [];
+
+  const getPreviousSleepWeekStart = function (startOfWeek) {
+    const previousSleepWeekDate = new Date(startOfWeek);
+
+    const previousMonday = previousSleepWeekDate.getDate() - 7;
+
+    const previousSleepWeekStart = new Date(
+      previousSleepWeekDate.setDate(previousMonday),
+    );
+    return previousSleepWeekStart;
+  };
+
+  const previousSleepWeekStart = hasSleepRecord
+    ? getPreviousSleepWeekStart(latestSleepWeekStart)
+    : null;
+
+  const previousSleepWeekEnd = hasSleepRecord
+    ? getEndOfWeekSunday(previousSleepWeekStart)
+    : null;
+
+  const previousSleepWeek = hasSleepRecord
+    ? sleepRecords.filter((record) => {
+        const recordDate = new Date(record.date);
+        return (
+          recordDate >= previousSleepWeekStart &&
+          recordDate <= previousSleepWeekEnd
+        );
+      })
+    : [];
+
+  const latestSleepTotal = latestSleepWeek.reduce((total, record) => {
+    return total + record.duration;
+  }, 0);
+
+  const hasLatestSleepWeekRecords = latestSleepWeek.length > 0;
+
+  const latestSleepWeekAverage = hasLatestSleepWeekRecords
+    ? latestSleepTotal / latestSleepWeek.length
+    : null;
+
   const stats = [
     {
       id: "growth",
@@ -48,7 +172,9 @@ function Dashboard({ selectedChild, selectedUnit }) {
             heightConversion(latestGrowthRecord.height, selectedUnit),
           )} ${units.height}`
         : "No data",
-      trend: "↑ 0.6 in this month",
+      trend: hasPreviousGrowthRecord
+        ? `↑ ${formatDecimal(heightConversion(monthlyHeightDifference, selectedUnit))} ${units.height} vs last month`
+        : "No data",
     },
 
     {
@@ -60,7 +186,9 @@ function Dashboard({ selectedChild, selectedUnit }) {
             weightConversion(latestGrowthRecord.weight, selectedUnit),
           )} ${units.weight}`
         : "No data",
-      trend: "↑ 0.8 lbs this month",
+      trend: hasPreviousGrowthRecord
+        ? `↑ ${formatDecimal(weightConversion(monthlyWeightDifference, selectedUnit))} ${units.weight} vs last month`
+        : "No data",
     },
 
     {
