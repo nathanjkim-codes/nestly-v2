@@ -162,6 +162,54 @@ function Dashboard({ selectedChild, selectedUnit }) {
     ? latestSleepTotal / latestSleepWeek.length
     : null;
 
+  const previousSleepTotal = previousSleepWeek.reduce((total, record) => {
+    return total + record.duration;
+  }, 0);
+
+  const hasPreviousSleepWeekRecords = previousSleepWeek.length > 0;
+
+  const previousSleepWeekAverage = hasPreviousSleepWeekRecords
+    ? previousSleepTotal / previousSleepWeek.length
+    : null;
+
+  const weeklySleepDifference =
+    hasLatestSleepWeekRecords && hasPreviousSleepWeekRecords
+      ? latestSleepWeekAverage - previousSleepWeekAverage
+      : null;
+
+  let monthlyHeightTrend;
+  if (monthlyHeightDifference === null) {
+    monthlyHeightTrend = null;
+  } else if (monthlyHeightDifference > 0) {
+    monthlyHeightTrend = "↑";
+  } else if (monthlyHeightDifference < 0) {
+    monthlyHeightTrend = "↓";
+  } else if (monthlyHeightDifference === 0) {
+    monthlyHeightTrend = "No change";
+  }
+
+  let monthlyWeightTrend;
+  if (monthlyWeightDifference === null) {
+    monthlyWeightTrend = null;
+  } else if (monthlyWeightDifference > 0) {
+    monthlyWeightTrend = "↑";
+  } else if (monthlyWeightDifference < 0) {
+    monthlyWeightTrend = "↓";
+  } else if (monthlyWeightDifference === 0) {
+    monthlyWeightTrend = "No change";
+  }
+
+  let weeklySleepTrend;
+  if (weeklySleepDifference === null) {
+    weeklySleepTrend = null;
+  } else if (weeklySleepDifference > 0) {
+    weeklySleepTrend = "↑";
+  } else if (weeklySleepDifference < 0) {
+    weeklySleepTrend = "↓";
+  } else if (weeklySleepDifference === 0) {
+    weeklySleepTrend = "No change";
+  }
+
   const stats = [
     {
       id: "growth",
