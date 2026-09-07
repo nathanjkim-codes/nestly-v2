@@ -1,11 +1,6 @@
 import { useState } from "react";
 
-function ChildSelector({
-  children,
-  selectedChildId,
-  setSelectedChildId,
-  selectedChild,
-}) {
+function ChildSelector({ children, setSelectedChildId, selectedChild }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {

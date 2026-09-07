@@ -42,7 +42,7 @@ function SleepChartCard({ sleepRecords }) {
   const bestSleepRecord = highestSleepDuration(sleepRecords);
 
   const bestSleepDay = hasSleepRecords ? bestSleepRecord.day : null;
-  const bestSleepDate = hasSleepRecords ? bestSleepRecord.date : null;
+
   const sleepDate = hasSleepRecords ? new Date(bestSleepRecord.date) : null;
 
   const formattedBestSleepDuration = hasSleepRecords

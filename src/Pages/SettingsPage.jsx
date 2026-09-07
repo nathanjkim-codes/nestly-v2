@@ -7,11 +7,6 @@ export function SettingsPage() {
     setSelectedUnit(event.target.value);
   };
 
-  const units =
-    selectedUnit === "imperial"
-      ? { height: "in", weight: "lbs", feeding: "fl oz" }
-      : { height: "cm", weight: "kg", feeding: "mL" };
-
   return (
     <section className="settings-page">
       <div className="page-top">
