@@ -713,6 +713,11 @@ body {
   align-items: center;
 }
 
+.modal-title {
+  color: white;
+  margin: 0;
+}
+
 .modal-close-btn {
   background: none;
   border: none;

@@ -1,4 +1,4 @@
-export function GrowthQuickAdd() {
+export function GrowthRecordForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -53,4 +53,4 @@ export function GrowthQuickAdd() {
   );
 }
 
-export default GrowthQuickAdd;
+export default GrowthRecordForm;

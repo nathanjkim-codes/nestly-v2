@@ -1,6 +1,6 @@
 import { SleepQuickAdd } from "./SleepQuickAdd";
 import { FeedingQuickAdd } from "./FeedingQuickAdd";
-import { GrowthQuickAdd } from "./GrowthQuickAdd";
+import { GrowthRecordForm } from "./GrowthRecordForm";
 import { MoodQuickAdd } from "./MoodQuickAdd";
 import { NoteQuickAdd } from "./NoteQuickAdd";
 
@@ -16,7 +16,7 @@ export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
       case "feeding":
         return <FeedingQuickAdd />;
       case "growth":
-        return <GrowthQuickAdd />;
+        return <GrowthRecordForm />;
       case "mood":
         return <MoodQuickAdd />;
       case "note":
@@ -34,7 +34,7 @@ export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
     <div className="modal-back-drop">
       <div className="modal-box">
         <div className="modal-header">
-          <h3 className="title">{selectedQuickAddTitle}</h3>
+          <h3 className="modal-title">{selectedQuickAddTitle}</h3>
           <span className="modal-close-btn" onClick={onClose}>
             ✕
           </span>

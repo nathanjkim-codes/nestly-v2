@@ -6,9 +6,12 @@ import {
 } from "../utils/measurementConversion";
 import { measurementUnits } from "../utils/measurementUnits";
 import { formatDecimal } from "../utils/formatDecimal";
+import { useState } from "react";
+import { GrowthRecordForm } from "../Components/QuickAdd/GrowthRecordForm";
 
 export function GrowthRecordsPage() {
   const { selectedChild, selectedUnit } = useOutletContext();
+  const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
 
   const units = measurementUnits(selectedUnit);
 
@@ -34,8 +37,30 @@ export function GrowthRecordsPage() {
           </p>
         </div>
 
-        <button className="page-add-btn">+ Add Growth Record</button>
+        <button
+          className="page-add-btn"
+          onClick={() => setIsGrowthFormOpen(true)}
+        >
+          + Add Growth Record
+        </button>
       </div>
+
+      {isGrowthFormOpen && (
+        <div className="modal-back-drop">
+          <div className="modal-box">
+            <div className="modal-header">
+              <h3 className="modal-title">Growth Record</h3>
+              <span
+                className="modal-close-btn"
+                onClick={() => setIsGrowthFormOpen(false)}
+              >
+                ✕
+              </span>
+            </div>
+            <GrowthRecordForm />
+          </div>
+        </div>
+      )}
 
       <div className="page-stats">
         <div className="page-stat-card">
