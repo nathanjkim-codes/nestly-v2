@@ -1,13 +1,14 @@
 import { useOutletContext } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 import { formatDecimalHours } from "../utils/formatDecimalHours";
+import { useState } from "react";
+import { SleepRecordForm } from "../Components/QuickAdd/SleepRecordForm";
 
 export function SleepRecordsPage() {
   const { selectedChild } = useOutletContext();
+  const [isSleepFormOpen, setIsSleepFormOpen] = useState(false);
 
   const sleepRecords = selectedChild.sleepRecords;
-
-  console.log(sleepRecords);
 
   const sortedSleepRecords = [...sleepRecords].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
@@ -48,8 +49,30 @@ export function SleepRecordsPage() {
           </p>
         </div>
 
-        <button className="page-add-btn">+ Add Sleep Record</button>
+        <button
+          className="page-add-btn"
+          onClick={() => setIsSleepFormOpen(true)}
+        >
+          + Add Sleep Record
+        </button>
       </div>
+
+      {isSleepFormOpen && (
+        <div className="modal-back-drop">
+          <div className="modal-box">
+            <div className="modal-header">
+              <h3 className="modal-title">Sleep Record</h3>
+              <span
+                className="modal-close-btn"
+                onClick={() => setIsSleepFormOpen(false)}
+              >
+                ✕
+              </span>
+            </div>
+            <SleepRecordForm />
+          </div>
+        </div>
+      )}
 
       <div className="page-stats">
         <div className="page-stat-card">

@@ -4,9 +4,12 @@ import { formatTime } from "../utils/formatTime";
 import { formatDecimal } from "../utils/formatDecimal";
 import { measurementUnits } from "../utils/measurementUnits";
 import { feedingConversion } from "../utils/measurementConversion";
+import { useState } from "react";
+import { FeedingRecordForm } from "../Components/QuickAdd/FeedingRecordForm";
 
 export function FeedingRecordsPage() {
   const { selectedChild, selectedUnit } = useOutletContext();
+  const [isFeedingFormOpen, setIsFeedingFormOpen] = useState(false);
 
   const units = measurementUnits(selectedUnit);
 
@@ -46,8 +49,30 @@ export function FeedingRecordsPage() {
           </p>
         </div>
 
-        <button className="page-add-btn">+ Add Feeding Record</button>
+        <button
+          className="page-add-btn"
+          onClick={() => setIsFeedingFormOpen(true)}
+        >
+          + Add Feeding Record
+        </button>
       </div>
+
+      {isFeedingFormOpen && (
+        <div className="modal-back-drop">
+          <div className="modal-box">
+            <div className="modal-header">
+              <h3 className="modal-title">Feeding Record</h3>
+              <span
+                className="modal-close-btn"
+                onClick={() => setIsFeedingFormOpen(false)}
+              >
+                ✕
+              </span>
+            </div>
+            <FeedingRecordForm />
+          </div>
+        </div>
+      )}
 
       <div className="page-stats">
         <div className="page-stat-card">

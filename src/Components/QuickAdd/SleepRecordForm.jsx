@@ -1,4 +1,4 @@
-export function SleepQuickAdd() {
+export function SleepRecordForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -36,4 +36,4 @@ export function SleepQuickAdd() {
   );
 }
 
-export default SleepQuickAdd;
+export default SleepRecordForm;

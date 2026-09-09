@@ -1,5 +1,5 @@
-import { SleepQuickAdd } from "./SleepQuickAdd";
-import { FeedingQuickAdd } from "./FeedingQuickAdd";
+import { SleepRecordForm } from "./SleepRecordForm";
+import { FeedingRecordForm } from "./FeedingRecordForm";
 import { GrowthRecordForm } from "./GrowthRecordForm";
 import { MoodQuickAdd } from "./MoodQuickAdd";
 import { NoteQuickAdd } from "./NoteQuickAdd";
@@ -12,9 +12,9 @@ export function QuickAddModal({ isOpen, onClose, selectedQuickAdd }) {
   const renderQuickAdd = () => {
     switch (selectedQuickAdd) {
       case "sleep":
-        return <SleepQuickAdd />;
+        return <SleepRecordForm />;
       case "feeding":
-        return <FeedingQuickAdd />;
+        return <FeedingRecordForm />;
       case "growth":
         return <GrowthRecordForm />;
       case "mood":

@@ -1,4 +1,4 @@
-export function FeedingQuickAdd() {
+export function FeedingRecordForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
@@ -40,4 +40,4 @@ export function FeedingQuickAdd() {
   );
 }
 
-export default FeedingQuickAdd;
+export default FeedingRecordForm;
