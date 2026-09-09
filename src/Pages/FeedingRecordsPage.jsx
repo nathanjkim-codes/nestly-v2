@@ -62,12 +62,13 @@ export function FeedingRecordsPage() {
           <div className="modal-box">
             <div className="modal-header">
               <h3 className="modal-title">Feeding Record</h3>
-              <span
+              <button
+                type="button"
                 className="modal-close-btn"
                 onClick={() => setIsFeedingFormOpen(false)}
               >
                 ✕
-              </span>
+              </button>
             </div>
             <FeedingRecordForm />
           </div>

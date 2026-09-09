@@ -62,12 +62,13 @@ export function SleepRecordsPage() {
           <div className="modal-box">
             <div className="modal-header">
               <h3 className="modal-title">Sleep Record</h3>
-              <span
+              <button
+                type="button"
                 className="modal-close-btn"
                 onClick={() => setIsSleepFormOpen(false)}
               >
                 ✕
-              </span>
+              </button>
             </div>
             <SleepRecordForm />
           </div>

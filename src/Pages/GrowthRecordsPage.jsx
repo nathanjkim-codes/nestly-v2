@@ -50,12 +50,13 @@ export function GrowthRecordsPage() {
           <div className="modal-box">
             <div className="modal-header">
               <h3 className="modal-title">Growth Record</h3>
-              <span
+              <button
+                type="button"
                 className="modal-close-btn"
                 onClick={() => setIsGrowthFormOpen(false)}
               >
                 ✕
-              </span>
+              </button>
             </div>
             <GrowthRecordForm />
           </div>

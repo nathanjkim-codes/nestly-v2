@@ -2,8 +2,12 @@ import { formatDate } from "../utils/formatDate";
 import { calculateAge } from "../utils/calculateAge";
 import EmmaAvatar from "../assets/avatars/Emma.png";
 import EvelynAvatar from "../assets/avatars/Evelyn.png";
+import { ChildForm } from "../Components/ChildForm";
+import { useState } from "react";
 
 export function ChildrenPage() {
+  const [isChildFormOpen, setIsChildFormOpen] = useState(false);
+
   const children = [
     {
       id: 1,
@@ -32,8 +36,31 @@ export function ChildrenPage() {
           <p className="page-description">Manage your children's profiles.</p>
         </div>
 
-        <button className="page-add-btn">+ Add Child</button>
+        <button
+          className="page-add-btn"
+          onClick={() => setIsChildFormOpen(true)}
+        >
+          + Add Child
+        </button>
       </div>
+
+      {isChildFormOpen && (
+        <div className="modal-back-drop">
+          <div className="modal-box">
+            <div className="modal-header">
+              <h3 className="modal-title">Add Child</h3>
+              <button
+                type="button"
+                className="modal-close-btn"
+                onClick={() => setIsChildFormOpen(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <ChildForm />
+          </div>
+        </div>
+      )}
 
       <table className="page-container">
         <thead className="page-header">
