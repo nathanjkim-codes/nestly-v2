@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 
 function App() {
   // Mock Data
-  const children = [
+  const initialChildren = [
     {
       id: 1,
 
@@ -627,6 +627,7 @@ function App() {
   ];
 
   // useState
+  const [children, setChildren] = useState(initialChildren);
   const [selectedChildId, setSelectedChildId] = useState(children[0].id);
 
   // selectedChild
@@ -648,7 +649,6 @@ function App() {
       <main className="main-content">
         <Header
           children={children}
-          selectedChildId={selectedChildId}
           setSelectedChildId={setSelectedChildId}
           selectedChild={selectedChild}
         />

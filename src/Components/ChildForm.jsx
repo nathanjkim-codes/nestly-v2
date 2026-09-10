@@ -1,23 +1,70 @@
+import { useState } from "react";
+
 export function ChildForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newChild = {
+      name: nameInput,
+      birthDate: birthDateInput,
+      gender: genderInput,
+      profileImage: profileImage,
+    };
+  };
+
+  const [nameInput, setNameInput] = useState("");
+  const [birthDateInput, setBirthDateInput] = useState("");
+  const [genderInput, setGenderInput] = useState("");
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleNameChange = (e) => {
+    setNameInput(e.target.value);
+  };
+
+  const handleBirthDateChange = (e) => {
+    setBirthDateInput(e.target.value);
+  };
+
+  const handleGenderChange = (e) => {
+    setGenderInput(e.target.value);
+  };
+
+  const handleProfileImageChange = (e) => {
+    setProfileImage(e.target.files[0]);
   };
 
   return (
-    <form className="quick-add-form Child-form" onSubmit={handleSubmit}>
+    <form className="quick-add-form child-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="child-name">Name:</label>
-        <input type="text" id="child-name" required />
+        <input
+          value={nameInput}
+          onChange={handleNameChange}
+          type="text"
+          id="child-name"
+          required
+        />
       </div>
 
       <div className="form-group">
         <label htmlFor="birth-date">Birth Date:</label>
-        <input type="date" id="birth-date" required />
+        <input
+          value={birthDateInput}
+          onChange={handleBirthDateChange}
+          type="date"
+          id="birth-date"
+          required
+        />
       </div>
 
       <div className="form-group">
         <label htmlFor="gender-select">Gender:</label>
-        <select id="gender-select">
+        <select
+          value={genderInput}
+          onChange={handleGenderChange}
+          id="gender-select"
+        >
+          <option value="">Select Gender</option>
           <option value="boy">Boy</option>
           <option value="girl">Girl</option>
         </select>
@@ -25,7 +72,12 @@ export function ChildForm() {
 
       <div className="form-group">
         <label htmlFor="profile-image">Profile Image:</label>
-        <input type="file" id="profile-image" accept="image/*" />
+        <input
+          onChange={handleProfileImageChange}
+          type="file"
+          id="profile-image"
+          accept="image/*"
+        />
       </div>
 
       <button type="submit" className="save-btn">
