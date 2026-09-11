@@ -1,32 +1,22 @@
 import { formatDate } from "../utils/formatDate";
 import { calculateAge } from "../utils/calculateAge";
-import EmmaAvatar from "../assets/avatars/Emma.png";
-import EvelynAvatar from "../assets/avatars/Evelyn.png";
 import { ChildForm } from "../Components/ChildForm";
 import { useState } from "react";
+import { useOutletContext } from "react-router-dom";
 
 export function ChildrenPage() {
   const [isChildFormOpen, setIsChildFormOpen] = useState(false);
 
-  const children = [
-    {
-      id: 1,
-      name: "Emma",
-      birthDate: "2023-06-03",
-      gender: "Female",
-      avatar: EmmaAvatar,
-    },
-
-    {
-      id: 2,
-      name: "Evelyn",
-      birthDate: "2023-03-23",
-      gender: "Female",
-      avatar: EvelynAvatar,
-    },
-  ];
+  const { children, setChildren } = useOutletContext();
 
   const hasChildren = children.length > 0;
+
+  const handleAddChild = (newChild) => {
+    const newChildArray = [...children, newChild];
+
+    setChildren(newChildArray);
+    setIsChildFormOpen(false);
+  };
 
   return (
     <section className="children-page">
@@ -57,7 +47,7 @@ export function ChildrenPage() {
                 ✕
               </button>
             </div>
-            <ChildForm />
+            <ChildForm handleAddChild={handleAddChild} />
           </div>
         </div>
       )}
@@ -75,22 +65,25 @@ export function ChildrenPage() {
         <tbody className="page-data">
           {hasChildren ? (
             children.map((child) => {
-              const age = calculateAge(child.birthDate);
+              const age = calculateAge(child.profile.birthDate);
 
               return (
                 <tr key={child.id} className="page-row">
                   <td className="page-cell-name">
-                    <img src={child.avatar} alt={`${child.name} avatar`} />
-                    <span>{child.name}</span>
+                    <img
+                      src={child.profile.profileImage}
+                      alt={`${child.profile.name} avatar`}
+                    />
+                    <span>{child.profile.name}</span>
                   </td>
 
                   <td>
                     {age.years} years {age.months} months
                   </td>
 
-                  <td>{child.gender}</td>
+                  <td>{child.profile.gender}</td>
 
-                  <td>{formatDate(child.birthDate)}</td>
+                  <td>{formatDate(child.profile.birthDate)}</td>
 
                   <td>
                     <div className="page-cell-actions">

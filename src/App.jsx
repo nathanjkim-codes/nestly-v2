@@ -652,7 +652,15 @@ function App() {
           setSelectedChildId={setSelectedChildId}
           selectedChild={selectedChild}
         />
-        <Outlet context={{ selectedChild, selectedUnit, setSelectedUnit }} />
+        <Outlet
+          context={{
+            selectedChild,
+            selectedUnit,
+            setSelectedUnit,
+            children,
+            setChildren,
+          }}
+        />
       </main>
     </div>
   );

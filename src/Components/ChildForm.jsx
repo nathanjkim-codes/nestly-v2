@@ -1,15 +1,19 @@
 import { useState } from "react";
 
-export function ChildForm() {
+export function ChildForm({ handleAddChild }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const newChild = {
-      name: nameInput,
-      birthDate: birthDateInput,
-      gender: genderInput,
-      profileImage: profileImage,
+      id: crypto.randomUUID(),
+      profile: {
+        name: nameInput,
+        birthDate: birthDateInput,
+        gender: genderInput,
+        profileImage: profileImage,
+      },
     };
+    handleAddChild(newChild);
   };
 
   const [nameInput, setNameInput] = useState("");
