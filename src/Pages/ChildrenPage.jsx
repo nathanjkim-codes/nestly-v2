@@ -18,6 +18,12 @@ export function ChildrenPage() {
     setIsChildFormOpen(false);
   };
 
+  const deleteById = (id) => {
+    setChildren((currentChild) =>
+      currentChild.filter((child) => child.id !== id),
+    );
+  };
+
   return (
     <section className="children-page">
       <div className="page-top">
@@ -89,7 +95,12 @@ export function ChildrenPage() {
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
                       <button className="page-edit-btn">Edit</button>
-                      <button className="page-delete-btn">Delete</button>
+                      <button
+                        className="page-delete-btn"
+                        onClick={() => deleteById(child.id)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
