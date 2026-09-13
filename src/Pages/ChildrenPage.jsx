@@ -5,9 +5,10 @@ import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
 export function ChildrenPage() {
-  const [isChildFormOpen, setIsChildFormOpen] = useState(false);
-
   const { children, setChildren } = useOutletContext();
+
+  const [isChildFormOpen, setIsChildFormOpen] = useState(false);
+  const [editChild, setEditChild] = useState(null);
 
   const hasChildren = children.length > 0;
 
@@ -18,10 +19,33 @@ export function ChildrenPage() {
     setIsChildFormOpen(false);
   };
 
-  const deleteById = (id) => {
+  const handleDeleteById = (id) => {
     setChildren((currentChild) =>
       currentChild.filter((child) => child.id !== id),
     );
+  };
+
+  const handleOpenEditChild = (child) => {
+    setEditChild(child);
+    setIsChildFormOpen(true);
+  };
+
+  const handleUpdateChild = (updatedProfile) => {
+    setChildren(
+      children.map((child) =>
+        child.id === editChild.id
+          ? {
+              ...child,
+              profile: {
+                ...child.profile,
+                ...updatedProfile,
+              },
+            }
+          : child,
+      ),
+    );
+    setEditChild(null);
+    setIsChildFormOpen(false);
   };
 
   return (
@@ -44,7 +68,9 @@ export function ChildrenPage() {
         <div className="modal-back-drop">
           <div className="modal-box">
             <div className="modal-header">
-              <h3 className="modal-title">Add Child</h3>
+              <h3 className="modal-title">
+                {editChild ? "Edit Child" : "Add Child"}
+              </h3>
               <button
                 type="button"
                 className="modal-close-btn"
@@ -53,7 +79,11 @@ export function ChildrenPage() {
                 ✕
               </button>
             </div>
-            <ChildForm handleAddChild={handleAddChild} />
+            <ChildForm
+              handleAddChild={handleAddChild}
+              handleUpdateChild={handleUpdateChild}
+              editChild={editChild}
+            />
           </div>
         </div>
       )}
@@ -94,10 +124,15 @@ export function ChildrenPage() {
                   <td>
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
-                      <button className="page-edit-btn">Edit</button>
+                      <button
+                        className="page-edit-btn"
+                        onClick={() => handleOpenEditChild(child)}
+                      >
+                        Edit
+                      </button>
                       <button
                         className="page-delete-btn"
-                        onClick={() => deleteById(child.id)}
+                        onClick={() => handleDeleteById(child.id)}
                       >
                         Delete
                       </button>

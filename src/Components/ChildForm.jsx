@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function ChildForm({ handleAddChild }) {
+export function ChildForm({ handleAddChild, editChild }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -36,6 +36,14 @@ export function ChildForm({ handleAddChild }) {
   const handleProfileImageChange = (e) => {
     setProfileImage(e.target.files[0]);
   };
+
+  useEffect(() => {
+    if (editChild) {
+      setNameInput(editChild.profile.name);
+      setBirthDateInput(editChild.profile.birthDate);
+      setGenderInput(editChild.profile.gender);
+    }
+  }, [editChild]);
 
   return (
     <form className="quick-add-form child-form" onSubmit={handleSubmit}>
