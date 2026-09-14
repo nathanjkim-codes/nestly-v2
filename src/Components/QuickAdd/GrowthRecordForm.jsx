@@ -2,35 +2,61 @@ export function GrowthRecordForm() {
   const handleSubmit = (e) => {
     e.preventDefault();
   };
+
+  const [dateInput, setDateInput] = useState("");
+  const [heightInput, setHeightInput] = useState("");
+  const [weightInput, setWeightInput] = useState("");
+  const [noteInput, setNoteInput] = useState("");
+
+  const handleDateChange = (e) => {
+    setDateInput(e.target.value);
+  };
+
+  const handleHeightChange = (e) => {
+    setHeightInput(e.target.value);
+  };
+
+  const handleWeightChange = (e) => {
+    setWeightInput(e.target.value);
+  };
+
+  const handleNoteChange = (e) => {
+    setNoteInput(e.target.value);
+  };
+
   return (
     <form className="quick-add-form growth-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="growth-date">Date:</label>
-        <input type="date" id="growth-date" required />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="growth-time">Time:</label>
-        <input type="time" id="growth-time" required />
+        <input
+          type="date"
+          id="growth-date"
+          value={dateInput}
+          onChange={handleDateChange}
+          required
+        />
       </div>
 
       <div className="form-group">
         <label htmlFor="growth-height">Height (in):</label>
-        <input type="number" id="growth-height" step="0.1" min="0" required />
+        <input
+          type="number"
+          id="growth-height"
+          value={heightInput}
+          onChange={handleHeightChange}
+          step="0.1"
+          min="0"
+          required
+        />
       </div>
 
       <div className="form-group">
         <label htmlFor="growth-weight">Weight (lb):</label>
-        <input type="number" id="growth-weight" step="0.1" min="0" required />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="growth-head-circumference">
-          Head Circumference (in):
-        </label>
         <input
           type="number"
-          id="growth-head-circumference"
+          id="growth-weight"
+          value={weightInput}
+          onChange={handleWeightChange}
           step="0.1"
           min="0"
           required
@@ -41,6 +67,8 @@ export function GrowthRecordForm() {
         <label htmlFor="growth-notes">Notes:</label>
         <textarea
           id="growth-notes"
+          value={noteInput}
+          onChange={handleNoteChange}
           rows={4}
           placeholder="Add notes (optional)"
         ></textarea>

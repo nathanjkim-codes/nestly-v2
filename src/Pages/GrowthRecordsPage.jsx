@@ -10,7 +10,9 @@ import { useState } from "react";
 import { GrowthRecordForm } from "../Components/QuickAdd/GrowthRecordForm";
 
 export function GrowthRecordsPage() {
-  const { selectedChild, selectedUnit } = useOutletContext();
+  const { selectedChild, selectedUnit, children, setChildren } =
+    useOutletContext();
+
   const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
 
   const units = measurementUnits(selectedUnit);
