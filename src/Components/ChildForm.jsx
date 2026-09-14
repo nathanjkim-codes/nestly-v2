@@ -1,19 +1,31 @@
 import { useState, useEffect } from "react";
 
-export function ChildForm({ handleAddChild, editChild }) {
+export function ChildForm({ handleAddChild, editChild, handleUpdateChild }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    const newChild = {
-      id: crypto.randomUUID(),
-      profile: {
+    if (editChild) {
+      const updatedProfile = {
         name: nameInput,
         birthDate: birthDateInput,
         gender: genderInput,
         profileImage: profileImage,
-      },
-    };
-    handleAddChild(newChild);
+      };
+
+      handleUpdateChild(updatedProfile);
+    } else {
+      const newChild = {
+        id: crypto.randomUUID(),
+        profile: {
+          name: nameInput,
+          birthDate: birthDateInput,
+          gender: genderInput,
+          profileImage: profileImage,
+        },
+      };
+
+      handleAddChild(newChild);
+    }
   };
 
   const [nameInput, setNameInput] = useState("");
@@ -54,6 +66,7 @@ export function ChildForm({ handleAddChild, editChild }) {
           onChange={handleNameChange}
           type="text"
           id="child-name"
+          placeholder="Please enter name"
           required
         />
       </div>
