@@ -1,6 +1,17 @@
-export function GrowthRecordForm() {
+import { useState } from "react";
+
+export function GrowthRecordForm({ handleAddRecord }) {
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    const newGrowthRecord = {
+      id: crypto.randomUUID(),
+      date: dateInput,
+      height: Number(heightInput),
+      weight: Number(weightInput),
+      note: noteInput,
+    };
+    handleAddRecord(newGrowthRecord);
   };
 
   const [dateInput, setDateInput] = useState("");

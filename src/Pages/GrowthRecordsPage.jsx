@@ -46,6 +46,7 @@ export function GrowthRecordsPage() {
     });
 
     setChildren(updatedChildren);
+    setIsGrowthFormOpen(false);
   };
 
   return (
@@ -79,7 +80,7 @@ export function GrowthRecordsPage() {
                 ✕
               </button>
             </div>
-            <GrowthRecordForm />
+            <GrowthRecordForm handleAddRecord={handleAddRecord} />
           </div>
         </div>
       )}
