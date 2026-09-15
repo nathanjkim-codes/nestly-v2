@@ -29,6 +29,25 @@ export function GrowthRecordsPage() {
   const latestDateRecord = hasRecord ? sortedGrowthRecords[0].date : null;
   const latestWeightRecord = hasRecord ? sortedGrowthRecords[0].weight : null;
 
+  const handleAddRecord = (newRecord) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedGrowthRecords = [...child.growthRecords, newRecord];
+
+        const updatedChild = {
+          ...child,
+          growthRecords: updatedGrowthRecords,
+        };
+
+        return updatedChild;
+      }
+
+      return child;
+    });
+
+    setChildren(updatedChildren);
+  };
+
   return (
     <section className="growth-records-page">
       <div className="page-top">
