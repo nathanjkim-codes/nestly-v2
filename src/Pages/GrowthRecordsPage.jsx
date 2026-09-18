@@ -49,6 +49,29 @@ export function GrowthRecordsPage() {
     setIsGrowthFormOpen(false);
   };
 
+  const handleDeleteRecord = (id) => {
+    setChildren((currentChildren) => {
+      const updatedChildren = currentChildren.map((child) => {
+        if (child.id === selectedChild.id) {
+          const updatedGrowthRecords = child.growthRecords.filter((record) => {
+            return record.id !== id;
+          });
+
+          const updatedChild = {
+            ...child,
+            growthRecords: updatedGrowthRecords,
+          };
+
+          return updatedChild;
+        }
+
+        return child;
+      });
+
+      return updatedChildren;
+    });
+  };
+
   return (
     <section className="growth-records-page">
       <div className="page-top">
@@ -154,7 +177,12 @@ export function GrowthRecordsPage() {
                       <div className="page-cell-actions">
                         <button className="page-view-btn">View</button>
                         <button className="page-edit-btn">Edit</button>
-                        <button className="page-delete-btn">Delete</button>
+                        <button
+                          className="page-delete-btn"
+                          onClick={() => handleDeleteRecord(record.id)}
+                        >
+                          Delete
+                        </button>
                       </div>
                     </td>
                   </tr>
