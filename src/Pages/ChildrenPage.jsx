@@ -20,9 +20,13 @@ export function ChildrenPage() {
   };
 
   const handleDeleteById = (id) => {
-    setChildren((currentChild) =>
-      currentChild.filter((child) => child.id !== id),
-    );
+    setChildren((currentChildren) => {
+      const updatedChildren = currentChildren.filter((child) => {
+        return child.id !== id;
+      });
+
+      return updatedChildren;
+    });
   };
 
   const handleOpenEditChild = (child) => {
@@ -44,10 +48,10 @@ export function ChildrenPage() {
           : child,
       ),
     );
+
     setEditChild(null);
     setIsChildFormOpen(false);
   };
-
   return (
     <section className="children-page">
       <div className="page-top">
