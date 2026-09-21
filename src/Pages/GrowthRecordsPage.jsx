@@ -14,6 +14,7 @@ export function GrowthRecordsPage() {
     useOutletContext();
 
   const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
+  const [editGrowthRecord, setEditGrowthRecord] = useState(null);
 
   const units = measurementUnits(selectedUnit);
 
@@ -72,6 +73,32 @@ export function GrowthRecordsPage() {
     });
   };
 
+  const handleUpdateRecord = (updatedGrowthRecord) => {
+    setChildren(
+      children.map((child) => {
+        if (child.id === selectedChild.id) {
+          const updatedGrowthRecords = child.growthRecords.map((record) => {
+            if (record.id === updatedGrowthRecord.id) {
+              return updatedGrowthRecord;
+            }
+            return record;
+          });
+          const updatedChild = {
+            ...child,
+            growthRecords: updatedGrowthRecords,
+          };
+          return updatedChild;
+        }
+        return child;
+      }),
+    );
+  };
+
+  const handleOpenEditRecord = (record) => {
+    setEditGrowthRecord(record);
+    setIsGrowthFormOpen(true);
+  };
+
   return (
     <section className="growth-records-page">
       <div className="page-top">
@@ -103,7 +130,11 @@ export function GrowthRecordsPage() {
                 ✕
               </button>
             </div>
-            <GrowthRecordForm handleAddRecord={handleAddRecord} />
+            <GrowthRecordForm
+              handleAddRecord={handleAddRecord}
+              handleUpdateRecord={handleUpdateRecord}
+              editGrowthRecord={editGrowthRecord}
+            />
           </div>
         </div>
       )}
@@ -176,7 +207,12 @@ export function GrowthRecordsPage() {
                     <td>
                       <div className="page-cell-actions">
                         <button className="page-view-btn">View</button>
-                        <button className="page-edit-btn">Edit</button>
+                        <button
+                          className="page-edit-btn"
+                          onClick={() => handleOpenEditRecord(record)}
+                        >
+                          Edit
+                        </button>
                         <button
                           className="page-delete-btn"
                           onClick={() => handleDeleteRecord(record.id)}

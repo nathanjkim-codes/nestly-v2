@@ -1,17 +1,31 @@
 import { useState } from "react";
 
-export function GrowthRecordForm({ handleAddRecord }) {
+export function GrowthRecordForm({
+  handleAddRecord,
+  editGrowthRecord,
+  handleUpdateRecord,
+}) {
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    const newGrowthRecord = {
-      id: crypto.randomUUID(),
-      date: dateInput,
-      height: Number(heightInput),
-      weight: Number(weightInput),
-      note: noteInput,
-    };
-    handleAddRecord(newGrowthRecord);
+    if (editGrowthRecord) {
+      const updatedGrowthRecord = {
+        id: editGrowthRecord.id,
+        date: dateInput,
+        height: Number(heightInput),
+        weight: Number(weightInput),
+        note: noteInput,
+      };
+      handleUpdateRecord(updatedGrowthRecord);
+    } else {
+      const newGrowthRecord = {
+        id: crypto.randomUUID(),
+        date: dateInput,
+        height: Number(heightInput),
+        weight: Number(weightInput),
+        note: noteInput,
+      };
+      handleAddRecord(newGrowthRecord);
+    }
   };
 
   const [dateInput, setDateInput] = useState("");
