@@ -54,6 +54,10 @@ export function ChildForm({ handleAddChild, editChild, handleUpdateChild }) {
       setNameInput(editChild.profile.name);
       setBirthDateInput(editChild.profile.birthDate);
       setGenderInput(editChild.profile.gender);
+    } else {
+      setNameInput("");
+      setBirthDateInput("");
+      setGenderInput("");
     }
   }, [editChild]);
 

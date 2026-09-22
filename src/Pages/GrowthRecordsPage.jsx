@@ -92,6 +92,8 @@ export function GrowthRecordsPage() {
         return child;
       }),
     );
+    setEditGrowthRecord(null);
+    setIsGrowthFormOpen(false);
   };
 
   const handleOpenEditRecord = (record) => {

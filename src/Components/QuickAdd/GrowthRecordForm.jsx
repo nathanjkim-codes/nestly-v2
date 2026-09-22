@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function GrowthRecordForm({
   handleAddRecord,
@@ -49,6 +49,20 @@ export function GrowthRecordForm({
     setNoteInput(e.target.value);
   };
 
+  useEffect(() => {
+    if (editGrowthRecord) {
+      setDateInput(editGrowthRecord.date);
+      setHeightInput(editGrowthRecord.height);
+      setWeightInput(editGrowthRecord.weight);
+      setNoteInput(editGrowthRecord.note);
+    } else {
+      setDateInput("");
+      setHeightInput("");
+      setWeightInput("");
+      setNoteInput("");
+    }
+  }, [editGrowthRecord]);
+
   return (
     <form className="quick-add-form growth-form" onSubmit={handleSubmit}>
       <div className="form-group">
@@ -69,6 +83,7 @@ export function GrowthRecordForm({
           id="growth-height"
           value={heightInput}
           onChange={handleHeightChange}
+          placeholder="Enter height"
           step="0.1"
           min="0"
           required
@@ -82,6 +97,7 @@ export function GrowthRecordForm({
           id="growth-weight"
           value={weightInput}
           onChange={handleWeightChange}
+          placeholder="Enter weight"
           step="0.1"
           min="0"
           required
