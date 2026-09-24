@@ -56,6 +56,25 @@ export function SleepRecordsPage() {
     setIsSleepFormOpen(false);
   };
 
+  const handleDeleteRecord = (record) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedSleepRecords = child.sleepRecords.filter(
+          (currentRecord) => {
+            return currentRecord.id !== record.id;
+          },
+        );
+        const updatedChild = {
+          ...child,
+          sleepRecords: updatedSleepRecords,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+  };
+
   return (
     <section className="sleep-records-page">
       <div className="page-top">
@@ -153,7 +172,12 @@ export function SleepRecordsPage() {
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
                       <button className="page-edit-btn">Edit</button>
-                      <button className="page-delete-btn">Delete</button>
+                      <button
+                        className="page-delete-btn"
+                        onClick={() => handleDeleteRecord(record)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
