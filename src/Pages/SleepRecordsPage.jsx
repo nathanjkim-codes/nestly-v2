@@ -5,7 +5,7 @@ import { useState } from "react";
 import { SleepRecordForm } from "../Components/QuickAdd/SleepRecordForm";
 
 export function SleepRecordsPage() {
-  const { selectedChild } = useOutletContext();
+  const { selectedChild, children, setChildren } = useOutletContext();
   const [isSleepFormOpen, setIsSleepFormOpen] = useState(false);
 
   const sleepRecords = selectedChild.sleepRecords;
@@ -39,6 +39,23 @@ export function SleepRecordsPage() {
     ? formatDecimalHours(averageSleepDuration)
     : null;
 
+  const handleAddRecord = (newRecord) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedSleepRecords = [...child.sleepRecords, newRecord];
+
+        const updatedChild = {
+          ...child,
+          sleepRecords: updatedSleepRecords,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+    setIsSleepFormOpen(false);
+  };
+
   return (
     <section className="sleep-records-page">
       <div className="page-top">
@@ -70,7 +87,7 @@ export function SleepRecordsPage() {
                 ✕
               </button>
             </div>
-            <SleepRecordForm />
+            <SleepRecordForm handleAddRecord={handleAddRecord} />
           </div>
         </div>
       )}
