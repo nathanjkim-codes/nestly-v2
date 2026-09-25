@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 
-export function SleepRecordForm({ handleAddRecord, editSleepRecord }) {
+export function SleepRecordForm({
+  handleAddRecord,
+  handleUpdateRecord,
+  editSleepRecord,
+}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -9,14 +13,26 @@ export function SleepRecordForm({ handleAddRecord, editSleepRecord }) {
       weekday: "short",
     });
 
-    const newSleepRecord = {
-      id: crypto.randomUUID(),
-      date: dateInput,
-      day: shortDayName,
-      duration: Number(durationInput),
-      note: noteInput,
-    };
-    handleAddRecord(newSleepRecord);
+    if (editSleepRecord) {
+      const updatedSleepRecord = {
+        id: editSleepRecord.id,
+        date: dateInput,
+        day: shortDayName,
+        duration: Number(durationInput),
+        note: noteInput,
+      };
+      handleUpdateRecord(updatedSleepRecord);
+    } else {
+      const newSleepRecord = {
+        id: crypto.randomUUID(),
+        date: dateInput,
+        day: shortDayName,
+        duration: Number(durationInput),
+        note: noteInput,
+      };
+
+      handleAddRecord(newSleepRecord);
+    }
   };
 
   const [dateInput, setDateInput] = useState("");

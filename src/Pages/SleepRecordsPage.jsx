@@ -81,6 +81,27 @@ export function SleepRecordsPage() {
     setIsSleepFormOpen(true);
   };
 
+  const handleUpdateRecord = (updatedSleepRecord) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedSleepRecords = child.sleepRecords.map((currentRecord) => {
+          if (currentRecord.id === updatedSleepRecord.id) {
+            return updatedSleepRecord;
+          }
+          return currentRecord;
+        });
+        const updatedChild = {
+          ...child,
+          sleepRecords: updatedSleepRecords,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+    setIsSleepFormOpen(false);
+  };
+
   return (
     <section className="sleep-records-page">
       <div className="page-top">
@@ -114,6 +135,7 @@ export function SleepRecordsPage() {
             </div>
             <SleepRecordForm
               handleAddRecord={handleAddRecord}
+              handleUpdateRecord={handleUpdateRecord}
               editSleepRecord={editSleepRecord}
             />
           </div>
