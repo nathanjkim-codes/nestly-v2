@@ -268,7 +268,6 @@ function App() {
           type: "Formula",
           amount: 5.0,
           unit: "oz",
-          duration: 20,
           note: "Drank everything",
         },
         {
@@ -277,7 +276,6 @@ function App() {
           type: "Breastmilk",
           amount: 4.0,
           unit: "oz",
-          duration: 18,
           note: "After nap",
         },
         {
@@ -286,7 +284,6 @@ function App() {
           type: "Formula",
           amount: 5.5,
           unit: "oz",
-          duration: 22,
           note: "Morning feeding",
         },
         {
@@ -295,7 +292,6 @@ function App() {
           type: "Breastmilk",
           amount: 3.5,
           unit: "oz",
-          duration: 16,
           note: "Left side",
         },
         {
@@ -304,7 +300,6 @@ function App() {
           type: "Formula",
           amount: 4.5,
           unit: "oz",
-          duration: 20,
           note: "Good appetite",
         },
         {
@@ -313,7 +308,6 @@ function App() {
           type: "Formula",
           amount: 5.0,
           unit: "oz",
-          duration: 21,
           note: "Night feeding",
         },
         {
@@ -322,7 +316,6 @@ function App() {
           type: "Breastmilk",
           amount: 4.0,
           unit: "oz",
-          duration: 19,
           note: "Both sides",
         },
         {
@@ -331,7 +324,6 @@ function App() {
           type: "Formula",
           amount: 4.5,
           unit: "oz",
-          duration: 20,
           note: "Before bedtime",
         },
         {
@@ -340,7 +332,6 @@ function App() {
           type: "Formula",
           amount: 4.2,
           unit: "oz",
-          duration: 20,
           note: "",
         },
         {
@@ -349,7 +340,6 @@ function App() {
           type: "Breastmilk",
           amount: 4.5,
           unit: "oz",
-          duration: 18,
           note: "",
         },
         {
@@ -358,7 +348,6 @@ function App() {
           type: "Formula",
           amount: 4.8,
           unit: "oz",
-          duration: 20,
           note: "",
         },
         {
@@ -367,7 +356,6 @@ function App() {
           type: "Breastmilk",
           amount: 5.0,
           unit: "oz",
-          duration: 18,
           note: "",
         },
         {
@@ -376,7 +364,6 @@ function App() {
           type: "Formula",
           amount: 5.3,
           unit: "oz",
-          duration: 20,
           note: "",
         },
         {
@@ -385,7 +372,6 @@ function App() {
           type: "Formula",
           amount: 4,
           unit: "oz",
-          duration: 20,
           note: "TEMP TEST",
         },
       ],
