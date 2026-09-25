@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function SleepRecordForm({ handleAddRecord }) {
+export function SleepRecordForm({ handleAddRecord, editSleepRecord }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -9,75 +9,39 @@ export function SleepRecordForm({ handleAddRecord }) {
       weekday: "short",
     });
 
-    const sleepStartTime = (startTimeInput) => {
-      const [startHours, startMinutes] = startTimeInput.split(":");
-      const startHoursNumber = Number(startHours);
-      const startMinutesNumber = Number(startMinutes);
-
-      const startTimeTotalMinutes = startHoursNumber * 60 + startMinutesNumber;
-      return startTimeTotalMinutes;
-    };
-
-    const sleepEndTime = (endTimeInput) => {
-      const [endHours, endMinutes] = endTimeInput.split(":");
-      const endHoursNumber = Number(endHours);
-      const endMinutesNumber = Number(endMinutes);
-
-      const endTimeTotalMinutes = endHoursNumber * 60 + endMinutesNumber;
-      return endTimeTotalMinutes;
-    };
-
-    const startEndTotalMinutes = (
-      startTimeTotalMinutes,
-      endTimeTotalMinutes,
-    ) => {
-      if (endTimeTotalMinutes < startTimeTotalMinutes) {
-        endTimeTotalMinutes += 24 * 60;
-      }
-
-      return endTimeTotalMinutes - startTimeTotalMinutes;
-    };
-
-    const startTimeTotalMinutes = sleepStartTime(startTimeInput);
-    const endTimeTotalMinutes = sleepEndTime(endTimeInput);
-
-    const sleepDurationMinutes = startEndTotalMinutes(
-      startTimeTotalMinutes,
-      endTimeTotalMinutes,
-    );
-
-    const sleepDecimalHours = sleepDurationMinutes / 60;
-
     const newSleepRecord = {
       id: crypto.randomUUID(),
       date: dateInput,
       day: shortDayName,
-      duration: sleepDecimalHours,
+      duration: Number(durationInput),
       note: noteInput,
     };
     handleAddRecord(newSleepRecord);
   };
 
   const [dateInput, setDateInput] = useState("");
-  const [startTimeInput, setStartTimeInput] = useState("");
-  const [endTimeInput, setEndTimeInput] = useState("");
+  const [durationInput, setDurationInput] = useState("");
   const [noteInput, setNoteInput] = useState("");
 
   const handleDateChange = (e) => {
     setDateInput(e.target.value);
   };
 
-  const handleStartTimeChange = (e) => {
-    setStartTimeInput(e.target.value);
-  };
-
-  const handleEndTimeChange = (e) => {
-    setEndTimeInput(e.target.value);
+  const handleDurationChange = (e) => {
+    setDurationInput(e.target.value);
   };
 
   const handleNoteChange = (e) => {
     setNoteInput(e.target.value);
   };
+
+  useEffect(() => {
+    if (editSleepRecord) {
+      setDateInput(editSleepRecord.date);
+      setDurationInput(editSleepRecord.duration);
+      setNoteInput(editSleepRecord.note);
+    }
+  }, [editSleepRecord]);
 
   return (
     <form className="quick-add-form sleep-form" onSubmit={handleSubmit}>
@@ -93,23 +57,12 @@ export function SleepRecordForm({ handleAddRecord }) {
       </div>
 
       <div className="form-group">
-        <label htmlFor="sleep-start-time">Start Time:</label>
+        <label htmlFor="sleep-start-time">sleep Hours:</label>
         <input
-          type="time"
+          type="number"
           id="sleep-start-time"
-          value={startTimeInput}
-          onChange={handleStartTimeChange}
-          required
-        />
-      </div>
-
-      <div className="form-group">
-        <label htmlFor="sleep-end-time">End Time:</label>
-        <input
-          type="time"
-          id="sleep-end-time"
-          value={endTimeInput}
-          onChange={handleEndTimeChange}
+          value={durationInput}
+          onChange={handleDurationChange}
           required
         />
       </div>

@@ -7,6 +7,7 @@ import { SleepRecordForm } from "../Components/QuickAdd/SleepRecordForm";
 export function SleepRecordsPage() {
   const { selectedChild, children, setChildren } = useOutletContext();
   const [isSleepFormOpen, setIsSleepFormOpen] = useState(false);
+  const [editSleepRecord, setEditSleepRecord] = useState(null);
 
   const sleepRecords = selectedChild.sleepRecords;
 
@@ -75,6 +76,11 @@ export function SleepRecordsPage() {
     setChildren(updatedChildren);
   };
 
+  const handleOpenEditRecord = (record) => {
+    setEditSleepRecord(record);
+    setIsSleepFormOpen(true);
+  };
+
   return (
     <section className="sleep-records-page">
       <div className="page-top">
@@ -106,7 +112,10 @@ export function SleepRecordsPage() {
                 ✕
               </button>
             </div>
-            <SleepRecordForm handleAddRecord={handleAddRecord} />
+            <SleepRecordForm
+              handleAddRecord={handleAddRecord}
+              editSleepRecord={editSleepRecord}
+            />
           </div>
         </div>
       )}
@@ -171,7 +180,12 @@ export function SleepRecordsPage() {
                   <td>
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
-                      <button className="page-edit-btn">Edit</button>
+                      <button
+                        className="page-edit-btn"
+                        onClick={() => handleOpenEditRecord(record)}
+                      >
+                        Edit
+                      </button>
                       <button
                         className="page-delete-btn"
                         onClick={() => handleDeleteRecord(record)}
