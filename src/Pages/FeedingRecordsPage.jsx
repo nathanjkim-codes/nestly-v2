@@ -8,7 +8,8 @@ import { useState } from "react";
 import { FeedingRecordForm } from "../Components/QuickAdd/FeedingRecordForm";
 
 export function FeedingRecordsPage() {
-  const { selectedChild, selectedUnit } = useOutletContext();
+  const { selectedChild, selectedUnit, children, setChildren } =
+    useOutletContext();
   const [isFeedingFormOpen, setIsFeedingFormOpen] = useState(false);
 
   const units = measurementUnits(selectedUnit);
@@ -38,6 +39,22 @@ export function FeedingRecordsPage() {
   const averageFeedingAmount = hasRecord
     ? totalFeedingAmount / totalFeedingRecords
     : null;
+
+  const handleAddRecord = (newRecord) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedFeedingRecords = [...child.feedingRecords, newRecord];
+        const updatedChild = {
+          ...child,
+          feedingRecords: updatedFeedingRecords,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+    setIsFeedingFormOpen(false);
+  };
 
   return (
     <section className="feeding-records-page">
@@ -70,7 +87,7 @@ export function FeedingRecordsPage() {
                 ✕
               </button>
             </div>
-            <FeedingRecordForm />
+            <FeedingRecordForm handleAddRecord={handleAddRecord} />
           </div>
         </div>
       )}
