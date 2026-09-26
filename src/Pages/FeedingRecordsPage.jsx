@@ -56,6 +56,25 @@ export function FeedingRecordsPage() {
     setIsFeedingFormOpen(false);
   };
 
+  const handleDeleteRecord = (record) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedFeedingRecord = child.feedingRecords.filter(
+          (currentRecord) => {
+            return currentRecord.id !== record.id;
+          },
+        );
+        const updatedChild = {
+          ...child,
+          feedingRecords: updatedFeedingRecord,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+  };
+
   return (
     <section className="feeding-records-page">
       <div className="page-top">
@@ -167,7 +186,12 @@ export function FeedingRecordsPage() {
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
                       <button className="page-edit-btn">Edit</button>
-                      <button className="page-delete-btn">Delete</button>
+                      <button
+                        className="page-delete-btn"
+                        onClick={() => handleDeleteRecord(record)}
+                      >
+                        Delete
+                      </button>
                     </div>
                   </td>
                 </tr>
