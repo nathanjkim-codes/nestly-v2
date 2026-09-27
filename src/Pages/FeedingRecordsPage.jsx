@@ -75,6 +75,29 @@ export function FeedingRecordsPage() {
     setChildren(updatedChildren);
   };
 
+  const handleUpdateRecord = (updatedFeedingRecord) => {
+    const updatedChildren = children.map((child) => {
+      if (child.id === selectedChild.id) {
+        const updatedFeedingRecords = child.feedingRecords.map(
+          (currentRecord) => {
+            if (currentRecord.id === updatedFeedingRecord.id) {
+              return updatedFeedingRecord;
+            }
+            return currentRecord;
+          },
+        );
+        const updatedChild = {
+          ...child,
+          feedingRecords: updatedFeedingRecords,
+        };
+        return updatedChild;
+      }
+      return child;
+    });
+    setChildren(updatedChildren);
+    setIsFeedingFormOpen(false);
+  };
+
   return (
     <section className="feeding-records-page">
       <div className="page-top">
