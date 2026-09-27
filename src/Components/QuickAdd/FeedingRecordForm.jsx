@@ -1,19 +1,33 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function FeedingRecordForm({ handleAddRecord }) {
+export function FeedingRecordForm({
+  handleAddRecord,
+  handleUpdateRecord,
+  editFeedingRecord,
+}) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
     const dateTime = `${dateInput}T${timeInput}`;
-
-    const newRecord = {
-      id: crypto.randomUUID(),
-      date: dateTime,
-      type: typeInput,
-      amount: Number(amountInput),
-      note: noteInput,
-    };
-    handleAddRecord(newRecord);
+    if (editFeedingRecord) {
+      const updatedFeedingRecord = {
+        id: editFeedingRecord.id,
+        date: dateTime,
+        type: typeInput,
+        amount: Number(amountInput),
+        note: noteInput,
+      };
+      handleUpdateRecord(updatedFeedingRecord);
+    } else {
+      const newRecord = {
+        id: crypto.randomUUID(),
+        date: dateTime,
+        type: typeInput,
+        amount: Number(amountInput),
+        note: noteInput,
+      };
+      handleAddRecord(newRecord);
+    }
   };
 
   const [dateInput, setDateInput] = useState("");
@@ -41,6 +55,18 @@ export function FeedingRecordForm({ handleAddRecord }) {
   const handleNoteChange = (e) => {
     setNoteInput(e.target.value);
   };
+
+  useEffect(() => {
+    if (editFeedingRecord) {
+      const [date, time] = editFeedingRecord.date.split("T");
+
+      setDateInput(date);
+      setTimeInput(time);
+      setTypeInput(editFeedingRecord.type);
+      setAmountInput(editFeedingRecord.amount);
+      setNoteInput(editFeedingRecord.note);
+    }
+  }, [editFeedingRecord]);
 
   return (
     <form className="quick-add-form feeding-form" onSubmit={handleSubmit}>

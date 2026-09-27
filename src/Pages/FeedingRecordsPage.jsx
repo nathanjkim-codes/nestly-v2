@@ -11,6 +11,7 @@ export function FeedingRecordsPage() {
   const { selectedChild, selectedUnit, children, setChildren } =
     useOutletContext();
   const [isFeedingFormOpen, setIsFeedingFormOpen] = useState(false);
+  const [editFeedingRecord, setEditFeedingRecord] = useState(null);
 
   const units = measurementUnits(selectedUnit);
 
@@ -75,6 +76,11 @@ export function FeedingRecordsPage() {
     setChildren(updatedChildren);
   };
 
+  const handleOpenEditRecord = (record) => {
+    setEditFeedingRecord(record);
+    setIsFeedingFormOpen(true);
+  };
+
   const handleUpdateRecord = (updatedFeedingRecord) => {
     const updatedChildren = children.map((child) => {
       if (child.id === selectedChild.id) {
@@ -96,6 +102,7 @@ export function FeedingRecordsPage() {
     });
     setChildren(updatedChildren);
     setIsFeedingFormOpen(false);
+    setEditFeedingRecord(null);
   };
 
   return (
@@ -110,7 +117,10 @@ export function FeedingRecordsPage() {
 
         <button
           className="page-add-btn"
-          onClick={() => setIsFeedingFormOpen(true)}
+          onClick={() => {
+            setEditFeedingRecord(null);
+            setIsFeedingFormOpen(true);
+          }}
         >
           + Add Feeding Record
         </button>
@@ -124,12 +134,19 @@ export function FeedingRecordsPage() {
               <button
                 type="button"
                 className="modal-close-btn"
-                onClick={() => setIsFeedingFormOpen(false)}
+                onClick={() => {
+                  setEditFeedingRecord(null);
+                  setIsFeedingFormOpen(false);
+                }}
               >
                 ✕
               </button>
             </div>
-            <FeedingRecordForm handleAddRecord={handleAddRecord} />
+            <FeedingRecordForm
+              handleAddRecord={handleAddRecord}
+              handleUpdateRecord={handleUpdateRecord}
+              editFeedingRecord={editFeedingRecord}
+            />
           </div>
         </div>
       )}
@@ -208,7 +225,12 @@ export function FeedingRecordsPage() {
                   <td>
                     <div className="page-cell-actions">
                       <button className="page-view-btn">View</button>
-                      <button className="page-edit-btn">Edit</button>
+                      <button
+                        className="page-edit-btn"
+                        onClick={() => handleOpenEditRecord(record)}
+                      >
+                        Edit
+                      </button>
                       <button
                         className="page-delete-btn"
                         onClick={() => handleDeleteRecord(record)}

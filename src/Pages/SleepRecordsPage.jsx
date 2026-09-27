@@ -100,6 +100,7 @@ export function SleepRecordsPage() {
     });
     setChildren(updatedChildren);
     setIsSleepFormOpen(false);
+    setEditSleepRecord(null);
   };
 
   return (
@@ -114,7 +115,10 @@ export function SleepRecordsPage() {
 
         <button
           className="page-add-btn"
-          onClick={() => setIsSleepFormOpen(true)}
+          onClick={() => {
+            setEditsleepRecord(null);
+            setIsSleepFormOpen(true);
+          }}
         >
           + Add Sleep Record
         </button>
@@ -128,7 +132,10 @@ export function SleepRecordsPage() {
               <button
                 type="button"
                 className="modal-close-btn"
-                onClick={() => setIsSleepFormOpen(false)}
+                onClick={() => {
+                  setEditSleepRecord(null);
+                  setIsSleepFormOpen(false);
+                }}
               >
                 ✕
               </button>
