@@ -47,6 +47,8 @@ export function SettingsPage() {
               <option value="imperial">Imperial (in, lbs, oz)</option>
               <option value="metric">Metric (cm, kg, mL)</option>
             </select>
+
+            <span className="select-arrow">⌄</span>
           </div>
         </div>
       </div>
@@ -67,15 +69,17 @@ export function SettingsPage() {
           <div className="settings-action-row">
             <span className="settings-section-icon">📥</span>
 
-            <div className="settings-action-content">
-              <h3 className="settings-item-label">Export Data</h3>
-              <p className="settings-item-description">
-                Download a copy of all your child's records in JSON format.
-              </p>
-            </div>
+            <div className="settings-action-main">
+              <div className="settings-action-content">
+                <h3 className="settings-item-label">Export Data</h3>
+                <p className="settings-item-description">
+                  Download a copy of all your child's records in JSON format.
+                </p>
+              </div>
 
-            <div className="export-action">
-              <button className="export-data-btn">Export Data</button>
+              <div className="export-action">
+                <button className="export-data-btn">Export Data</button>
+              </div>
             </div>
           </div>
         </div>
@@ -84,15 +88,17 @@ export function SettingsPage() {
           <div className="settings-action-row">
             <span className="settings-section-icon">🗑️</span>
 
-            <div className="settings-action-content">
-              <h3 className="settings-item-label">Delete All Data</h3>
-              <p className="settings-item-description">
-                Permanently delete all your child's records.
-              </p>
-            </div>
+            <div className="settings-action-main">
+              <div className="settings-action-content">
+                <h3 className="settings-item-label">Delete All Data</h3>
+                <p className="settings-item-description">
+                  Permanently delete all your child's records.
+                </p>
+              </div>
 
-            <div className="delete-action">
-              <button className="delete-data-btn">Delete Data</button>
+              <div className="delete-action">
+                <button className="delete-data-btn">Delete Data</button>
+              </div>
             </div>
           </div>
         </div>

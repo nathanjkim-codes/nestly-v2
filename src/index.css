@@ -1600,3 +1600,143 @@ body {
   display: flex;
   gap: 15px;
 }
+
+.page-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-heading,
+.page-description {
+  margin: 0;
+}
+
+.settings-page {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.settings-preferences,
+.data-settings {
+  display: flex;
+  flex-direction: column;
+
+  background-color: #0b1020;
+  border: 1px solid #1e293b;
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.preferences-heading,
+.data-heading {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 20px;
+}
+
+.preferences-content,
+.measurement-content,
+.data-title-group,
+.settings-action-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-section-description,
+.settings-item-description {
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.settings-section-icon {
+  font-size: 30px;
+}
+
+.settings-section-label,
+.settings-item-label {
+  color: #f8fafc;
+  margin: 0;
+}
+
+.measurement-settings {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.measurement-units-change {
+  position: relative;
+  margin-right: 60px;
+}
+
+.settings-unit-select {
+  appearance: none;
+
+  width: 220px;
+  padding: 12px 40px 12px 16px;
+
+  background-color: #111827;
+  color: #f8fafc;
+
+  border: 1px solid #334155;
+  border-radius: 8px;
+
+  font-size: 14px;
+}
+
+.select-arrow {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #cbd5e1;
+  pointer-events: none;
+}
+
+.settings-action-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 0;
+}
+
+.settings-action-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+}
+
+.export-data-settings {
+  border-bottom: 1px solid #1e293b;
+}
+
+.export-data-btn,
+.delete-data-btn {
+  width: 150px;
+  padding: 12px 18px;
+  background-color: #0b1020;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.export-data-btn {
+  color: #818cf8;
+  border: 1px solid #6366f1;
+}
+
+.delete-data-btn {
+  color: #ef4444;
+  border: 1px solid #ef4444;
+}
