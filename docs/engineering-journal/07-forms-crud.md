@@ -207,6 +207,14 @@ Updated UI
 
 ---
 
+## Engineering Decision
+
+I first implemented CRUD using React state so I could understand and verify the frontend data flow before adding a server and database.
+
+This allowed me to focus on how data moves through forms, event handlers, state updates, and React re-renders before introducing backend complexity.
+
+---
+
 ## What I Learned
 
 CRUD helped me connect several React concepts that I had previously learned separately:
