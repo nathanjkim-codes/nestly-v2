@@ -1,6 +1,6 @@
 import express from "express";
 
-const children = [
+let children = [
   {
     id: 1,
     name: "Emma",
@@ -28,6 +28,36 @@ app.post("/api/children", (req, res) => {
   children.push(newChild);
 
   res.json(newChild);
+});
+
+//UPDATE
+app.put("/api/children/:id", (req, res) => {
+  let updatedChild;
+  const childId = Number(req.params.id);
+  const updatedData = req.body;
+  const updatedChildren = children.map((child) => {
+    if (childId === child.id) {
+      updatedChild = {
+        ...child,
+        ...updatedData,
+      };
+      return updatedChild;
+    }
+    return child;
+  });
+  children = updatedChildren;
+  res.json(updatedChild);
+});
+
+//DELETE
+app.delete("/api/children/:id", (req, res) => {
+  const childId = Number(req.params.id);
+
+  const updatedChildren = children.filter((child) => {
+    return childId !== child.id;
+  });
+  children = updatedChildren;
+  res.sendStatus(204);
 });
 
 const PORT = 3000;
