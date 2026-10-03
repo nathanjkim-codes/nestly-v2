@@ -634,7 +634,7 @@ function App() {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        setChildren(data);
       });
   }, []);
 
