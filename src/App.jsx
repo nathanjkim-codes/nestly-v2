@@ -628,6 +628,16 @@ function App() {
     localStorage.setItem("selectedUnit", selectedUnit);
   }, [selectedUnit]);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/api/children")
+      .then((response) => {
+        return response.json();
+      })
+      .then((data) => {
+        console.log(data);
+      });
+  }, []);
+
   return (
     <div className="app-shell">
       <Sidebar />

@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 
 let children = [
   {
@@ -14,6 +15,7 @@ let children = [
 const app = express();
 
 // Middleware
+app.use(cors());
 app.use(express.json());
 
 // READ
