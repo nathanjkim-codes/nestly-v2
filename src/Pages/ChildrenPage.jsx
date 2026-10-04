@@ -29,17 +29,31 @@ export function ChildrenPage() {
       .then((createdChild) => {
         setChildren([...children, createdChild]);
         setIsChildFormOpen(false);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
       });
   };
 
   const handleDeleteById = (id) => {
-    setChildren((currentChildren) => {
-      const updatedChildren = currentChildren.filter((child) => {
-        return child.id !== id;
-      });
+    fetch(`http://localhost:3000/api/children/${id}`, {
+      method: "DELETE",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
 
-      return updatedChildren;
-    });
+        setChildren((currentChildren) => {
+          const updatedChildren = currentChildren.filter((child) => {
+            return child.id !== id;
+          });
+          return updatedChildren;
+        });
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
   };
 
   const handleOpenEditChild = (child) => {
