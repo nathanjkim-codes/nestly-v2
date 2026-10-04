@@ -1,6 +1,9 @@
 import ChildSelector from "./ChildSelector.jsx";
 
 function Header({ children, setSelectedChildId, selectedChild }) {
+  if (!selectedChild) {
+    return <div>Loading...</div>;
+  }
   return (
     <div className="header">
       <div className="header-info">

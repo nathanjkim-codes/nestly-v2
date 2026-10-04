@@ -13,10 +13,23 @@ export function ChildrenPage() {
   const hasChildren = children.length > 0;
 
   const handleAddChild = (newChild) => {
-    const newChildArray = [...children, newChild];
-
-    setChildren(newChildArray);
-    setIsChildFormOpen(false);
+    fetch("http://localhost:3000/api/children", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify(newChild),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((createdChild) => {
+        setChildren([...children, createdChild]);
+        setIsChildFormOpen(false);
+      });
   };
 
   const handleDeleteById = (id) => {

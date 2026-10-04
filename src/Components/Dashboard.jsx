@@ -17,6 +17,10 @@ import {
 import { formatDecimalHours } from "../utils/formatDecimalHours.js";
 
 function Dashboard({ selectedChild, selectedUnit }) {
+  if (!selectedChild) {
+    return <div>Loading...</div>;
+  }
+
   const currentStats = selectedChild.currentStats;
   const growthRecords = selectedChild.growthRecords;
   const sleepRecords = selectedChild.sleepRecords;
