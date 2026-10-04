@@ -62,23 +62,36 @@ export function ChildrenPage() {
   };
 
   const handleUpdateChild = (updatedProfile) => {
-    setChildren(
-      children.map((child) =>
-        child.id === editChild.id
-          ? {
-              ...child,
-              profile: {
-                ...child.profile,
-                ...updatedProfile,
-              },
+    fetch(`http://localhost:3000/api/children/${editChild.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedProfile),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((updatedChild) => {
+        setChildren(
+          children.map((child) => {
+            if (child.id === updatedChild.id) {
+              return updatedChild;
             }
-          : child,
-      ),
-    );
-
-    setEditChild(null);
-    setIsChildFormOpen(false);
+            return child;
+          }),
+        );
+        setEditChild(null);
+        setIsChildFormOpen(false);
+      })
+      .catch((error) => {
+        console.error("Fetch error:", error);
+      });
   };
+
   return (
     <section className="children-page">
       <div className="page-top">

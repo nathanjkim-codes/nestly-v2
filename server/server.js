@@ -637,7 +637,10 @@ app.put("/api/children/:id", (req, res) => {
     if (childId === child.id) {
       updatedChild = {
         ...child,
-        ...updatedData,
+        profile: {
+          ...child.profile,
+          ...updatedData,
+        },
       };
       return updatedChild;
     }
