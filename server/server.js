@@ -681,7 +681,17 @@ app.get("/api/children/:id/growthRecords", (req, res) => {
 });
 
 // CREATE
+app.post("/api/children/:id/growthRecords", (req, res) => {
+  const childId = Number(req.params.id);
+  const newRecord = req.body;
 
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+  child.growthRecords.push(newRecord);
+
+  res.json(newRecord);
+});
 // DELETE
 
 // ========================================
