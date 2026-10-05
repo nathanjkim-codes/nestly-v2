@@ -20,15 +20,17 @@ function App() {
     localStorage.setItem("selectedUnit", selectedUnit);
   }, [selectedUnit]);
 
+  // GET CHILDREN ON APP LOAD
   useEffect(() => {
-    fetch("http://localhost:3000/api/children")
-      .then((response) => {
-        return response.json();
-      })
-      .then((data) => {
-        setChildren(data);
-        setSelectedChildId(data[0].id);
-      });
+    const fetchChildren = async () => {
+      const response = await fetch("http://localhost:3000/api/children");
+      const data = await response.json();
+
+      setChildren(data);
+      setSelectedChildId(data[0].id);
+    };
+
+    fetchChildren();
   }, []);
 
   return (
