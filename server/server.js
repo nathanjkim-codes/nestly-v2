@@ -608,11 +608,16 @@ let children = [
   },
 ];
 
+// SERVER SETUP
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+
+// ========================================
+// CHILDREN REST API
+// ========================================
 
 // READ
 app.get("/api/children", (req, res) => {
@@ -660,6 +665,28 @@ app.delete("/api/children/:id", (req, res) => {
   children = updatedChildren;
   res.sendStatus(204);
 });
+
+// ========================================
+// GROWTH RECORDS REST API
+// ========================================
+
+// READ
+app.get("/api/children/:id/growthRecords", (req, res) => {
+  const childId = Number(req.params.id);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+  res.json(child.growthRecords);
+});
+
+// CREATE
+
+// DELETE
+
+// ========================================
+// START SERVER
+// ========================================
 
 const PORT = 3000;
 
