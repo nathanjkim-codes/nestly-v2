@@ -12,48 +12,54 @@ export function ChildrenPage() {
 
   const hasChildren = children.length > 0;
 
-  const handleAddChild = (newChild) => {
-    fetch("http://localhost:3000/api/children", {
-      method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(newChild),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((createdChild) => {
-        setChildren([...children, createdChild]);
-        setIsChildFormOpen(false);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
+  // CREATE
+  const handleAddChild = async (newChild) => {
+    try {
+      const response = await fetch("http://localhost:3000/api/children", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newChild),
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const createdChild = await response.json();
+
+      setChildren((currentChildren) => {
+        return [...currentChildren, createdChild];
+      });
+
+      setIsChildFormOpen(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
-  const handleDeleteById = (id) => {
-    fetch(`http://localhost:3000/api/children/${id}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        setChildren((currentChildren) => {
-          const updatedChildren = currentChildren.filter((child) => {
-            return child.id !== id;
-          });
-          return updatedChildren;
-        });
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
+  // DELETE
+  const handleDeleteById = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/children/${id}`, {
+        method: "DELETE",
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.filter((child) => {
+          return child.id !== id;
+        });
+
+        return updatedChildren;
+      });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   const handleOpenEditChild = (child) => {
@@ -61,37 +67,42 @@ export function ChildrenPage() {
     setIsChildFormOpen(true);
   };
 
-  const handleUpdateChild = (updatedProfile) => {
-    fetch(`http://localhost:3000/api/children/${editChild.id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedProfile),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((updatedChild) => {
-        setChildren(
-          children.map((child) => {
-            if (child.id === updatedChild.id) {
-              return updatedChild;
-            }
-            return child;
-          }),
-        );
-        setEditChild(null);
-        setIsChildFormOpen(false);
-      })
-      .catch((error) => {
-        console.error("Fetch error:", error);
-      });
-  };
+  // UPDATE
+  const handleUpdateChild = async (updatedProfile) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${editChild.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedProfile),
+        },
+      );
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedChild = await response.json();
+
+      setChildren((currentChildren) => {
+        return currentChildren.map((child) => {
+          if (child.id === updatedChild.id) {
+            return updatedChild;
+          }
+
+          return child;
+        });
+      });
+
+      setEditChild(null);
+      setIsChildFormOpen(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
   return (
     <section className="children-page">
       <div className="page-top">
