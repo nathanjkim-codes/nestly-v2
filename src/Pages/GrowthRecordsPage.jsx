@@ -16,6 +16,10 @@ export function GrowthRecordsPage() {
   const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
   const [editGrowthRecord, setEditGrowthRecord] = useState(null);
 
+  if (!selectedChild) {
+    return <div>Loading...</div>;
+  }
+
   const units = measurementUnits(selectedUnit);
 
   const growthRecords = selectedChild.growthRecords;
