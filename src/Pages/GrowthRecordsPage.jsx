@@ -84,27 +84,44 @@ export function GrowthRecordsPage() {
   };
 
   // DELETE
-  const handleDeleteRecord = (id) => {
-    setChildren((currentChildren) => {
-      const updatedChildren = currentChildren.map((child) => {
-        if (child.id === selectedChild.id) {
-          const updatedGrowthRecords = child.growthRecords.filter((record) => {
-            return record.id !== id;
-          });
+  const handleDeleteRecord = async (record) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${record.id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
-          const updatedChild = {
-            ...child,
-            growthRecords: updatedGrowthRecords,
-          };
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-          return updatedChild;
-        }
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedGrowthRecords = child.growthRecords.filter(
+              (currentRecord) => {
+                return currentRecord.id !== record.id;
+              },
+            );
 
-        return child;
+            const updatedChild = {
+              ...child,
+              growthRecords: updatedGrowthRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        });
+
+        return updatedChildren;
       });
-
-      return updatedChildren;
-    });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   // UPDATE
@@ -273,7 +290,7 @@ export function GrowthRecordsPage() {
                         </button>
                         <button
                           className="page-delete-btn"
-                          onClick={() => handleDeleteRecord(record.id)}
+                          onClick={() => handleDeleteRecord(record)}
                         >
                           Delete
                         </button>
