@@ -739,6 +739,17 @@ app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
 });
 
 // ========================================
+// SLEEP RECORDS REST API
+// ========================================
+app.get("/api/children/:childId/sleepRecords", (req, res) => {
+  const childId = Number(req.params.childId);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+  res.json(child.sleepRecords);
+});
+// ========================================
 // START SERVER
 // ========================================
 
