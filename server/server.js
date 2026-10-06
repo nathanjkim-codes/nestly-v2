@@ -634,9 +634,9 @@ app.post("/api/children", (req, res) => {
 });
 
 // UPDATE
-app.put("/api/children/:id", (req, res) => {
+app.put("/api/children/:childId", (req, res) => {
   let updatedChild;
-  const childId = Number(req.params.id);
+  const childId = Number(req.params.childId);
   const updatedData = req.body;
   const updatedChildren = children.map((child) => {
     if (childId === child.id) {
@@ -656,8 +656,8 @@ app.put("/api/children/:id", (req, res) => {
 });
 
 //DELETE
-app.delete("/api/children/:id", (req, res) => {
-  const childId = Number(req.params.id);
+app.delete("/api/children/:childId", (req, res) => {
+  const childId = Number(req.params.childId);
 
   const updatedChildren = children.filter((child) => {
     return childId !== child.id;
@@ -671,8 +671,8 @@ app.delete("/api/children/:id", (req, res) => {
 // ========================================
 
 // READ
-app.get("/api/children/:id/growthRecords", (req, res) => {
-  const childId = Number(req.params.id);
+app.get("/api/children/:childId/growthRecords", (req, res) => {
+  const childId = Number(req.params.childId);
 
   const child = children.find((child) => {
     return childId === child.id;
@@ -681,8 +681,8 @@ app.get("/api/children/:id/growthRecords", (req, res) => {
 });
 
 // CREATE
-app.post("/api/children/:id/growthRecords", (req, res) => {
-  const childId = Number(req.params.id);
+app.post("/api/children/:childId/growthRecords", (req, res) => {
+  const childId = Number(req.params.childId);
   const newRecord = req.body;
 
   const child = children.find((child) => {
@@ -724,6 +724,20 @@ app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
 });
 
 // DELETE
+app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+  const updatedGrowthRecords = child.growthRecords.filter((currentRecord) => {
+    return recordId !== currentRecord.id;
+  });
+  child.growthRecords = updatedGrowthRecords;
+  res.sendStatus(204);
+});
+
 // ========================================
 // START SERVER
 // ========================================
