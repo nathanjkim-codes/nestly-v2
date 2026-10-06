@@ -792,6 +792,21 @@ app.put("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
   res.json(updatedRecord);
 });
 
+// DELETE
+app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+  const updatedSleepRecords = child.sleepRecords.filter((currentRecord) => {
+    return recordId !== currentRecord.id;
+  });
+  child.sleepRecords = updatedSleepRecords;
+  res.sendStatus(204);
+});
+
 // ========================================
 // START SERVER
 // ========================================
