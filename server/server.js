@@ -624,7 +624,7 @@ app.get("/api/children", (req, res) => {
   res.json(children);
 });
 
-//CREATE
+// CREATE
 app.post("/api/children", (req, res) => {
   const newChild = req.body;
 
@@ -633,7 +633,7 @@ app.post("/api/children", (req, res) => {
   res.json(newChild);
 });
 
-//UPDATE
+// UPDATE
 app.put("/api/children/:id", (req, res) => {
   let updatedChild;
   const childId = Number(req.params.id);
@@ -692,8 +692,38 @@ app.post("/api/children/:id/growthRecords", (req, res) => {
 
   res.json(newRecord);
 });
-// DELETE
 
+// UPDATE
+app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+  const updatedData = req.body;
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  let updatedRecord;
+
+  const updatedGrowthRecords = child.growthRecords.map((currentRecord) => {
+    if (recordId === currentRecord.id) {
+      updatedRecord = {
+        ...currentRecord,
+        ...updatedData,
+      };
+
+      return updatedRecord;
+    }
+
+    return currentRecord;
+  });
+
+  child.growthRecords = updatedGrowthRecords;
+
+  res.json(updatedRecord);
+});
+
+// DELETE
 // ========================================
 // START SERVER
 // ========================================
