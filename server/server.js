@@ -741,6 +741,8 @@ app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
 // ========================================
 // SLEEP RECORDS REST API
 // ========================================
+
+// READ
 app.get("/api/children/:childId/sleepRecords", (req, res) => {
   const childId = Number(req.params.childId);
 
@@ -748,6 +750,19 @@ app.get("/api/children/:childId/sleepRecords", (req, res) => {
     return childId === child.id;
   });
   res.json(child.sleepRecords);
+});
+
+// CREATE
+app.post("/api/children/:childId/sleepRecords", (req, res) => {
+  const childId = Number(req.params.childId);
+  const newRecord = req.body;
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  child.sleepRecords.push(newRecord);
+  res.json(newRecord);
 });
 // ========================================
 // START SERVER
