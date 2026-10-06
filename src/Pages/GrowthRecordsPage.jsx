@@ -108,32 +108,53 @@ export function GrowthRecordsPage() {
   };
 
   // UPDATE
-  const handleUpdateRecord = (updatedGrowthRecord) => {
-    setChildren(
-      children.map((child) => {
-        if (child.id === selectedChild.id) {
-          const updatedGrowthRecords = child.growthRecords.map((record) => {
-            if (record.id === updatedGrowthRecord.id) {
-              return updatedGrowthRecord;
-            }
-            return record;
-          });
-          const updatedChild = {
-            ...child,
-            growthRecords: updatedGrowthRecords,
-          };
-          return updatedChild;
-        }
-        return child;
-      }),
-    );
-    setEditGrowthRecord(null);
-    setIsGrowthFormOpen(false);
-  };
+  const handleUpdateRecord = async (updatedGrowthRecord) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${updatedGrowthRecord.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedGrowthRecord),
+        },
+      );
 
-  const handleOpenEditRecord = (record) => {
-    setEditGrowthRecord(record);
-    setIsGrowthFormOpen(true);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const updatedRecord = await response.json();
+
+      setChildren(
+        children.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedGrowthRecords = child.growthRecords.map((record) => {
+              if (record.id === updatedRecord.id) {
+                return updatedRecord;
+              }
+
+              return record;
+            });
+
+            const updatedChild = {
+              ...child,
+              growthRecords: updatedGrowthRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        }),
+      );
+
+      setEditGrowthRecord(null);
+      setIsGrowthFormOpen(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   return (
