@@ -34,26 +34,56 @@ export function GrowthRecordsPage() {
   const latestDateRecord = hasRecord ? sortedGrowthRecords[0].date : null;
   const latestWeightRecord = hasRecord ? sortedGrowthRecords[0].weight : null;
 
-  const handleAddRecord = (newRecord) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedGrowthRecords = [...child.growthRecords, newRecord];
+  // CREATE
+  const handleAddRecord = async (newRecord) => {
+    console.log("handleAddRecord running:", newRecord);
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecord),
+        },
+      );
 
-        const updatedChild = {
-          ...child,
-          growthRecords: updatedGrowthRecords,
-        };
-
-        return updatedChild;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      return child;
-    });
+      const createdRecord = await response.json();
 
-    setChildren(updatedChildren);
-    setIsGrowthFormOpen(false);
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedGrowthRecords = [
+              ...child.growthRecords,
+              createdRecord,
+            ];
+
+            const updatedChild = {
+              ...child,
+              growthRecords: updatedGrowthRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        });
+
+        return updatedChildren;
+      });
+
+      setIsGrowthFormOpen(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
+  // DELETE
   const handleDeleteRecord = (id) => {
     setChildren((currentChildren) => {
       const updatedChildren = currentChildren.map((child) => {
@@ -77,6 +107,7 @@ export function GrowthRecordsPage() {
     });
   };
 
+  // UPDATE
   const handleUpdateRecord = (updatedGrowthRecord) => {
     setChildren(
       children.map((child) => {
