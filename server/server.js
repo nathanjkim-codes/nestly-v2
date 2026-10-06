@@ -764,6 +764,34 @@ app.post("/api/children/:childId/sleepRecords", (req, res) => {
   child.sleepRecords.push(newRecord);
   res.json(newRecord);
 });
+
+// UPDATE
+app.put("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+  const updatedData = req.body;
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  let updatedRecord;
+
+  const updatedSleepRecords = child.sleepRecords.map((currentRecord) => {
+    if (recordId === currentRecord.id) {
+      updatedRecord = {
+        ...currentRecord,
+        ...updatedData,
+      };
+      return updatedRecord;
+    }
+    return currentRecord;
+  });
+  child.sleepRecords = updatedSleepRecords;
+
+  res.json(updatedRecord);
+});
+
 // ========================================
 // START SERVER
 // ========================================
