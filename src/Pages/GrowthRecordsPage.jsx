@@ -36,7 +36,6 @@ export function GrowthRecordsPage() {
 
   // CREATE
   const handleAddRecord = async (newRecord) => {
-    console.log("handleAddRecord running:", newRecord);
     try {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/growthRecords`,
