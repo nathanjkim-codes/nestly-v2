@@ -9,6 +9,10 @@ export function SleepRecordsPage() {
   const [isSleepFormOpen, setIsSleepFormOpen] = useState(false);
   const [editSleepRecord, setEditSleepRecord] = useState(null);
 
+  if (!selectedChild) {
+    return <div>Loading...</div>;
+  }
+
   const sleepRecords = selectedChild.sleepRecords;
 
   const sortedSleepRecords = [...sleepRecords].sort(
@@ -40,21 +44,44 @@ export function SleepRecordsPage() {
     ? formatDecimalHours(averageSleepDuration)
     : null;
 
-  const handleAddRecord = (newRecord) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedSleepRecords = [...child.sleepRecords, newRecord];
+  // CREATE
+  const handleAddRecord = async (newRecord) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecord),
+        },
+      );
 
-        const updatedChild = {
-          ...child,
-          sleepRecords: updatedSleepRecords,
-        };
-        return updatedChild;
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return child;
-    });
-    setChildren(updatedChildren);
-    setIsSleepFormOpen(false);
+
+      const createdRecord = await response.json();
+
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedSleepRecords = [...child.sleepRecords, createdRecord];
+
+            const updatedChild = {
+              ...child,
+              sleepRecords: updatedSleepRecords,
+            };
+            return updatedChild;
+          }
+          return child;
+        });
+        return updatedChildren;
+      });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   const handleDeleteRecord = (record) => {
@@ -116,7 +143,7 @@ export function SleepRecordsPage() {
         <button
           className="page-add-btn"
           onClick={() => {
-            setEditsleepRecord(null);
+            setEditSleepRecord(null);
             setIsSleepFormOpen(true);
           }}
         >
