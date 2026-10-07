@@ -125,26 +125,63 @@ export function SleepRecordsPage() {
     }
   };
 
-  const handleUpdateRecord = (updatedSleepRecord) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedSleepRecords = child.sleepRecords.map((currentRecord) => {
-          if (currentRecord.id === updatedSleepRecord.id) {
-            return updatedSleepRecord;
-          }
-          return currentRecord;
-        });
-        const updatedChild = {
-          ...child,
-          sleepRecords: updatedSleepRecords,
-        };
-        return updatedChild;
+  //UPDATE
+  const handleUpdateRecord = async (updatedRecord) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${updatedRecord.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(updatedRecord),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return child;
-    });
-    setChildren(updatedChildren);
-    setIsSleepFormOpen(false);
-    setEditSleepRecord(null);
+
+      const savedRecord = await response.json();
+
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedSleepRecords = child.sleepRecords.map(
+              (currentRecord) => {
+                if (currentRecord.id === savedRecord.id) {
+                  return savedRecord;
+                }
+
+                return currentRecord;
+              },
+            );
+
+            const updatedChild = {
+              ...child,
+              sleepRecords: updatedSleepRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        });
+
+        return updatedChildren;
+      });
+
+      setEditSleepRecord(null);
+      setIsSleepFormOpen(false);
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
+  };
+
+  const handleOpenEditRecord = (record) => {
+    setEditSleepRecord(record);
+    setIsSleepFormOpen(true);
   };
 
   return (
