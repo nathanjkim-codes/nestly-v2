@@ -84,28 +84,45 @@ export function SleepRecordsPage() {
     }
   };
 
-  const handleDeleteRecord = (record) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedSleepRecords = child.sleepRecords.filter(
-          (currentRecord) => {
-            return currentRecord.id !== record.id;
-          },
-        );
-        const updatedChild = {
-          ...child,
-          sleepRecords: updatedSleepRecords,
-        };
-        return updatedChild;
-      }
-      return child;
-    });
-    setChildren(updatedChildren);
-  };
+  // DELETE
+  const handleDeleteRecord = async (record) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${record.id}`,
+        {
+          method: "DELETE",
+        },
+      );
 
-  const handleOpenEditRecord = (record) => {
-    setEditSleepRecord(record);
-    setIsSleepFormOpen(true);
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedSleepRecords = child.sleepRecords.filter(
+              (currentRecord) => {
+                return currentRecord.id !== record.id;
+              },
+            );
+
+            const updatedChild = {
+              ...child,
+              sleepRecords: updatedSleepRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        });
+
+        return updatedChildren;
+      });
+    } catch (error) {
+      console.error("Fetch error:", error);
+    }
   };
 
   const handleUpdateRecord = (updatedSleepRecord) => {
