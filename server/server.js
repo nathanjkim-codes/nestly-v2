@@ -688,6 +688,13 @@ app.post("/api/children/:childId/growthRecords", (req, res) => {
   const child = children.find((child) => {
     return childId === child.id;
   });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   child.growthRecords.push(newRecord);
 
   res.json(newRecord);
@@ -805,6 +812,27 @@ app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
   });
   child.sleepRecords = updatedSleepRecords;
   res.sendStatus(204);
+});
+
+// ========================================
+// FEEDING RECORDS REST API
+// ========================================
+
+// READ
+app.get("/api/children/:childId/feedingRecords", (req, res) => {
+  const childId = Number(req.params.childId);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  res.json(child.feedingRecords);
 });
 
 // ========================================
