@@ -41,19 +41,41 @@ export function FeedingRecordsPage() {
     ? totalFeedingAmount / totalFeedingRecords
     : null;
 
-  const handleAddRecord = (newRecord) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedFeedingRecords = [...child.feedingRecords, newRecord];
-        const updatedChild = {
-          ...child,
-          feedingRecords: updatedFeedingRecords,
-        };
-        return updatedChild;
-      }
-      return child;
+  // CREATE RECORD
+  const handleAddRecord = async (newRecord) => {
+    const response = await fetch(
+      `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newRecord),
+      },
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status:${response.status}`);
+    }
+
+    const createdRecord = await response.json();
+
+    setChildren((currentChildren) => {
+      const updatedChildren = currentChildren.map((child) => {
+        if (child.id === selectedChild.id) {
+          const updatedFeedingRecords = [
+            ...child.feedingRecords,
+            createdRecord,
+          ];
+          const updatedChild = {
+            ...child,
+            feedingRecords: updatedFeedingRecords,
+          };
+          return updatedChild;
+        }
+        return child;
+      });
+      return updatedChildren;
     });
-    setChildren(updatedChildren);
     setIsFeedingFormOpen(false);
   };
 
