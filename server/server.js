@@ -619,12 +619,12 @@ app.use(express.json());
 // CHILDREN REST API
 // ========================================
 
-// READ
+// READ CHILD
 app.get("/api/children", (req, res) => {
   res.json(children);
 });
 
-// CREATE
+// CREATE CHILD
 app.post("/api/children", (req, res) => {
   const newChild = req.body;
 
@@ -633,35 +633,57 @@ app.post("/api/children", (req, res) => {
   res.json(newChild);
 });
 
-// UPDATE
+// UPDATE CHILD
 app.put("/api/children/:childId", (req, res) => {
-  let updatedChild;
   const childId = Number(req.params.childId);
   const updatedData = req.body;
-  const updatedChildren = children.map((child) => {
-    if (childId === child.id) {
+
+  let updatedChild;
+
+  const updatedChildren = children.map((currentChild) => {
+    if (currentChild.id === childId) {
       updatedChild = {
-        ...child,
+        ...currentChild,
         profile: {
-          ...child.profile,
+          ...currentChild.profile,
           ...updatedData,
         },
       };
+
       return updatedChild;
     }
-    return child;
+
+    return currentChild;
   });
+
+  if (!updatedChild) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   children = updatedChildren;
   res.json(updatedChild);
 });
 
-//DELETE
+// DELETE CHILD
 app.delete("/api/children/:childId", (req, res) => {
   const childId = Number(req.params.childId);
+
+  const child = children.find((child) => {
+    return child.id === childId;
+  });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
 
   const updatedChildren = children.filter((child) => {
     return childId !== child.id;
   });
+
   children = updatedChildren;
   res.sendStatus(204);
 });
@@ -670,17 +692,24 @@ app.delete("/api/children/:childId", (req, res) => {
 // GROWTH RECORDS REST API
 // ========================================
 
-// READ
+// READ GROWTH RECORD
 app.get("/api/children/:childId/growthRecords", (req, res) => {
   const childId = Number(req.params.childId);
 
   const child = children.find((child) => {
     return childId === child.id;
   });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   res.json(child.growthRecords);
 });
 
-// CREATE
+// CREATE GROWTH RECORD
 app.post("/api/children/:childId/growthRecords", (req, res) => {
   const childId = Number(req.params.childId);
   const newRecord = req.body;
@@ -696,11 +725,10 @@ app.post("/api/children/:childId/growthRecords", (req, res) => {
   }
 
   child.growthRecords.push(newRecord);
-
   res.json(newRecord);
 });
 
-// UPDATE
+// UPDATE GROWTH RECORD
 app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
   const childId = Number(req.params.childId);
   const recordId = Number(req.params.recordId);
@@ -710,10 +738,16 @@ app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
     return childId === child.id;
   });
 
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   let updatedRecord;
 
   const updatedGrowthRecords = child.growthRecords.map((currentRecord) => {
-    if (recordId === currentRecord.id) {
+    if (currentRecord.id === recordId) {
       updatedRecord = {
         ...currentRecord,
         ...updatedData,
@@ -725,12 +759,17 @@ app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
     return currentRecord;
   });
 
-  child.growthRecords = updatedGrowthRecords;
+  if (!updatedRecord) {
+    return res.status(404).json({
+      error: "Growth record not found",
+    });
+  }
 
+  child.growthRecords = updatedGrowthRecords;
   res.json(updatedRecord);
 });
 
-// DELETE
+// DELETE GROWTH RECORD
 app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
   const childId = Number(req.params.childId);
   const recordId = Number(req.params.recordId);
@@ -738,9 +777,27 @@ app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
   const child = children.find((child) => {
     return childId === child.id;
   });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  const record = child.growthRecords.find((currentRecord) => {
+    return currentRecord.id === recordId;
+  });
+
+  if (!record) {
+    return res.status(404).json({
+      error: "Growth record not found",
+    });
+  }
+
   const updatedGrowthRecords = child.growthRecords.filter((currentRecord) => {
     return recordId !== currentRecord.id;
   });
+
   child.growthRecords = updatedGrowthRecords;
   res.sendStatus(204);
 });
@@ -749,17 +806,24 @@ app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
 // SLEEP RECORDS REST API
 // ========================================
 
-// READ
+// READ SLEEP RECORD
 app.get("/api/children/:childId/sleepRecords", (req, res) => {
   const childId = Number(req.params.childId);
 
   const child = children.find((child) => {
     return childId === child.id;
   });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   res.json(child.sleepRecords);
 });
 
-// CREATE
+// CREATE SLEEP RECORD
 app.post("/api/children/:childId/sleepRecords", (req, res) => {
   const childId = Number(req.params.childId);
   const newRecord = req.body;
@@ -768,11 +832,17 @@ app.post("/api/children/:childId/sleepRecords", (req, res) => {
     return childId === child.id;
   });
 
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   child.sleepRecords.push(newRecord);
   res.json(newRecord);
 });
 
-// UPDATE
+// UPDATE SLEEP RECORD
 app.put("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
   const childId = Number(req.params.childId);
   const recordId = Number(req.params.recordId);
@@ -782,24 +852,38 @@ app.put("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
     return childId === child.id;
   });
 
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
   let updatedRecord;
 
   const updatedSleepRecords = child.sleepRecords.map((currentRecord) => {
-    if (recordId === currentRecord.id) {
+    if (currentRecord.id === recordId) {
       updatedRecord = {
         ...currentRecord,
         ...updatedData,
       };
+
       return updatedRecord;
     }
+
     return currentRecord;
   });
-  child.sleepRecords = updatedSleepRecords;
 
+  if (!updatedRecord) {
+    return res.status(404).json({
+      error: "Sleep record not found",
+    });
+  }
+
+  child.sleepRecords = updatedSleepRecords;
   res.json(updatedRecord);
 });
 
-// DELETE
+// DELETE SLEEP RECORD
 app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
   const childId = Number(req.params.childId);
   const recordId = Number(req.params.recordId);
@@ -807,9 +891,27 @@ app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
   const child = children.find((child) => {
     return childId === child.id;
   });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  const record = child.sleepRecords.find((currentRecord) => {
+    return currentRecord.id === recordId;
+  });
+
+  if (!record) {
+    return res.status(404).json({
+      error: "Sleep record not found",
+    });
+  }
+
   const updatedSleepRecords = child.sleepRecords.filter((currentRecord) => {
     return recordId !== currentRecord.id;
   });
+
   child.sleepRecords = updatedSleepRecords;
   res.sendStatus(204);
 });
@@ -818,7 +920,7 @@ app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
 // FEEDING RECORDS REST API
 // ========================================
 
-// READ
+// READ FEEDING RECORD
 app.get("/api/children/:childId/feedingRecords", (req, res) => {
   const childId = Number(req.params.childId);
 
@@ -835,7 +937,7 @@ app.get("/api/children/:childId/feedingRecords", (req, res) => {
   res.json(child.feedingRecords);
 });
 
-// CREATE
+// CREATE FEEDING RECORD
 app.post("/api/children/:childId/feedingRecords", (req, res) => {
   const childId = Number(req.params.childId);
   const newRecord = req.body;
@@ -852,6 +954,70 @@ app.post("/api/children/:childId/feedingRecords", (req, res) => {
 
   child.feedingRecords.push(newRecord);
   res.json(newRecord);
+});
+
+// UPDATE FEEDING RECORD
+app.put("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+  const updatedData = req.body;
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  let updatedRecord;
+
+  const updatedFeedingRecords = child.feedingRecords.map((currentRecord) => {
+    if (currentRecord.id === recordId) {
+      updatedRecord = {
+        ...currentRecord,
+        ...updatedData,
+      };
+
+      return updatedRecord;
+    }
+
+    return currentRecord;
+  });
+
+  if (!updatedRecord) {
+    return res.status(404).json({
+      error: "Feeding record not found",
+    });
+  }
+
+  child.feedingRecords = updatedFeedingRecords;
+  res.json(updatedRecord);
+});
+
+// DELETE FEEDING RECORD
+app.delete("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
+  const childId = Number(req.params.childId);
+  const recordId = Number(req.params.recordId);
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  const updatedFeedingRecords = child.feedingRecords.filter((currentRecord) => {
+    return recordId !== currentRecord.id;
+  });
+
+  child.feedingRecords = updatedFeedingRecords;
+  res.sendStatus(204);
 });
 // ========================================
 // START SERVER
