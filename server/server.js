@@ -835,6 +835,24 @@ app.get("/api/children/:childId/feedingRecords", (req, res) => {
   res.json(child.feedingRecords);
 });
 
+// CREATE
+app.post("/api/children/:childId/feedingRecords", (req, res) => {
+  const childId = Number(req.params.childId);
+  const newRecord = req.body;
+
+  const child = children.find((child) => {
+    return childId === child.id;
+  });
+
+  if (!child) {
+    return res.status(404).json({
+      error: "Child not found",
+    });
+  }
+
+  child.feedingRecords.push(newRecord);
+  res.json(newRecord);
+});
 // ========================================
 // START SERVER
 // ========================================
