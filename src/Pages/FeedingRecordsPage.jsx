@@ -13,6 +13,10 @@ export function FeedingRecordsPage() {
   const [isFeedingFormOpen, setIsFeedingFormOpen] = useState(false);
   const [editFeedingRecord, setEditFeedingRecord] = useState(null);
 
+  if (!selectedChild) {
+    return <div>Loading...</div>;
+  }
+
   const units = measurementUnits(selectedUnit);
 
   const feedingRecords = selectedChild.feedingRecords;
@@ -41,7 +45,7 @@ export function FeedingRecordsPage() {
     ? totalFeedingAmount / totalFeedingRecords
     : null;
 
-  // CREATE RECORD
+  // CREATE FEEDING RECORD
   const handleAddRecord = async (newRecord) => {
     const response = await fetch(
       `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
@@ -79,30 +83,48 @@ export function FeedingRecordsPage() {
     setIsFeedingFormOpen(false);
   };
 
-  const handleDeleteRecord = (record) => {
-    const updatedChildren = children.map((child) => {
-      if (child.id === selectedChild.id) {
-        const updatedFeedingRecord = child.feedingRecords.filter(
-          (currentRecord) => {
-            return currentRecord.id !== record.id;
-          },
-        );
-        const updatedChild = {
-          ...child,
-          feedingRecords: updatedFeedingRecord,
-        };
-        return updatedChild;
+  // DELETE FEEDING RECORD
+  const handleDeleteRecord = async (record) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${record.id}`,
+        {
+          method: "DELETE",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
       }
-      return child;
-    });
-    setChildren(updatedChildren);
+
+      setChildren((currentChildren) => {
+        const updatedChildren = currentChildren.map((child) => {
+          if (child.id === selectedChild.id) {
+            const updatedFeedingRecords = child.feedingRecords.filter(
+              (currentRecord) => {
+                return currentRecord.id !== record.id;
+              },
+            );
+
+            const updatedChild = {
+              ...child,
+              feedingRecords: updatedFeedingRecords,
+            };
+
+            return updatedChild;
+          }
+
+          return child;
+        });
+
+        return updatedChildren;
+      });
+    } catch (error) {
+      console.error("Delete failed:", error);
+    }
   };
 
-  const handleOpenEditRecord = (record) => {
-    setEditFeedingRecord(record);
-    setIsFeedingFormOpen(true);
-  };
-
+  // UPDATE FEEDING RECORD
   const handleUpdateRecord = (updatedFeedingRecord) => {
     const updatedChildren = children.map((child) => {
       if (child.id === selectedChild.id) {
@@ -125,6 +147,11 @@ export function FeedingRecordsPage() {
     setChildren(updatedChildren);
     setIsFeedingFormOpen(false);
     setEditFeedingRecord(null);
+  };
+
+  const handleOpenEditRecord = (record) => {
+    setEditFeedingRecord(record);
+    setIsFeedingFormOpen(true);
   };
 
   return (
