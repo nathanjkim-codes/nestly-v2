@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import pool from "./db.js";
 
 let children = [
   {
@@ -620,8 +621,39 @@ app.use(express.json());
 // ========================================
 
 // READ CHILD
-app.get("/api/children", (req, res) => {
-  res.json(children);
+app.get("/api/children", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT * FROM children");
+
+    console.log(result.rows);
+
+    // Format the data for React
+    const formattedChildren = result.rows.map((child) => {
+      return {
+        id: child.id,
+
+        profile: {
+          name: child.name,
+          gender: child.gender,
+          birthDate: child.birth_date,
+          profileImage: child.profile_image,
+        },
+
+        currentStats: child.current_stats,
+        insight: child.insight,
+      };
+    });
+
+    // Send formatted data to React
+    res.json(formattedChildren);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to fetch children",
+    });
+  }
 });
 
 // CREATE CHILD
