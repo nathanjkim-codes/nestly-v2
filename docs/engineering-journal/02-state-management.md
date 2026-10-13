@@ -1,82 +1,183 @@
 # 02. State Management
 
-**Status:** Completed
+**Status:** Completed (Frontend)
 
-**Last Updated:** July 6, 2026
+**Last Updated:** October 13, 2026
 
 ## Feature Purpose
 
-Nestly needs to show the correct child’s information across the dashboard.
+Nestly allows parents to manage multiple children, track daily records, and view information across different pages.
 
-To make this possible, I created a shared state for the selected child so different components can stay connected and display consistent data.
+To manage these interactions, I used React state to keep the user interface updated and organized.
 
 ---
 
 ## Goal
 
-Create one source of truth for the selected child.
+Manage shared data and local component state efficiently while keeping the application easy to maintain.
 
 ---
 
 ## Problem
 
-Many components need access to the same child data.
+Different parts of the application need different types of state.
 
-If each component managed its own selected child state, the dashboard could show inconsistent information.
+For example:
+
+- The Dashboard and record pages need access to the selected child's information.
+- Forms need to manage user input.
+- Modals need to track whether they are open or closed.
+- Edit forms need to know which record is being edited.
+- The Analytics page needs to track the selected date range.
+
+Keeping all these states in one component would make the application harder to maintain.
 
 ---
 
 ## My Approach
 
-I stored the selected child state in the App component.
+I organized state based on where it is needed.
 
-Then I passed the selected child and the update function down to child components using props.
+### 1. Shared State
 
-This allows components like the Header, Child Selector, Dashboard, Child Overview, Stats Cards, and Charts to work with the same selected child data.
+I used React's `useState` in the App component to manage shared child data.
+
+Examples:
+
+- `children` — Stores child data.
+- `selectedChildId` — Tracks the currently selected child.
+
+I used props and React Router's `useOutletContext` to share data with components and nested pages.
+
+This helps different pages use consistent child information.
+
+### 2. Form State
+
+I used local state to manage user input in forms.
+
+Examples:
+
+- `dateInput`
+- `timeInput`
+- `typeInput`
+- `amountInput`
+- `noteInput`
+
+Each state stores a value entered by the user.
+
+When the user types into an input, the corresponding state updates.
+
+### 3. Modal State
+
+I used boolean state to control whether forms and modals are visible.
+
+Examples:
+
+- `isOpen`
+- `isModalOpen`
+- `isChildFormOpen`
+- `isFeedingFormOpen`
+- `isGrowthFormOpen`
+- `isSleepFormOpen`
+
+These states help control when a modal opens or closes.
+
+### 4. Edit State
+
+I used state to track which child or record is being edited.
+
+Examples:
+
+- `editChild`
+- `editFeedingRecord`
+- `editGrowthRecord`
+- `editSleepRecord`
+
+These states are initially set to `null`.
+
+When the user selects a record to edit, the selected record can be stored in state and passed to the form.
+
+### 5. Filter and Date Range State
+
+I used state to manage date filters and analytics selections.
+
+Examples:
+
+- `dateRange` — Stores the selected Analytics date range.
+- `fromDate` — Stores the beginning of a date filter.
+- `toDate` — Stores the end of a date filter.
+
+When these values change, the application can update which records are displayed.
+
+### 6. Quick Add State
+
+I used state to manage quick-add interactions.
+
+Examples:
+
+- `selectedQuickAdd` — Tracks the selected quick-add action.
+- `isModalOpen` — Controls the quick-add modal visibility.
+
+This helps the application determine which form to display based on the user's action.
 
 ---
 
 ## Technical Decisions
 
-I lifted the selected child state to the App component because App is the common parent of the dashboard components.
+I decided to separate shared state from local component state.
 
-This keeps the selected child data centralized and easier to manage.
+Shared child data is managed in a common parent component because multiple pages need access to it.
 
-Instead of each component deciding which child is selected, the App component controls that state and shares it with the components that need it.
+Form input state stays within the relevant form because other pages do not need to manage those temporary input values.
+
+Modal visibility and editing state are managed by the components responsible for those interactions.
+
+I also used `null` to represent when no record is selected for editing, and boolean values to represent open or closed UI states.
+
+This approach helps avoid unnecessary state sharing and keeps component responsibilities clear.
 
 ---
 
 ## Key Concepts
 
-- useState
+- React `useState`
+- Shared State
+- Local State
+- Controlled Inputs
+- Lifting State Up
 - Props
-- Lifting State
+- React Router `useOutletContext`
 - Single Source of Truth
-- React Data Flow
-- Parent-to-Child Communication
+- Immutable State Updates
+- Conditional Rendering
+- React Re-rendering
 
 ---
 
 ## Impact
 
-When a parent selects a different child, the dashboard can update consistently.
+The application can manage multiple interactions without placing all state in one component.
 
-This makes the app feel connected and prevents different parts of the UI from showing different child information.
+Parents can select children, enter records, open and close forms, edit existing information, and filter records.
+
+Keeping state close to where it is needed makes components easier to understand and maintain.
 
 ---
 
 ## Reflection
 
-State management helped me understand how React components communicate with each other.
+Implementing state management across Nestly helped me understand that not every state belongs in the App component.
 
-Instead of thinking about each component separately, I started thinking about where data should live and which components need access to that data.
+I learned to distinguish between shared data, temporary form input, modal visibility, selected edit records, and filters.
 
-This made the project easier to reason about as the dashboard became more dynamic.
+I also learned that state placement is an important architectural decision in React.
+
+As the application grew, separating state by responsibility made the data flow easier to understand.
 
 ---
 
 ## Screenshot
 
-The dashboard using shared selected child state across multiple components.
+The dashboard and record pages using React state to manage user interactions.
 
 ![State Management](../screenshots/state-management.png)
