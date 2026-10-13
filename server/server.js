@@ -657,12 +657,44 @@ app.get("/api/children", async (req, res) => {
 });
 
 // CREATE CHILD
-app.post("/api/children", (req, res) => {
-  const newChild = req.body;
+app.post("/api/children", async (req, res) => {
+  try {
+    const newChild = req.body;
 
-  children.push(newChild);
+    const name = newChild.profile.name;
+    const gender = newChild.profile.gender;
+    const birthDate = newChild.profile.birthDate;
 
-  res.json(newChild);
+    const result = await pool.query(
+      `INSERT INTO children (name, gender, birth_date)
+      VALUES ($1, $2, $3)
+      RETURNING *`,
+      [name, gender, birthDate],
+    );
+    const createdChild = result.rows[0];
+
+    const formattedChild = {
+      id: createdChild.id,
+
+      profile: {
+        name: createdChild.name,
+        gender: createdChild.gender,
+        birthDate: createdChild.birth_date,
+        profileImage: createdChild.profile_image,
+      },
+
+      currentStats: createdChild.current_stats,
+      insight: createdChild.insight,
+    };
+
+    res.status(201).json(formattedChild);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to create child",
+    });
+  }
 });
 
 // UPDATE CHILD
