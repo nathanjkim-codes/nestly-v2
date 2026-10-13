@@ -698,36 +698,54 @@ app.post("/api/children", async (req, res) => {
 });
 
 // UPDATE CHILD
-app.put("/api/children/:childId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const updatedData = req.body;
+app.put("/api/children/:childId", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const updatedData = req.body;
 
-  let updatedChild;
+    const name = updatedData.profile.name;
+    const gender = updatedData.profile.gender;
+    const birthDate = updatedData.profile.birthDate;
 
-  const updatedChildren = children.map((currentChild) => {
-    if (currentChild.id === childId) {
-      updatedChild = {
-        ...currentChild,
-        profile: {
-          ...currentChild.profile,
-          ...updatedData,
-        },
-      };
+    const result = await pool.query(
+      `UPDATE children
+      SET 
+      name = $1,
+      gender = $2,
+      birth_date = $3
 
-      return updatedChild;
+      WHERE id = $4
+      RETURNING *`,
+      [name, gender, birthDate, childId],
+    );
+
+    const updatedChild = result.rows[0];
+
+    if (!updatedChild) {
+      return res.status(404).json({
+        error: "Child not found",
+      });
     }
 
-    return currentChild;
-  });
+    const formattedChild = {
+      id: updatedChild.id,
+      profile: {
+        name: updatedChild.name,
+        gender: updatedChild.gender,
+        birthDate: updatedChild.birth_date,
+        profileImage: updatedChild.profile_image,
+      },
+      currentStats: updatedChild.current_stats,
+      insight: updatedChild.insight,
+    };
+    res.status(200).json(formattedChild);
+  } catch (error) {
+    console.error(error);
 
-  if (!updatedChild) {
-    return res.status(404).json({
-      error: "Child not found",
+    res.status(500).json({
+      error: "Failed to update child",
     });
   }
-
-  children = updatedChildren;
-  res.json(updatedChild);
 });
 
 // DELETE CHILD
