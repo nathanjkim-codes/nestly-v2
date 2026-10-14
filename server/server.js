@@ -749,27 +749,31 @@ app.put("/api/children/:childId", async (req, res) => {
 });
 
 // DELETE CHILD
-app.delete("/api/children/:childId", (req, res) => {
-  const childId = Number(req.params.childId);
+app.delete("/api/children/:childId", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return child.id === childId;
-  });
+    const result = await pool.query(
+      `DELETE FROM children
+      WHERE id = $1
+      RETURNING *`,
+      [childId],
+    );
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Child not found",
+      });
+    }
+    return res.sendStatus(204);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Failed to delete child",
     });
   }
-
-  const updatedChildren = children.filter((child) => {
-    return childId !== child.id;
-  });
-
-  children = updatedChildren;
-  res.sendStatus(204);
 });
-
 // ========================================
 // GROWTH RECORDS REST API
 // ========================================
