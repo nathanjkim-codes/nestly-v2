@@ -77,7 +77,7 @@ export function ChildrenPage() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedProfile),
+          body: JSON.stringify({ profile: updatedProfile }),
         },
       );
 

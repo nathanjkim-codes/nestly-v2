@@ -315,7 +315,7 @@ function Dashboard({ selectedChild, selectedUnit }) {
       id: "mood",
       icon: "😊",
       title: "Mood",
-      value: currentStats.mood,
+      value: currentStats?.mood ?? "No data",
       trend: "Mostly positive",
     },
   ];

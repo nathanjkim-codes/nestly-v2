@@ -641,6 +641,11 @@ app.get("/api/children", async (req, res) => {
 
         currentStats: child.current_stats,
         insight: child.insight,
+
+        // Temporary until connect records
+        growthRecords: [],
+        sleepRecords: [],
+        feedingRecords: [],
       };
     });
 
@@ -685,6 +690,10 @@ app.post("/api/children", async (req, res) => {
 
       currentStats: createdChild.current_stats,
       insight: createdChild.insight,
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
     };
 
     res.status(201).json(formattedChild);
@@ -737,7 +746,12 @@ app.put("/api/children/:childId", async (req, res) => {
       },
       currentStats: updatedChild.current_stats,
       insight: updatedChild.insight,
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
     };
+
     res.status(200).json(formattedChild);
   } catch (error) {
     console.error(error);
