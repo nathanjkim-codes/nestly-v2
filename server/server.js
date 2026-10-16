@@ -828,22 +828,53 @@ app.get("/api/children/:childId/growthRecords", async (req, res) => {
 });
 
 // CREATE GROWTH RECORD
-app.post("/api/children/:childId/growthRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+app.post("/api/children/:childId/growthRecords/", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const newRecord = req.body;
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+    // Validate height
+    if (!Number.isFinite(newRecord.height) || newRecord.height <= 0) {
+      return res.status(400).json({
+        error: "Height must be a positive number",
+      });
+    }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    // Validate weight
+    if (!Number.isFinite(newRecord.weight) || newRecord.weight <= 0) {
+      return res.status(400).json({
+        error: "weight must be a positive number",
+      });
+    }
+
+    // Insert the new growth record into PostgreSQL
+    const result = await pool.query(
+      `INSERT INTO growth_records 
+      (child_id, date, height, weight, note)
+      VALUES
+      ($1, $2, $3, $4, $5)
+      RETURNING *`,
+      [
+        childId,
+        newRecord.date,
+        newRecord.height,
+        newRecord.weight,
+        newRecord.note ?? "",
+      ],
+    );
+    // Get the newly saved record from PostgreSQL
+    const savedRecord = result.rows[0];
+    // Send the saved record back to React with status 201
+    res.status(201).json(savedRecord);
+  } catch (error) {
+    //Handle errors
+    console.error(error);
+
+    // Send a 500 error response if fetching growth records fails
+    res.status(500).json({
+      error: "Failed to create growthRecords",
     });
   }
-
-  child.growthRecords.push(newRecord);
-  res.json(newRecord);
 });
 
 // UPDATE GROWTH RECORD
