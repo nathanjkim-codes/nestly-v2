@@ -16,15 +16,26 @@ import {
 } from "../utils/dateUtils.js";
 import { formatDecimalHours } from "../utils/formatDecimalHours.js";
 
-function Dashboard({ selectedChild, selectedUnit }) {
-  if (!selectedChild) {
+function Dashboard({ selectedChild, selectedUnit, loading, error }) {
+  // Check if data is still loading
+  if (loading) {
     return <div>Loading...</div>;
   }
 
+  // Check if fetch failed
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  // Check if no child is available
+  if (!selectedChild) {
+    return <div>No children yet.</div>;
+  }
+
   const currentStats = selectedChild.currentStats;
-  const growthRecords = selectedChild.growthRecords;
-  const sleepRecords = selectedChild.sleepRecords;
-  const feedingRecords = selectedChild.feedingRecords;
+  const growthRecords = selectedChild.growthRecords ?? [];
+  const sleepRecords = selectedChild.sleepRecords ?? [];
+  const feedingRecords = selectedChild.feedingRecords ?? [];
 
   const units = measurementUnits(selectedUnit);
 
