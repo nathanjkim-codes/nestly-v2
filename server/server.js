@@ -878,44 +878,57 @@ app.post("/api/children/:childId/growthRecords/", async (req, res) => {
 });
 
 // UPDATE GROWTH RECORD
-app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
-  const updatedData = req.body;
+app.put("/api/children/:childId/growthRecords/:recordId", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const recordId = Number(req.params.recordId);
+    const { date, height, weight, note } = req.body;
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
-
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
-
-  let updatedRecord;
-
-  const updatedGrowthRecords = child.growthRecords.map((currentRecord) => {
-    if (currentRecord.id === recordId) {
-      updatedRecord = {
-        ...currentRecord,
-        ...updatedData,
-      };
-
-      return updatedRecord;
+    // Validate height
+    if (!Number.isFinite(height) || height <= 0) {
+      return res.status(400).json({
+        error: "Height must be a positive number",
+      });
+    }
+    // Validate weight
+    if (!Number.isFinite(weight) || weight <= 0) {
+      return res.status(400).json({
+        error: "Weight must be a positive number",
+      });
     }
 
-    return currentRecord;
-  });
+    const result = await pool.query(
+      `UPDATE growth_records
+      SET
+      date = $1,
+      height = $2,
+      weight = $3,
+      note = $4
+      
+      WHERE id = $5 AND child_id = $6
+      RETURNING *`,
+      [date, height, weight, note, recordId, childId],
+    );
+    // Get the upadted record from PostgreSQL
+    const updatedRecord = result.rows[0];
 
-  if (!updatedRecord) {
-    return res.status(404).json({
-      error: "Growth record not found",
+    // Return 404 if the growth record does not exist
+    if (!updatedRecord) {
+      return res.status(404).json({
+        error: "Growth record not found",
+      });
+    }
+    // Send the updated record back to React with status 200
+    res.status(200).json(updatedRecord);
+  } catch (error) {
+    //Handle errors
+    console.error(error);
+
+    // Send status 500 if the server fails to update the record
+    res.status(500).json({
+      error: "Fail to update growthRecords",
     });
   }
-
-  child.growthRecords = updatedGrowthRecords;
-  res.json(updatedRecord);
 });
 
 // DELETE GROWTH RECORD
