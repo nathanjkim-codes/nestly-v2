@@ -932,37 +932,40 @@ app.put("/api/children/:childId/growthRecords/:recordId", async (req, res) => {
 });
 
 // DELETE GROWTH RECORD
-app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+app.delete(
+  "/api/children/:childId/growthRecords/:recordId",
+  async (req, res) => {
+    try {
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // Delete the matching growth record from PostgreSQL
+      const result = await pool.query(
+        `DELETE FROM growth_records
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
+        [recordId, childId],
+      );
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Return 404 if no matching growth record was found
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Record not found",
+        });
+      }
+      // Send status 204 when the record is successfully deleted
+      return res.sendStatus(204);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
 
-  const record = child.growthRecords.find((currentRecord) => {
-    return currentRecord.id === recordId;
-  });
-
-  if (!record) {
-    return res.status(404).json({
-      error: "Growth record not found",
-    });
-  }
-
-  const updatedGrowthRecords = child.growthRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
-
-  child.growthRecords = updatedGrowthRecords;
-  res.sendStatus(204);
-});
+      // Send status 500 if the server fails to delete the record
+      return res.status(500).json({
+        error: "failed to delete record",
+      });
+    }
+  },
+);
 
 // ========================================
 // SLEEP RECORDS REST API
