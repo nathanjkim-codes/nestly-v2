@@ -1196,38 +1196,53 @@ app.put("/api/children/:childId/sleepRecords/:recordId", async (req, res) => {
 });
 
 // DELETE SLEEP RECORD
-app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+app.delete(
+  "/api/children/:childId/sleepRecords/:recordId",
+  async (req, res) => {
+    try {
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // Check if childId is a positive integer
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Check if recordId is a positive integer
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
 
-  const record = child.sleepRecords.find((currentRecord) => {
-    return currentRecord.id === recordId;
-  });
+      // Delete the matching sleep record from PostgreSQL
+      const result = await pool.query(
+        `DELETE FROM sleep_records
+      WHERE id = $1 AND child_id = $2
+      RETURNING *`,
+        [recordId, childId],
+      );
 
-  if (!record) {
-    return res.status(404).json({
-      error: "Sleep record not found",
-    });
-  }
+      // Return 404 if no matching sleep record was found
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Sleep record not found",
+        });
+      }
+      // Return 204 if deletion succeeded
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
 
-  const updatedSleepRecords = child.sleepRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
-
-  child.sleepRecords = updatedSleepRecords;
-  res.sendStatus(204);
-});
-
+      // Return 500 if the delete fails unexpectedly
+      res.status(500).json({
+        error: "Failed to delete sleep record",
+      });
+    }
+  },
+);
 // ========================================
 // FEEDING RECORDS REST API
 // ========================================
