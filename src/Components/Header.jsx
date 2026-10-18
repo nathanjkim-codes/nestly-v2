@@ -1,8 +1,13 @@
 import ChildSelector from "./ChildSelector.jsx";
 
-function Header({ children, setSelectedChildId, selectedChild, loading }) {
+function Header({
+  children,
+  setSelectedChildId,
+  selectedChild,
+  childrenLoading,
+}) {
   // Show loading while fetching data
-  if (loading) {
+  if (childrenLoading) {
     return <div>Loading...</div>;
   }
 

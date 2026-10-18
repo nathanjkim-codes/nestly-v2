@@ -16,15 +16,23 @@ import {
 } from "../utils/dateUtils.js";
 import { formatDecimalHours } from "../utils/formatDecimalHours.js";
 
-function Dashboard({ selectedChild, selectedUnit, loading, error }) {
+function Dashboard({
+  selectedChild,
+  selectedUnit,
+  childrenLoading,
+  childrenError,
+  growthRecords,
+  growthRecordsLoading,
+  growthRecordsError,
+}) {
   // Check if data is still loading
-  if (loading) {
-    return <div>Loading...</div>;
+  if (childrenLoading) {
+    return <div>Loading children...</div>;
   }
 
   // Check if fetch failed
-  if (error) {
-    return <div>{error}</div>;
+  if (childrenError) {
+    return <div>{childrenError}</div>;
   }
 
   // Check if no child is available
@@ -32,8 +40,16 @@ function Dashboard({ selectedChild, selectedUnit, loading, error }) {
     return <div>No children yet.</div>;
   }
 
+  if (growthRecordsLoading) {
+    return <div>Loading growth records...</div>;
+  }
+
+  if (growthRecordsError) {
+    return <div>{growthRecordsError}</div>;
+  }
+
   const currentStats = selectedChild.currentStats;
-  const growthRecords = selectedChild.growthRecords ?? [];
+
   const sleepRecords = selectedChild.sleepRecords ?? [];
   const feedingRecords = selectedChild.feedingRecords ?? [];
 

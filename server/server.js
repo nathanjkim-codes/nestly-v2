@@ -972,39 +972,103 @@ app.delete(
 // ========================================
 
 // READ SLEEP RECORD
-app.get("/api/children/:childId/sleepRecords", (req, res) => {
-  const childId = Number(req.params.childId);
+app.get("/api/children/:childId/sleepRecords", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+    // Fetch sleep records for the selected child from PostgreSQL
+    const result = await pool.query(
+      `SELECT * FROM sleep_records WHERE child_id = $1`,
+      [childId],
+    );
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    // Format the data for React
+    const formattedSleepRecords = result.rows.map((record) => {
+      return {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        day: record.day,
+        duration: Number(record.duration),
+        note: record.note ?? "",
+      };
+    });
+    // Send formatted data to react
+    res.json(formattedSleepRecords);
+  } catch (error) {
+    console.error(error);
+
+    // Send a 500 error response if fetching sleep records fails
+    res.status(500).json({
+      error: "Failed to fetch sleepRecords",
     });
   }
-
-  res.json(child.sleepRecords);
 });
 
 // CREATE SLEEP RECORD
-app.post("/api/children/:childId/sleepRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+app.post("/api/children/:childId/sleepRecords", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const newRecord = req.body;
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child ID",
+      });
+    }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+      return res.status(400).json({
+        error: "Invalid date",
+      });
+    }
+
+    if (
+      newRecord.duration === "" ||
+      newRecord.duration === null ||
+      newRecord.duration === undefined ||
+      !Number.isFinite(Number(newRecord.duration)) ||
+      Number(newRecord.duration) <= 0
+    ) {
+      return res.status(400).json({
+        error: "Invalid duration",
+      });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO sleep_records
+      (child_id, date, day, duration, note)
+      VALUES
+      ($1, $2, $3, $4, $5)
+      RETURNING *`,
+      [
+        childId,
+        newRecord.date,
+        newRecord.day,
+        newRecord.duration,
+        newRecord.note ?? "",
+      ],
+    );
+
+    const record = result.rows[0];
+
+    const savedRecord = {
+      id: record.id,
+      childId: record.child_id,
+      date: record.date,
+      day: record.day,
+      duration: Number(record.duration),
+      note: record.note ?? "",
+    };
+
+    res.status(201).json(savedRecord);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to create sleep record",
     });
   }
-
-  child.sleepRecords.push(newRecord);
-  res.json(newRecord);
 });
 
 // UPDATE SLEEP RECORD

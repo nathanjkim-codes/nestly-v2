@@ -7,8 +7,11 @@ function App() {
   // useState
   const [children, setChildren] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [growthRecords, setGrowthRecords] = useState([]);
+  const [childrenLoading, setChildrenLoading] = useState(true);
+  const [growthRecordsLoading, setGrowthRecordsLoading] = useState(false);
+  const [childrenError, setChildrenError] = useState(null);
+  const [growthRecordsError, setGrowthRecordsError] = useState(null);
 
   // selectedChild
   const selectedChild = children.find((child) => child.id === selectedChildId);
@@ -38,15 +41,16 @@ function App() {
         setSelectedChildId(data[0]?.id ?? null);
       } catch (error) {
         console.error(error);
-        setError("Failed to load children");
+        setChildrenError("Failed to load children");
       } finally {
-        setLoading(false);
+        setChildrenLoading(false);
       }
     };
 
     fetchChildren();
   }, []);
-  //// Keep the selected child valid when the children array changes
+
+  // Keep the selected child valid when the children array changes
   useEffect(() => {
     const existingChild = children.find((child) => {
       return child.id === selectedChildId;
@@ -58,6 +62,39 @@ function App() {
     }
   }, [children]);
 
+  //
+  useEffect(() => {
+    if (!selectedChildId) {
+      return;
+    }
+    // Fetch records using selectedChildId
+    const fetchGrowthRecords = async () => {
+      try {
+        setGrowthRecordsLoading(true);
+        setGrowthRecordsError(null);
+        const response = await fetch(
+          `http://localhost:3000/api/children/${selectedChildId}/growthRecords`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log("Grwoth records from server:", data);
+
+        setGrowthRecords(data);
+      } catch (error) {
+        console.error(error);
+        setGrowthRecordsError("Failed to load growth records");
+      } finally {
+        setGrowthRecordsLoading(false);
+      }
+    };
+    fetchGrowthRecords();
+  }, [selectedChildId]);
+
   return (
     <div className="app-shell">
       <Sidebar />
@@ -67,7 +104,7 @@ function App() {
           children={children}
           setSelectedChildId={setSelectedChildId}
           selectedChild={selectedChild}
-          loading={loading}
+          childrenLoading={childrenLoading}
         />
         <Outlet
           context={{
@@ -76,8 +113,12 @@ function App() {
             setSelectedUnit,
             children,
             setChildren,
-            loading,
-            error,
+            growthRecords,
+            setGrowthRecords,
+            growthRecordsLoading,
+            growthRecordsError,
+            childrenLoading,
+            childrenError,
           }}
         />
       </main>

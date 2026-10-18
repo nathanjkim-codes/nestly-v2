@@ -10,19 +10,32 @@ import { useState } from "react";
 import { GrowthRecordForm } from "../Components/QuickAdd/GrowthRecordForm";
 
 export function GrowthRecordsPage() {
-  const { selectedChild, selectedUnit, children, setChildren } =
-    useOutletContext();
+  const {
+    selectedChild,
+    selectedUnit,
+    children,
+    setChildren,
+    growthRecords,
+    growthRecordsLoading,
+    growthRecordsError,
+  } = useOutletContext();
 
   const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
   const [editGrowthRecord, setEditGrowthRecord] = useState(null);
+
+  if (growthRecordsLoading) {
+    return <div>Loading growth records...</div>;
+  }
+
+  if (growthRecordsError) {
+    return <div>{growthRecordsError}</div>;
+  }
 
   if (!selectedChild) {
     return <div>Loading...</div>;
   }
 
   const units = measurementUnits(selectedUnit);
-
-  const growthRecords = selectedChild.growthRecords;
 
   const sortedGrowthRecords = [...growthRecords].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
