@@ -833,17 +833,43 @@ app.post("/api/children/:childId/growthRecords/", async (req, res) => {
     const childId = Number(req.params.childId);
     const newRecord = req.body;
 
-    // Validate height
-    if (!Number.isFinite(newRecord.height) || newRecord.height <= 0) {
+    // Validate child id
+    if (!Number.isInteger(childId) || childId <= 0) {
       return res.status(400).json({
-        error: "Height must be a positive number",
+        error: "Invalid child ID",
+      });
+    }
+
+    // Validate date
+    if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+      return res.status(400).json({
+        error: "Invalid date",
+      });
+    }
+
+    // Validate height
+    if (
+      newRecord.height === "" ||
+      newRecord.height === null ||
+      newRecord.height === undefined ||
+      !Number.isFinite(Number(newRecord.height)) ||
+      Number(newRecord.height) <= 0
+    ) {
+      return res.status(400).json({
+        error: "Invalid height",
       });
     }
 
     // Validate weight
-    if (!Number.isFinite(newRecord.weight) || newRecord.weight <= 0) {
+    if (
+      newRecord.weight === "" ||
+      newRecord.weight === null ||
+      newRecord.weight === undefined ||
+      !Number.isFinite(Number(newRecord.weight)) ||
+      Number(newRecord.weight) <= 0
+    ) {
       return res.status(400).json({
-        error: "weight must be a positive number",
+        error: "Invalid weight",
       });
     }
 
@@ -863,7 +889,16 @@ app.post("/api/children/:childId/growthRecords/", async (req, res) => {
       ],
     );
     // Get the newly saved record from PostgreSQL
-    const savedRecord = result.rows[0];
+    const record = result.rows[0];
+
+    const savedRecord = {
+      id: record.id,
+      childId: record.child_id,
+      date: record.date,
+      height: Number(record.height),
+      weight: Number(record.weight),
+      note: record.note ?? "",
+    };
     // Send the saved record back to React with status 201
     res.status(201).json(savedRecord);
   } catch (error) {
