@@ -24,7 +24,7 @@ export function SleepRecordsPage() {
   }
 
   if (!selectedChild) {
-    return <div>Loading...</div>;
+    return <div>No children yet. Add a child to get started.</div>;
   }
 
   const sortedSleepRecords = [...sleepRecords].sort(

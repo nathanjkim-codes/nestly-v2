@@ -32,7 +32,7 @@ export function GrowthRecordsPage() {
   }
 
   if (!selectedChild) {
-    return <div>Loading...</div>;
+    return <div>No children yet. Add a child to get started.</div>;
   }
 
   const units = measurementUnits(selectedUnit);

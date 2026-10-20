@@ -65,12 +65,14 @@ function App() {
     }
   }, [children]);
 
-  //
+  // Fetch growth records using selectedChildId
   useEffect(() => {
     if (!selectedChildId) {
+      setGrowthRecords([]);
+      setGrowthRecordsLoading(false);
       return;
     }
-    // Fetch growth records using selectedChildId
+
     const fetchGrowthRecords = async () => {
       try {
         setGrowthRecordsLoading(true);
@@ -99,6 +101,8 @@ function App() {
   // Fetch sleep records using selectedChildId
   useEffect(() => {
     if (!selectedChildId) {
+      setSleepRecords([]);
+      setSleepRecordsLoading(false);
       return;
     }
 
