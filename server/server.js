@@ -1248,22 +1248,43 @@ app.delete(
 // ========================================
 
 // READ FEEDING RECORD
-app.get("/api/children/:childId/feedingRecords", (req, res) => {
-  const childId = Number(req.params.childId);
+app.get("/api/children/:childId/feedingRecords", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child ID",
+      });
+    }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    const result = await pool.query(
+      `SELECT * FROM feeding_records
+      WHERE child_id = $1`,
+      [childId],
+    );
+
+    const formattedFeedingRecords = result.rows.map((record) => {
+      return {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        type: record.type,
+        amount: Number(record.amount),
+        unit: record.unit,
+        note: record.note ?? "",
+      };
+    });
+
+    res.json(formattedFeedingRecords);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to fetch feeding records",
     });
   }
-
-  res.json(child.feedingRecords);
 });
-
 // CREATE FEEDING RECORD
 app.post("/api/children/:childId/feedingRecords", (req, res) => {
   const childId = Number(req.params.childId);
