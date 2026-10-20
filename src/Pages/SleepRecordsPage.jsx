@@ -5,15 +5,27 @@ import { useState } from "react";
 import { SleepRecordForm } from "../Components/QuickAdd/SleepRecordForm";
 
 export function SleepRecordsPage() {
-  const { selectedChild, children, setChildren } = useOutletContext();
+  const {
+    selectedChild,
+    sleepRecords,
+    setSleepRecords,
+    sleepRecordsLoading,
+    sleepRecordsError,
+  } = useOutletContext();
   const [isSleepFormOpen, setIsSleepFormOpen] = useState(false);
   const [editSleepRecord, setEditSleepRecord] = useState(null);
+
+  if (sleepRecordsLoading) {
+    return <div>Loading sleep records...</div>;
+  }
+
+  if (sleepRecordsError) {
+    return <div>{sleepRecordsError}</div>;
+  }
 
   if (!selectedChild) {
     return <div>Loading...</div>;
   }
-
-  const sleepRecords = selectedChild.sleepRecords;
 
   const sortedSleepRecords = [...sleepRecords].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
@@ -44,9 +56,10 @@ export function SleepRecordsPage() {
     ? formatDecimalHours(averageSleepDuration)
     : null;
 
-  // CREATE
+  // CREATE — Add a new sleep record
   const handleAddRecord = async (newRecord) => {
     try {
+      // 1. Send new form data to Express → PostgreSQL
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords`,
         {
@@ -58,35 +71,32 @@ export function SleepRecordsPage() {
         },
       );
 
+      // 2. Check if the POST request failed
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      // 3. Receive the newly saved record from Express
       const createdRecord = await response.json();
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedSleepRecords = [...child.sleepRecords, createdRecord];
-
-            const updatedChild = {
-              ...child,
-              sleepRecords: updatedSleepRecords,
-            };
-            return updatedChild;
-          }
-          return child;
-        });
-        return updatedChildren;
+      // 4. Update React state after successful creation
+      setSleepRecords((currentRecords) => {
+        // Keep existing records and add the new record
+        return [...currentRecords, createdRecord];
       });
+
+      // 5. Close the Add form after successful POST
+      setIsSleepFormOpen(false);
     } catch (error) {
+      // 6. Log any errors
       console.error("Fetch error:", error);
     }
   };
 
-  // DELETE
+  // DELETE — Remove an existing sleep record
   const handleDeleteRecord = async (record) => {
     try {
+      // 1. Send DELETE request to Express → PostgreSQL
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${record.id}`,
         {
@@ -94,40 +104,29 @@ export function SleepRecordsPage() {
         },
       );
 
+      // 2. Check if the DELETE request failed
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedSleepRecords = child.sleepRecords.filter(
-              (currentRecord) => {
-                return currentRecord.id !== record.id;
-              },
-            );
-
-            const updatedChild = {
-              ...child,
-              sleepRecords: updatedSleepRecords,
-            };
-
-            return updatedChild;
-          }
-
-          return child;
+      // 3. Update React state after successful deletion
+      setSleepRecords((currentRecords) => {
+        // 4. Create a new array without the deleted record
+        return currentRecords.filter((currentRecord) => {
+          // Keep records whose IDs do not match the deleted record
+          return currentRecord.id !== record.id;
         });
-
-        return updatedChildren;
       });
     } catch (error) {
+      // 5. Log any errors
       console.error("Fetch error:", error);
     }
   };
 
-  //UPDATE
+  // UPDATE — Edit an existing sleep record
   const handleUpdateRecord = async (updatedRecord) => {
     try {
+      // 1. Send updated form data to Express → PostgreSQL
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${updatedRecord.id}`,
         {
@@ -139,42 +138,37 @@ export function SleepRecordsPage() {
         },
       );
 
+      // 2. Check if the request failed
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
+      // 3. Receive the saved record from Express
       const savedRecord = await response.json();
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedSleepRecords = child.sleepRecords.map(
-              (currentRecord) => {
-                if (currentRecord.id === savedRecord.id) {
-                  return savedRecord;
-                }
-
-                return currentRecord;
-              },
-            );
-
-            const updatedChild = {
-              ...child,
-              sleepRecords: updatedSleepRecords,
-            };
-
-            return updatedChild;
+      // 4. Update React state with the saved record
+      setSleepRecords((currentRecords) => {
+        const updatedRecords = currentRecords.map((currentRecord) => {
+          // Replace the record if the IDs match
+          if (currentRecord.id === savedRecord.id) {
+            return savedRecord;
           }
 
-          return child;
+          // Keep other records unchanged
+          return currentRecord;
         });
 
-        return updatedChildren;
+        // Return the new array to React
+        return updatedRecords;
       });
 
+      // 5. Clear the selected record for future editing
       setEditSleepRecord(null);
+
+      // 6. Close the edit form
       setIsSleepFormOpen(false);
     } catch (error) {
+      // 7. Log any errors
       console.error("Fetch error:", error);
     }
   };

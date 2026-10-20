@@ -53,7 +53,7 @@ export function SleepRecordForm({
 
   useEffect(() => {
     if (editSleepRecord) {
-      setDateInput(editSleepRecord.date);
+      setDateInput(editSleepRecord.date.slice(0, 10));
       setDurationInput(editSleepRecord.duration);
       setNoteInput(editSleepRecord.note);
     }

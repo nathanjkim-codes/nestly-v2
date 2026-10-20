@@ -7,11 +7,14 @@ function App() {
   // useState
   const [children, setChildren] = useState([]);
   const [selectedChildId, setSelectedChildId] = useState(null);
-  const [growthRecords, setGrowthRecords] = useState([]);
   const [childrenLoading, setChildrenLoading] = useState(true);
+  const [growthRecords, setGrowthRecords] = useState([]);
   const [growthRecordsLoading, setGrowthRecordsLoading] = useState(false);
-  const [childrenError, setChildrenError] = useState(null);
   const [growthRecordsError, setGrowthRecordsError] = useState(null);
+  const [sleepRecords, setSleepRecords] = useState([]);
+  const [sleepRecordsLoading, setSleepRecordsLoading] = useState(false);
+  const [sleepRecordsError, setSleepRecordsError] = useState(null);
+  const [childrenError, setChildrenError] = useState(null);
 
   // selectedChild
   const selectedChild = children.find((child) => child.id === selectedChildId);
@@ -67,7 +70,7 @@ function App() {
     if (!selectedChildId) {
       return;
     }
-    // Fetch records using selectedChildId
+    // Fetch growth records using selectedChildId
     const fetchGrowthRecords = async () => {
       try {
         setGrowthRecordsLoading(true);
@@ -82,8 +85,6 @@ function App() {
 
         const data = await response.json();
 
-        console.log("Grwoth records from server:", data);
-
         setGrowthRecords(data);
       } catch (error) {
         console.error(error);
@@ -93,6 +94,40 @@ function App() {
       }
     };
     fetchGrowthRecords();
+  }, [selectedChildId]);
+
+  // Fetch sleep records using selectedChildId
+  useEffect(() => {
+    if (!selectedChildId) {
+      return;
+    }
+
+    const fetchSleepRecords = async () => {
+      try {
+        setSleepRecordsLoading(true);
+        setSleepRecordsError(null);
+        const response = await fetch(
+          `HTTP://localhost:3000/api/children/${selectedChildId}/sleepRecords`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log("Sleep records from server:", data);
+
+        setSleepRecords(data);
+      } catch (error) {
+        console.error(error);
+        setSleepRecordsError("Failed to load sleep records");
+      } finally {
+        setSleepRecordsLoading(false);
+      }
+    };
+
+    fetchSleepRecords();
   }, [selectedChildId]);
 
   return (
@@ -117,6 +152,10 @@ function App() {
             setGrowthRecords,
             growthRecordsLoading,
             growthRecordsError,
+            sleepRecords,
+            setSleepRecords,
+            sleepRecordsLoading,
+            sleepRecordsError,
             childrenLoading,
             childrenError,
           }}
