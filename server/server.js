@@ -1252,18 +1252,20 @@ app.get("/api/children/:childId/feedingRecords", async (req, res) => {
   try {
     const childId = Number(req.params.childId);
 
+    // Check if childId is a positive integer
     if (!Number.isInteger(childId) || childId <= 0) {
       return res.status(400).json({
         error: "Invalid child ID",
       });
     }
 
+    // Fetch feeding records for the selected child from PostgreSQL
     const result = await pool.query(
-      `SELECT * FROM feeding_records
-      WHERE child_id = $1`,
+      `SELECT * FROM feeding_records WHERE child_id = $1`,
       [childId],
     );
 
+    // Format the data for React
     const formattedFeedingRecords = result.rows.map((record) => {
       return {
         id: record.id,
@@ -1276,16 +1278,20 @@ app.get("/api/children/:childId/feedingRecords", async (req, res) => {
       };
     });
 
+    // Send formatted data to react
     res.json(formattedFeedingRecords);
   } catch (error) {
     console.error(error);
 
+    // Send a 500 error response if fetching feeding records fails
     res.status(500).json({
       error: "Failed to fetch feeding records",
     });
   }
 });
+
 // CREATE FEEDING RECORD
+
 app.post("/api/children/:childId/feedingRecords", (req, res) => {
   const childId = Number(req.params.childId);
   const newRecord = req.body;
