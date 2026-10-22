@@ -1513,27 +1513,54 @@ app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
 });
 
 // DELETE FEEDING RECORD
-app.delete("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+// DELETE FEEDING RECORD
+app.delete(
+  "/api/children/:childId/feedingRecords/:recordId",
+  async (req, res) => {
+    try {
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // Validate child ID
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Validate record ID
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
 
-  const updatedFeedingRecords = child.feedingRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
+      // Delete feeding record from PostgreSQL
+      const result = await pool.query(
+        `DELETE FROM feeding_records
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
+        [recordId, childId],
+      );
 
-  child.feedingRecords = updatedFeedingRecords;
-  res.sendStatus(204);
-});
+      // Check if feeding record exists
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Feeding record not found",
+        });
+      }
+
+      // Successfully deleted
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        error: "Failed to delete feeding record",
+      });
+    }
+  },
+);
 // ========================================
 // START SERVER
 // ========================================
