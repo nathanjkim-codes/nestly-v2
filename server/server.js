@@ -1291,23 +1291,108 @@ app.get("/api/children/:childId/feedingRecords", async (req, res) => {
 });
 
 // CREATE FEEDING RECORD
+app.post("/api/children/:childId/feedingRecords", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const newRecord = req.body;
 
-app.post("/api/children/:childId/feedingRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+    // Validate child ID
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child ID",
+      });
+    }
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+    // Validate date
+    if (!newRecord?.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+      return res.status(400).json({
+        error: "Invalid date",
+      });
+    }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    // Validate type
+    if (!newRecord.type || typeof newRecord.type !== "string") {
+      return res.status(400).json({
+        error: "Invalid feeding type",
+      });
+    }
+
+    // Validate amount
+    if (
+      newRecord.amount == null ||
+      newRecord.amount === "" ||
+      !Number.isFinite(newRecord.amount) ||
+      newRecord.amount <= 0
+    ) {
+      return res.status(400).json({
+        error: "Invalid amount",
+      });
+    }
+
+    // Validate unit
+    if (!newRecord.unit || typeof newRecord.unit !== "string") {
+      return res.status(400).json({
+        error: "Invalid unit",
+      });
+    }
+
+    // Validate note
+    if (newRecord.note != null && typeof newRecord.note !== "string") {
+      return res.status(400).json({
+        error: "Invalid note",
+      });
+    }
+
+    // Check if child exists
+    const childResult = await pool.query(
+      "SELECT id FROM children WHERE id = $1",
+      [childId],
+    );
+
+    if (childResult.rows.length === 0) {
+      return res.status(404).json({
+        error: "Child not found",
+      });
+    }
+
+    // Insert feeding record into PostgreSQL
+    const result = await pool.query(
+      `INSERT INTO feeding_records
+       (child_id, date, type, amount, unit, note)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+      [
+        childId,
+        newRecord.date,
+        newRecord.type,
+        newRecord.amount,
+        newRecord.unit,
+        newRecord.note ?? "",
+      ],
+    );
+
+    // Format data for React
+    const record = result.rows[0];
+
+    const createdRecord = {
+      id: record.id,
+      childId: record.child_id,
+      date: record.date,
+      type: record.type,
+      amount: Number(record.amount),
+      unit: record.unit,
+      note: record.note ?? "",
+    };
+
+    // Send created record
+    return res.status(201).json(createdRecord);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Failed to create feeding record",
     });
   }
-
-  child.feedingRecords.push(newRecord);
-  res.json(newRecord);
 });
 
 // UPDATE FEEDING RECORD
