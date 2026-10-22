@@ -14,6 +14,9 @@ function App() {
   const [sleepRecords, setSleepRecords] = useState([]);
   const [sleepRecordsLoading, setSleepRecordsLoading] = useState(false);
   const [sleepRecordsError, setSleepRecordsError] = useState(null);
+  const [feedingRecords, setFeedingRecords] = useState([]);
+  const [feedingRecordsLoading, setFeedingRecordsLoading] = useState(false);
+  const [feedingRecordsError, setFeedingRecordsError] = useState(null);
   const [childrenError, setChildrenError] = useState(null);
 
   // selectedChild
@@ -66,6 +69,7 @@ function App() {
   }, [children]);
 
   // Fetch growth records using selectedChildId
+  // or clear records and stop loading when no child is selected.
   useEffect(() => {
     if (!selectedChildId) {
       setGrowthRecords([]);
@@ -99,6 +103,7 @@ function App() {
   }, [selectedChildId]);
 
   // Fetch sleep records using selectedChildId
+  // or clear records and stop loading when no child is selected.
   useEffect(() => {
     if (!selectedChildId) {
       setSleepRecords([]);
@@ -134,6 +139,44 @@ function App() {
     fetchSleepRecords();
   }, [selectedChildId]);
 
+  // Fetch feeding records when the selected child changes,
+  // or clear records and stop loading when no child is selected.
+  useEffect(() => {
+    if (!selectedChildId) {
+      setFeedingRecords([]);
+      setFeedingRecordsLoading(false);
+      return;
+    }
+
+    const fetchFeedingRecords = async () => {
+      try {
+        setFeedingRecordsLoading(true);
+        setFeedingRecordsError(null);
+
+        const response = await fetch(
+          `http://localhost:3000/api/children/${selectedChildId}/feedingRecords`,
+        );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        console.log("Feeding records from server:", data);
+
+        setFeedingRecords(data);
+      } catch (error) {
+        console.error(error);
+        setFeedingRecordsError("Failed to load feeding records");
+      } finally {
+        setFeedingRecordsLoading(false);
+      }
+    };
+
+    fetchFeedingRecords();
+  }, [selectedChildId]);
+
   return (
     <div className="app-shell">
       <Sidebar />
@@ -160,6 +203,10 @@ function App() {
             setSleepRecords,
             sleepRecordsLoading,
             sleepRecordsError,
+            feedingRecords,
+            setFeedingRecords,
+            feedingRecordsLoading,
+            feedingRecordsError,
             childrenLoading,
             childrenError,
           }}

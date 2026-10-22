@@ -15,7 +15,8 @@ CREATE TABLE growth_records (
     child_id INTEGER NOT NULL REFERENCES children(id) ON DELETE CASCADE,
     date TIMESTAMP NOT NULL,
     height NUMERIC NOT NULL,
-    weight NUMERIC NOT NULL
+    weight NUMERIC NOT NULL,
+    note TEXT
 );
 
 -- 5. Create sleep records table
@@ -35,6 +36,6 @@ CREATE TABLE feeding_records (
     date TIMESTAMP NOT NULL,
     type TEXT NOT NULL,
     amount NUMERIC NOT NULL,
-    unit TEXT NOT NULL,
+    duration INTEGER,
     note text
 );

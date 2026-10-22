@@ -1273,7 +1273,7 @@ app.get("/api/children/:childId/feedingRecords", async (req, res) => {
         date: record.date,
         type: record.type,
         amount: Number(record.amount),
-        unit: record.unit,
+        duration: record.duration == null ? null : Number(record.duration),
         note: record.note ?? "",
       };
     });
@@ -1329,11 +1329,12 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
       });
     }
 
-    // Validate unit
-    if (!newRecord.unit || typeof newRecord.unit !== "string") {
-      return res.status(400).json({
-        error: "Invalid unit",
-      });
+    // Validate duration
+    if (
+      newRecord.duration != null &&
+      (!Number.isInteger(newRecord.duration) || newRecord.duration <= 0)
+    ) {
+      return res.status(400).json({ error: "Invalid duration" });
     }
 
     // Validate note
@@ -1343,12 +1344,12 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
       });
     }
 
-    // Check if child exists
     const childResult = await pool.query(
       "SELECT id FROM children WHERE id = $1",
       [childId],
     );
 
+    // Check if child exists
     if (childResult.rows.length === 0) {
       return res.status(404).json({
         error: "Child not found",
@@ -1358,7 +1359,7 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
     // Insert feeding record into PostgreSQL
     const result = await pool.query(
       `INSERT INTO feeding_records
-       (child_id, date, type, amount, unit, note)
+       (child_id, date, type, amount, duration, note)
        VALUES ($1, $2, $3, $4, $5, $6)
        RETURNING *`,
       [
@@ -1366,7 +1367,7 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
         newRecord.date,
         newRecord.type,
         newRecord.amount,
-        newRecord.unit,
+        newRecord.duration ?? null,
         newRecord.note ?? "",
       ],
     );
@@ -1380,7 +1381,7 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
       date: record.date,
       type: record.type,
       amount: Number(record.amount),
-      unit: record.unit,
+      duration: record.duration == null ? null : Number(record.duration),
       note: record.note ?? "",
     };
 
@@ -1395,7 +1396,6 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
   }
 });
 
-// UPDATE FEEDING RECORD
 // UPDATE FEEDING RECORD
 app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
   try {
@@ -1446,10 +1446,13 @@ app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
       });
     }
 
-    // Validate unit
-    if (!updatedRecord.unit || typeof updatedRecord.unit !== "string") {
+    // Validate duration
+    if (
+      updatedRecord.duration != null &&
+      (!Number.isInteger(updatedRecord.duration) || updatedRecord.duration <= 0)
+    ) {
       return res.status(400).json({
-        error: "Invalid unit",
+        error: "Invalid duration",
       });
     }
 
@@ -1463,18 +1466,18 @@ app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
     // Update feeding record in PostgreSQL
     const result = await pool.query(
       `UPDATE feeding_records
-         SET date = $1,
-             type = $2,
-             amount = $3,
-             unit = $4,
-             note = $5
-         WHERE id = $6 AND child_id = $7
-         RETURNING *`,
+   SET date = $1,
+       type = $2,
+       amount = $3,
+       duration = $4,
+       note = $5
+   WHERE id = $6 AND child_id = $7
+   RETURNING *`,
       [
         updatedRecord.date,
         updatedRecord.type,
         updatedRecord.amount,
-        updatedRecord.unit,
+        updatedRecord.duration ?? null,
         updatedRecord.note ?? "",
         recordId,
         childId,
@@ -1497,7 +1500,7 @@ app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
       date: record.date,
       type: record.type,
       amount: Number(record.amount),
-      unit: record.unit,
+      duration: record.duration == null ? null : Number(record.duration),
       note: record.note ?? "",
     };
 
@@ -1512,7 +1515,6 @@ app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
   }
 });
 
-// DELETE FEEDING RECORD
 // DELETE FEEDING RECORD
 app.delete(
   "/api/children/:childId/feedingRecords/:recordId",
