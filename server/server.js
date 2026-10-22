@@ -1396,44 +1396,120 @@ app.post("/api/children/:childId/feedingRecords", async (req, res) => {
 });
 
 // UPDATE FEEDING RECORD
-app.put("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
-  const updatedData = req.body;
+// UPDATE FEEDING RECORD
+app.put("/api/children/:childId/feedingRecords/:recordId", async (req, res) => {
+  try {
+    const childId = Number(req.params.childId);
+    const recordId = Number(req.params.recordId);
+    const updatedRecord = req.body;
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
-
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
-
-  let updatedRecord;
-
-  const updatedFeedingRecords = child.feedingRecords.map((currentRecord) => {
-    if (currentRecord.id === recordId) {
-      updatedRecord = {
-        ...currentRecord,
-        ...updatedData,
-      };
-
-      return updatedRecord;
+    // Validate child ID
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child ID",
+      });
     }
 
-    return currentRecord;
-  });
+    // Validate record ID
+    if (!Number.isInteger(recordId) || recordId <= 0) {
+      return res.status(400).json({
+        error: "Invalid record ID",
+      });
+    }
 
-  if (!updatedRecord) {
-    return res.status(404).json({
-      error: "Feeding record not found",
+    // Validate date
+    if (
+      !updatedRecord?.date ||
+      Number.isNaN(new Date(updatedRecord.date).getTime())
+    ) {
+      return res.status(400).json({
+        error: "Invalid date",
+      });
+    }
+
+    // Validate type
+    if (!updatedRecord.type || typeof updatedRecord.type !== "string") {
+      return res.status(400).json({
+        error: "Invalid feeding type",
+      });
+    }
+
+    // Validate amount
+    if (
+      updatedRecord.amount == null ||
+      updatedRecord.amount === "" ||
+      !Number.isFinite(updatedRecord.amount) ||
+      updatedRecord.amount <= 0
+    ) {
+      return res.status(400).json({
+        error: "Invalid amount",
+      });
+    }
+
+    // Validate unit
+    if (!updatedRecord.unit || typeof updatedRecord.unit !== "string") {
+      return res.status(400).json({
+        error: "Invalid unit",
+      });
+    }
+
+    // Validate note
+    if (updatedRecord.note != null && typeof updatedRecord.note !== "string") {
+      return res.status(400).json({
+        error: "Invalid note",
+      });
+    }
+
+    // Update feeding record in PostgreSQL
+    const result = await pool.query(
+      `UPDATE feeding_records
+         SET date = $1,
+             type = $2,
+             amount = $3,
+             unit = $4,
+             note = $5
+         WHERE id = $6 AND child_id = $7
+         RETURNING *`,
+      [
+        updatedRecord.date,
+        updatedRecord.type,
+        updatedRecord.amount,
+        updatedRecord.unit,
+        updatedRecord.note ?? "",
+        recordId,
+        childId,
+      ],
+    );
+
+    // Check if feeding record exists
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Feeding record not found",
+      });
+    }
+
+    // Format data for React
+    const record = result.rows[0];
+
+    const formattedRecord = {
+      id: record.id,
+      childId: record.child_id,
+      date: record.date,
+      type: record.type,
+      amount: Number(record.amount),
+      unit: record.unit,
+      note: record.note ?? "",
+    };
+
+    // Send updated record
+    return res.status(200).json(formattedRecord);
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      error: "Failed to update feeding record",
     });
   }
-
-  child.feedingRecords = updatedFeedingRecords;
-  res.json(updatedRecord);
 });
 
 // DELETE FEEDING RECORD
