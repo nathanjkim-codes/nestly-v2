@@ -23,17 +23,37 @@ import {
 export function AnalyticsPage() {
   const [dateRange, setDateRange] = useState("30");
 
+  const {
+    selectedChild,
+    selectedUnit,
+    growthRecords,
+    growthRecordsLoading,
+    growthRecordsError,
+    sleepRecords,
+    sleepRecordsLoading,
+    sleepRecordsError,
+    feedingRecords,
+    feedingRecordsLoading,
+    feedingRecordsError,
+  } = useOutletContext();
+
+  if (growthRecordsLoading || sleepRecordsLoading || feedingRecordsLoading) {
+    return <div>Loading analytics...</div>;
+  }
+
+  if (growthRecordsError || sleepRecordsError || feedingRecordsError) {
+    return <div>Failed to load analytics data.</div>;
+  }
+
+  if (!selectedChild) {
+    return <div>No children yet. Add a child to get started.</div>;
+  }
+
   const handleDateRangeChange = (e) => {
     setDateRange(e.target.value);
   };
 
-  const { selectedChild, selectedUnit } = useOutletContext();
-
   const units = measurementUnits(selectedUnit);
-
-  const growthRecords = selectedChild.growthRecords;
-  const sleepRecords = selectedChild.sleepRecords;
-  const feedingRecords = selectedChild.feedingRecords;
 
   const sortedGrowthRecords = [...growthRecords].sort(
     (a, b) => new Date(a.date) - new Date(b.date),
