@@ -13,15 +13,19 @@ export function GrowthRecordsPage() {
   const {
     selectedChild,
     selectedUnit,
-    children,
-    setChildren,
     growthRecords,
+    setGrowthRecords,
     growthRecordsLoading,
     growthRecordsError,
   } = useOutletContext();
 
   const [isGrowthFormOpen, setIsGrowthFormOpen] = useState(false);
   const [editGrowthRecord, setEditGrowthRecord] = useState(null);
+
+  const handleOpenEditRecord = (record) => {
+    setEditGrowthRecord(record);
+    setIsGrowthFormOpen(true);
+  };
 
   if (growthRecordsLoading) {
     return <div>Loading growth records...</div>;
@@ -37,6 +41,7 @@ export function GrowthRecordsPage() {
 
   const units = measurementUnits(selectedUnit);
 
+  // Sort growth records by date (newest first)
   const sortedGrowthRecords = [...growthRecords].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
   );
@@ -47,7 +52,7 @@ export function GrowthRecordsPage() {
   const latestDateRecord = hasRecord ? sortedGrowthRecords[0].date : null;
   const latestWeightRecord = hasRecord ? sortedGrowthRecords[0].weight : null;
 
-  // CREATE
+  // CREATE - Save a new record and update React state
   const handleAddRecord = async (newRecord) => {
     try {
       const response = await fetch(
@@ -67,26 +72,8 @@ export function GrowthRecordsPage() {
 
       const createdRecord = await response.json();
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedGrowthRecords = [
-              ...child.growthRecords,
-              createdRecord,
-            ];
-
-            const updatedChild = {
-              ...child,
-              growthRecords: updatedGrowthRecords,
-            };
-
-            return updatedChild;
-          }
-
-          return child;
-        });
-
-        return updatedChildren;
+      setGrowthRecords((currentRecords) => {
+        return [...currentRecords, createdRecord];
       });
 
       setIsGrowthFormOpen(false);
@@ -95,7 +82,7 @@ export function GrowthRecordsPage() {
     }
   };
 
-  // DELETE
+  // DELETE - Remove a record from the database and React state
   const handleDeleteRecord = async (record) => {
     try {
       const response = await fetch(
@@ -109,34 +96,17 @@ export function GrowthRecordsPage() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedGrowthRecords = child.growthRecords.filter(
-              (currentRecord) => {
-                return currentRecord.id !== record.id;
-              },
-            );
-
-            const updatedChild = {
-              ...child,
-              growthRecords: updatedGrowthRecords,
-            };
-
-            return updatedChild;
-          }
-
-          return child;
+      setGrowthRecords((currentRecords) => {
+        return currentRecords.filter((currentRecord) => {
+          return currentRecord.id !== record.id;
         });
-
-        return updatedChildren;
       });
     } catch (error) {
       console.error("Fetch error:", error);
     }
   };
 
-  // UPDATE
+  // UPDATE - Save changes and replace the updated record in React state
   const handleUpdateRecord = async (updatedGrowthRecord) => {
     try {
       const response = await fetch(
@@ -156,28 +126,15 @@ export function GrowthRecordsPage() {
 
       const updatedRecord = await response.json();
 
-      setChildren(
-        children.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedGrowthRecords = child.growthRecords.map((record) => {
-              if (record.id === updatedRecord.id) {
-                return updatedRecord;
-              }
-
-              return record;
-            });
-
-            const updatedChild = {
-              ...child,
-              growthRecords: updatedGrowthRecords,
-            };
-
-            return updatedChild;
+      setGrowthRecords((currentRecords) => {
+        const updatedRecords = currentRecords.map((currentRecord) => {
+          if (currentRecord.id === updatedRecord.id) {
+            return updatedRecord;
           }
-
-          return child;
-        }),
-      );
+          return currentRecord;
+        });
+        return updatedRecords;
+      });
 
       setEditGrowthRecord(null);
       setIsGrowthFormOpen(false);
@@ -198,7 +155,10 @@ export function GrowthRecordsPage() {
 
         <button
           className="page-add-btn"
-          onClick={() => setIsGrowthFormOpen(true)}
+          onClick={() => {
+            setEditGrowthRecord(null);
+            setIsGrowthFormOpen(true);
+          }}
         >
           + Add Growth Record
         </button>
