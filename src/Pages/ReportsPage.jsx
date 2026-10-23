@@ -5,14 +5,33 @@ import { formatDate } from "../utils/formatDate";
 import { formatDateForInput } from "../utils/formatDateForInput";
 
 export function ReportsPage() {
-  const { selectedChild } = useOutletContext();
-
-  const growthRecords = selectedChild.growthRecords;
-  const sleepRecords = selectedChild.sleepRecords;
-  const feedingRecords = selectedChild.feedingRecords;
+  const {
+    selectedChild,
+    growthRecords,
+    growthRecordsLoading,
+    growthRecordsError,
+    sleepRecords,
+    sleepRecordsLoading,
+    sleepRecordsError,
+    feedingRecords,
+    feedingRecordsLoading,
+    feedingRecordsError,
+  } = useOutletContext();
 
   const [fromDate, setFromDate] = useState("");
   const [toDate, setToDate] = useState("");
+
+  if (growthRecordsLoading || sleepRecordsLoading || feedingRecordsLoading) {
+    return <div>Loading child's data...</div>;
+  }
+
+  if (growthRecordsError || sleepRecordsError || feedingRecordsError) {
+    return <div>Failed to load child's data</div>;
+  }
+
+  if (!selectedChild) {
+    return <div>No children yet. Add a child to get started.</div>;
+  }
 
   const handleFromDateChange = (event) => {
     setFromDate(event.target.value);
@@ -61,6 +80,10 @@ export function ReportsPage() {
   const hasFilteredGrowthRecords = filteredGrowthRecords.length > 0;
   const hasFilteredSleepRecords = filteredSleepRecords.length > 0;
   const hasFilteredFeedingRecords = filteredFeedingRecords.length > 0;
+
+  const handleGenerateReport = () => {
+    window.print();
+  };
 
   return (
     <section className="reports-page">
@@ -175,7 +198,11 @@ export function ReportsPage() {
               placeholder="Routine check-up."
             ></textarea>
 
-            <button type="button" className="generate-report-btn">
+            <button
+              type="button"
+              className="generate-report-btn"
+              onClick={handleGenerateReport}
+            >
               Generate Report
             </button>
           </div>
@@ -190,7 +217,7 @@ export function ReportsPage() {
           </p>
         </div>
 
-        <div className="preview-records">
+        <div className="preview-records print-report">
           <div className="preview-record-card preview-growth-records">
             <div className="preview-record-header">
               <span className="preview-records-icon">📏</span>

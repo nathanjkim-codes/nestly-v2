@@ -1740,3 +1740,107 @@ body {
   color: #ef4444;
   border: 1px solid #ef4444;
 }
+
+/* =====================================
+   NESTLY — PRINT REPORT
+===================================== */
+
+@media print {
+  @page {
+    size: portrait;
+    margin: 15mm;
+  }
+
+  /* Make the page printable */
+  html,
+  body,
+  #root {
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    background: white !important;
+  }
+
+  /* Hide the entire app */
+  body * {
+    visibility: hidden !important;
+  }
+
+  /* Show only the report */
+  .print-report,
+  .print-report * {
+    visibility: visible !important;
+  }
+
+  /* Position the report at the top */
+  .print-report {
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Display Growth, Sleep, Feeding vertically */
+  .print-report .preview-record-card {
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: auto !important;
+    max-height: none !important;
+
+    margin-bottom: 20px !important;
+    overflow: visible !important;
+    break-inside: auto;
+  }
+
+  /* Remove scrollbars from record tables */
+  .print-report .report-table-container {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  /* Format tables */
+  .print-report table {
+    width: 100% !important;
+    border-collapse: collapse !important;
+  }
+
+  .print-report th,
+  .print-report td {
+    padding: 8px 12px !important;
+    color: black !important;
+    border-bottom: 1px solid #ddd !important;
+    text-align: left;
+  }
+
+  /* Keep table headers visible */
+  .print-report thead {
+    display: table-header-group;
+  }
+
+  /* Avoid splitting individual rows */
+  .print-report tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  /* Remove shadows and dark backgrounds */
+  .print-report,
+  .print-report * {
+    box-shadow: none !important;
+    background-color: white !important;
+    color: black !important;
+  }
+}
