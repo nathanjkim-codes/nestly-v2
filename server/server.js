@@ -17,20 +17,33 @@ app.use(express.json());
 // SIGNUP
 app.post("/api/email/signup", async (req, res) => {
   try {
+    // Get user input
     const email = req.body.email;
     const password = req.body.password;
 
+    // Check for missing input
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Email and password are required",
+      });
+    }
+
+    // Hash password
     const passwordHash = await argon2.hash(password);
 
-    const result = await pool.query(
+    // Save user to database
+    await pool.query(
       `INSERT INTO users(email, Password_hash)
       VALUES ($1, $2)`,
       [email, passwordHash],
     );
 
+    // Signup successful
     res.status(201).json({
       message: "Account created successfully",
     });
+
+    // Handle server errors
   } catch (error) {
     console.error(error);
 
