@@ -1,4 +1,13 @@
--- 1. Create children table
+-- 1. Create users table
+CREATE TABLE users (
+    id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+
+-- 2. Create children table
 CREATE TABLE children (
       id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
       name VARCHAR(100) NOT NULL,
@@ -9,7 +18,7 @@ CREATE TABLE children (
       insight JSONB
 );
 
--- 4. Create growth records table
+-- 3. Create growth records table
 CREATE TABLE growth_records (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     child_id INTEGER NOT NULL REFERENCES children(id) ON DELETE CASCADE,
@@ -19,7 +28,7 @@ CREATE TABLE growth_records (
     note TEXT
 );
 
--- 5. Create sleep records table
+-- 4. Create sleep records table
 CREATE TABLE sleep_records (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     child_id INTEGER NOT NULL REFERENCES children(id) ON DELETE CASCADE,
@@ -29,7 +38,7 @@ CREATE TABLE sleep_records (
     note TEXT
 );
 
--- 6. Create feeding records table
+-- 5. Create feeding records table
 CREATE TABLE feeding_records (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     child_id INTEGER NOT NULL REFERENCES children(id) ON DELETE CASCADE,
