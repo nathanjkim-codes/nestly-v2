@@ -15,7 +15,7 @@ app.use(express.json());
 // ========================================
 
 // SIGNUP
-app.post("/api/email/signup", async (req, res) => {
+app.post("/api/auth/signup", async (req, res) => {
   try {
     // Get user input
     const email = req.body.email;
