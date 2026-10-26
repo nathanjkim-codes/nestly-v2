@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import pool from "./db.js";
 import argon2 from "argon2";
+import session from "express-session";
 
 // SERVER SETUP
 const app = express();
@@ -60,6 +61,49 @@ app.post("/api/auth/signup", async (req, res) => {
   }
 });
 
+// LOGIN
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Email and password are required",
+      });
+    }
+
+    const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+      email,
+    ]);
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    const isValidPassword = await argon2.verify(user.password_hash, password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    return res.status(200).json({
+      message: "Successfully logged in",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to log in",
+    });
+  }
+});
 // ========================================
 // CHILDREN REST API
 // ========================================
