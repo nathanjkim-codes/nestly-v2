@@ -13,6 +13,7 @@ app.use(express.json());
 
 app.use(
   session({
+    name: "nestly.sid",
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
@@ -151,6 +152,28 @@ app.get("/api/auth/me", async (req, res) => {
       error: "Failed to get current user",
     });
   }
+});
+
+// LOGOUT
+app.post("/api/auth/logout", (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      error: "Not authenticated",
+    });
+  }
+
+  req.session.destroy((error) => {
+    if (error) {
+      return res.status(500).json({
+        error: "Failed to log out",
+      });
+    }
+    res.clearCookie("nestly.sid");
+
+    res.status(200).json({
+      message: "Successfully logged out",
+    });
+  });
 });
 
 // ========================================
