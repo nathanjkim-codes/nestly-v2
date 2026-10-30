@@ -11,6 +11,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  }),
+);
+
 // ========================================
 // AUTHENTICATION API
 // ========================================
@@ -93,6 +105,8 @@ app.post("/api/auth/login", async (req, res) => {
       });
     }
 
+    req.session.userId = user.id;
+
     return res.status(200).json({
       message: "Successfully logged in",
     });
@@ -104,6 +118,41 @@ app.post("/api/auth/login", async (req, res) => {
     });
   }
 });
+
+// Check current user session
+app.get("/api/auth/me", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.status(401).json({
+        error: "Not authenticated",
+      });
+    }
+
+    const result = await pool.query(
+      `SELECT id, email FROM users WHERE id = $1`,
+      [req.session.userId],
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Not authenticated",
+      });
+    }
+
+    return res.status(200).json({
+      user: user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to get current user",
+    });
+  }
+});
+
 // ========================================
 // CHILDREN REST API
 // ========================================
