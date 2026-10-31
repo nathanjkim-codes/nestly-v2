@@ -24,6 +24,15 @@ app.use(
   }),
 );
 
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      error: "Not authenticated",
+    });
+  }
+  next();
+}
+
 // ========================================
 // AUTHENTICATION API
 // ========================================
@@ -181,7 +190,7 @@ app.post("/api/auth/logout", (req, res) => {
 // ========================================
 
 // READ CHILD
-app.get("/api/children", async (req, res) => {
+app.get("/api/children", requireAuth, async (req, res) => {
   try {
     const result = await pool.query("SELECT * FROM children");
 
