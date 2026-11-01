@@ -192,9 +192,10 @@ app.post("/api/auth/logout", (req, res) => {
 // READ CHILD
 app.get("/api/children", requireAuth, async (req, res) => {
   try {
-    const result = await pool.query("SELECT * FROM children");
-
-    console.log(result.rows);
+    const result = await pool.query(
+      "SELECT * FROM children WHERE user_id = $1",
+      [req.session.userId],
+    );
 
     // Format the data for React
     const formattedChildren = result.rows.map((child) => {
@@ -231,22 +232,91 @@ app.get("/api/children", requireAuth, async (req, res) => {
 });
 
 // CREATE CHILD
-app.post("/api/children", async (req, res) => {
+app.post("/api/children", requireAuth, async (req, res) => {
   try {
+    // Get child data from the request body
     const newChild = req.body;
 
-    const name = newChild.profile.name;
-    const gender = newChild.profile.gender;
-    const birthDate = newChild.profile.birthDate;
+    // Get the child's name
+    const name = newChild?.profile?.name;
 
+    // Check if the name is a valid, non-empty string
+    if (typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({
+        error: "Child name is required",
+      });
+    }
+
+    // Get the child's gender
+    const gender = newChild?.profile?.gender;
+
+    // Check if the gender is allowed
+    if (!["Male", "Female"].includes(gender)) {
+      return res.status(400).json({
+        error: "Invalid gender",
+      });
+    }
+
+    // Get the child's birth date
+    const birthDate = newChild?.profile?.birthDate;
+
+    // Check if the birth date follows YYYY-MM-DD format
+    if (
+      typeof birthDate !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)
+    ) {
+      return res.status(400).json({
+        error: "Birth date must be YYYY-MM-DD",
+      });
+    }
+
+    // Convert the birth date into year, month, and day
+    const [year, month, day] = birthDate.split("-").map(Number);
+
+    // Create a Date object
+    const date = new Date(0);
+
+    // Set the birth date and reset the time
+    date.setFullYear(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+
+    // Check if the birth date actually exists
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return res.status(400).json({
+        error: "Birth date is not a real date",
+      });
+    }
+
+    // Get today's date and reset the time
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check if the birth date is in the future
+    if (date > today) {
+      return res.status(400).json({
+        error: "Birth date cannot be in the future",
+      });
+    }
+
+    // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
+
+    // Insert the new child into PostgreSQL
     const result = await pool.query(
-      `INSERT INTO children (name, gender, birth_date)
-      VALUES ($1, $2, $3)
+      `INSERT INTO children (name, gender, birth_date, user_id)
+      VALUES ($1, $2, $3, $4)
       RETURNING *`,
-      [name, gender, birthDate],
+      [name, gender, birthDate, userId],
     );
+
+    // Get the newly created child
     const createdChild = result.rows[0];
 
+    // Format the data for react
     const formattedChild = {
       id: createdChild.id,
 
@@ -265,10 +335,13 @@ app.post("/api/children", async (req, res) => {
       feedingRecords: [],
     };
 
+    // Send the created child to React
     res.status(201).json(formattedChild);
   } catch (error) {
+    // Handle errors
     console.error(error);
 
+    // Send a 500 error response if creating a child fails
     res.status(500).json({
       error: "Failed to create child",
     });
