@@ -598,89 +598,113 @@ app.get(
 );
 
 // CREATE GROWTH RECORD
-app.post("/api/children/:childId/growthRecords/", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
-    const newRecord = req.body;
+app.post(
+  "/api/children/:childId/growthRecords/",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // Get the child ID from the URL
+      const childId = Number(req.params.childId);
 
-    // Validate child id
-    if (!Number.isInteger(childId) || childId <= 0) {
-      return res.status(400).json({
-        error: "Invalid child ID",
-      });
-    }
+      const newRecord = req.body;
 
-    // Validate date
-    if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
-      return res.status(400).json({
-        error: "Invalid date",
-      });
-    }
+      // Validate child id
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-    // Validate height
-    if (
-      newRecord.height === "" ||
-      newRecord.height === null ||
-      newRecord.height === undefined ||
-      !Number.isFinite(Number(newRecord.height)) ||
-      Number(newRecord.height) <= 0
-    ) {
-      return res.status(400).json({
-        error: "Invalid height",
-      });
-    }
+      // Validate date
+      if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
 
-    // Validate weight
-    if (
-      newRecord.weight === "" ||
-      newRecord.weight === null ||
-      newRecord.weight === undefined ||
-      !Number.isFinite(Number(newRecord.weight)) ||
-      Number(newRecord.weight) <= 0
-    ) {
-      return res.status(400).json({
-        error: "Invalid weight",
-      });
-    }
+      // Validate height
+      if (
+        newRecord.height === "" ||
+        newRecord.height === null ||
+        newRecord.height === undefined ||
+        !Number.isFinite(Number(newRecord.height)) ||
+        Number(newRecord.height) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid height",
+        });
+      }
 
-    // Insert the new growth record into PostgreSQL
-    const result = await pool.query(
-      `INSERT INTO growth_records 
-      (child_id, date, height, weight, note)
+      // Validate weight
+      if (
+        newRecord.weight === "" ||
+        newRecord.weight === null ||
+        newRecord.weight === undefined ||
+        !Number.isFinite(Number(newRecord.weight)) ||
+        Number(newRecord.weight) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid weight",
+        });
+      }
+
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id
+        FROM children
+        WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // Stop if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // Insert the new growth record into PostgreSQL
+      const result = await pool.query(
+        `INSERT INTO growth_records 
+      (child_id, date, height, weight, note )
       VALUES
       ($1, $2, $3, $4, $5)
       RETURNING *`,
-      [
-        childId,
-        newRecord.date,
-        newRecord.height,
-        newRecord.weight,
-        newRecord.note ?? "",
-      ],
-    );
-    // Get the newly saved record from PostgreSQL
-    const record = result.rows[0];
+        [
+          childId,
+          newRecord.date,
+          newRecord.height,
+          newRecord.weight,
+          newRecord.note ?? "",
+        ],
+      );
+      // Get the newly saved record from PostgreSQL
+      const record = result.rows[0];
 
-    const savedRecord = {
-      id: record.id,
-      childId: record.child_id,
-      date: record.date,
-      height: Number(record.height),
-      weight: Number(record.weight),
-      note: record.note ?? "",
-    };
-    // Send the saved record back to React with status 201
-    res.status(201).json(savedRecord);
-  } catch (error) {
-    //Handle errors
-    console.error(error);
+      const savedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        height: Number(record.height),
+        weight: Number(record.weight),
+        note: record.note ?? "",
+      };
+      // Send the saved record back to React with status 201
+      res.status(201).json(savedRecord);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
 
-    // Send a 500 error response if fetching growth records fails
-    res.status(500).json({
-      error: "Failed to create growthRecords",
-    });
-  }
-});
+      // Send a 500 error response if fetching growth records fails
+      res.status(500).json({
+        error: "Failed to create growthRecords",
+      });
+    }
+  },
+);
 
 // UPDATE GROWTH RECORD
 app.put("/api/children/:childId/growthRecords/:recordId", async (req, res) => {
