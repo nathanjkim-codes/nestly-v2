@@ -10,6 +10,7 @@ CREATE TABLE users (
 -- 2. Create children table
 CREATE TABLE children (
       id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+      user_id INTEGER NOT NULL REFERENCES users(id),
       name VARCHAR(100) NOT NULL,
       gender VARCHAR(20),
       birth_date DATE,

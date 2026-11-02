@@ -543,39 +543,59 @@ app.delete("/api/children/:childId", requireAuth, async (req, res) => {
 // ========================================
 
 // READ GROWTH RECORD
-app.get("/api/children/:childId/growthRecords", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
+app.get(
+  "/api/children/:childId/growthRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // Get the child ID from the URL
+      const childId = Number(req.params.childId);
 
-    // Fetch growth records for the selected child from PostgreSQL
-    const result = await pool.query(
-      "SELECT * FROM growth_records WHERE child_id = $1",
-      [childId],
-    );
+      // Check if the child ID is a positive integer
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
 
-    // Format the data for React
-    const formattedGrowthRecords = result.rows.map((record) => {
-      return {
-        id: record.id,
-        childId: record.child_id,
-        date: record.date,
-        height: Number(record.height),
-        weight: Number(record.weight),
-        note: record.note ?? "",
-      };
-    });
-    // Send formatted data to react
-    res.json(formattedGrowthRecords);
-  } catch (error) {
-    //Handle errors
-    console.error(error);
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-    // Send a 500 error response if fetching growth records fails
-    res.status(500).json({
-      error: "Failed to fetch GrowthRecords",
-    });
-  }
-});
+      // Fetch growth records that belong to the logged-in user's child
+      const result = await pool.query(
+        `SELECT growth_records.* 
+        FROM growth_records 
+        JOIN children
+        ON growth_records.child_id = children.id
+        WHERE growth_records.child_id = $1 
+        AND children.user_id = $2`,
+        [childId, userId],
+      );
+
+      // Format the data for React
+      const formattedGrowthRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          height: Number(record.height),
+          weight: Number(record.weight),
+          note: record.note ?? "",
+        };
+      });
+      // Send formatted data to react
+      res.json(formattedGrowthRecords);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
+
+      // Send a 500 error response if fetching growth records fails
+      res.status(500).json({
+        error: "Failed to fetch GrowthRecords",
+      });
+    }
+  },
+);
 
 // CREATE GROWTH RECORD
 app.post("/api/children/:childId/growthRecords/", async (req, res) => {
