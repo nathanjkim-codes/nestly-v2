@@ -351,13 +351,19 @@ app.post("/api/children", requireAuth, async (req, res) => {
 // UPDATE CHILD
 app.put("/api/children/:childId", requireAuth, async (req, res) => {
   try {
+    // Get the child ID from the URL
     const childId = Number(req.params.childId);
+
+    // Check if the child ID is a positive integer
     if (!Number.isInteger(childId) || childId <= 0) {
       return res.status(400).json({
         error: "Invalid child id",
       });
     }
+    // Get the updated child data from the request body
     const updatedData = req.body;
+
+    // Check if the request body is a valid object
     if (
       !updatedData ||
       typeof updatedData !== "object" ||
@@ -368,19 +374,29 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
       });
     }
 
+    // Get the child's name
     const name = updatedData?.profile?.name;
+
+    // Check if the name is a valid, non-empty string
     if (typeof name !== "string" || name.trim().length === 0) {
       return res.status(400).json({
         error: "Child name is required",
       });
     }
+
+    // Get the child's gender
     const gender = updatedData?.profile?.gender;
+
+    // Check if the gender is allowed
     if (!["Male", "Female"].includes(gender)) {
       return res.status(400).json({
         error: "Invalid gender",
       });
     }
+
+    // Get the child's birth date
     const birthDate = updatedData?.profile?.birthDate;
+
     // Check if the birth date follows YYYY-MM-DD format
     if (
       typeof birthDate !== "string" ||
@@ -423,8 +439,10 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
       });
     }
 
+    // Get the logged-in user's ID from the session
     const userId = req.session.userId;
 
+    // Update the child's information in PostgreSQL
     const result = await pool.query(
       `UPDATE children
       SET 
@@ -437,14 +455,17 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
       [name.trim(), gender, birthDate, childId, userId],
     );
 
+    // Get the updated child
     const updatedChild = result.rows[0];
 
+    // Check if the child exists and belongs to the logged-in user
     if (!updatedChild) {
       return res.status(404).json({
         error: "Child not found",
       });
     }
 
+    // Format the data for React
     const formattedChild = {
       id: updatedChild.id,
       profile: {
@@ -461,10 +482,13 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
       feedingRecords: [],
     };
 
+    // Send the updated child to React
     res.status(200).json(formattedChild);
   } catch (error) {
+    // Handle errors
     console.error(error);
 
+    // Send a 500 error response if updating a child fails
     res.status(500).json({
       error: "Failed to update child",
     });
@@ -472,26 +496,43 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
 });
 
 // DELETE CHILD
-app.delete("/api/children/:childId", async (req, res) => {
+app.delete("/api/children/:childId", requireAuth, async (req, res) => {
   try {
+    // Get the child ID from the URL
     const childId = Number(req.params.childId);
 
+    // Check if the child ID is a positive integer
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child id",
+      });
+    }
+
+    // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
+
+    // Delete the child from PostgreSQL
     const result = await pool.query(
       `DELETE FROM children
-      WHERE id = $1
+      WHERE id = $1 AND user_id =$2
       RETURNING *`,
-      [childId],
+      [childId, userId],
     );
 
+    // Check if the child exists and belongs to the logged-in user
     if (result.rows.length === 0) {
       return res.status(404).json({
         error: "Child not found",
       });
     }
+
+    // Send a 204 response if deleting the child succeeds
     return res.sendStatus(204);
   } catch (error) {
+    // Handle errors
     console.error(error);
 
+    // Send a 500 error response if deleting a child fails
     return res.status(500).json({
       error: "Failed to delete child",
     });
