@@ -707,27 +707,57 @@ app.post(
 );
 
 // UPDATE GROWTH RECORD
-app.put("/api/children/:childId/growthRecords/:recordId", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
-    const recordId = Number(req.params.recordId);
-    const { date, height, weight, note } = req.body;
+app.put(
+  "/api/children/:childId/growthRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const childId = Number(req.params.childId);
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
+      const recordId = Number(req.params.recordId);
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record id",
+        });
+      }
 
-    // Validate height
-    if (!Number.isFinite(height) || height <= 0) {
-      return res.status(400).json({
-        error: "Height must be a positive number",
-      });
-    }
-    // Validate weight
-    if (!Number.isFinite(weight) || weight <= 0) {
-      return res.status(400).json({
-        error: "Weight must be a positive number",
-      });
-    }
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-    const result = await pool.query(
-      `UPDATE growth_records
+      // Get the updated growth record data from the request body
+      const { date, height, weight, note } = req.body;
+
+      // Validate height
+      if (!Number.isFinite(height) || height <= 0) {
+        return res.status(400).json({
+          error: "Height must be a positive number",
+        });
+      }
+      // Validate weight
+      if (!Number.isFinite(weight) || weight <= 0) {
+        return res.status(400).json({
+          error: "Weight must be a positive number",
+        });
+      }
+
+      const childResult = await pool.query(
+        `SELECT id
+        FROM children
+        WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+      const result = await pool.query(
+        `UPDATE growth_records
       SET
       date = $1,
       height = $2,
@@ -736,29 +766,31 @@ app.put("/api/children/:childId/growthRecords/:recordId", async (req, res) => {
       
       WHERE id = $5 AND child_id = $6
       RETURNING *`,
-      [date, height, weight, note, recordId, childId],
-    );
-    // Get the upadted record from PostgreSQL
-    const updatedRecord = result.rows[0];
+        [date, height, weight, note, recordId, childId],
+      );
 
-    // Return 404 if the growth record does not exist
-    if (!updatedRecord) {
-      return res.status(404).json({
-        error: "Growth record not found",
+      // Get the updated record from PostgreSQL
+      const updatedRecord = result.rows[0];
+
+      // Return 404 if the growth record does not exist
+      if (!updatedRecord) {
+        return res.status(404).json({
+          error: "Growth record not found",
+        });
+      }
+      // Send the updated record back to React with status 200
+      res.status(200).json(updatedRecord);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
+
+      // Send status 500 if the server fails to update the record
+      res.status(500).json({
+        error: "Fail to update growthRecords",
       });
     }
-    // Send the updated record back to React with status 200
-    res.status(200).json(updatedRecord);
-  } catch (error) {
-    //Handle errors
-    console.error(error);
-
-    // Send status 500 if the server fails to update the record
-    res.status(500).json({
-      error: "Fail to update growthRecords",
-    });
-  }
-});
+  },
+);
 
 // DELETE GROWTH RECORD
 app.delete(
