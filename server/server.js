@@ -310,13 +310,13 @@ app.post("/api/children", requireAuth, async (req, res) => {
       `INSERT INTO children (name, gender, birth_date, user_id)
       VALUES ($1, $2, $3, $4)
       RETURNING *`,
-      [name, gender, birthDate, userId],
+      [name.trim(), gender, birthDate, userId],
     );
 
     // Get the newly created child
     const createdChild = result.rows[0];
 
-    // Format the data for react
+    // Format the data for React
     const formattedChild = {
       id: createdChild.id,
 
@@ -349,14 +349,81 @@ app.post("/api/children", requireAuth, async (req, res) => {
 });
 
 // UPDATE CHILD
-app.put("/api/children/:childId", async (req, res) => {
+app.put("/api/children/:childId", requireAuth, async (req, res) => {
   try {
     const childId = Number(req.params.childId);
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child id",
+      });
+    }
     const updatedData = req.body;
+    if (
+      !updatedData ||
+      typeof updatedData !== "object" ||
+      Array.isArray(updatedData)
+    ) {
+      return res.status(400).json({
+        error: "Invalid data",
+      });
+    }
 
-    const name = updatedData.profile.name;
-    const gender = updatedData.profile.gender;
-    const birthDate = updatedData.profile.birthDate;
+    const name = updatedData?.profile?.name;
+    if (typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({
+        error: "Child name is required",
+      });
+    }
+    const gender = updatedData?.profile?.gender;
+    if (!["Male", "Female"].includes(gender)) {
+      return res.status(400).json({
+        error: "Invalid gender",
+      });
+    }
+    const birthDate = updatedData?.profile?.birthDate;
+    // Check if the birth date follows YYYY-MM-DD format
+    if (
+      typeof birthDate !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)
+    ) {
+      return res.status(400).json({
+        error: "Birth date must be YYYY-MM-DD",
+      });
+    }
+
+    // Convert the birth date into year, month, and day
+    const [year, month, day] = birthDate.split("-").map(Number);
+
+    // Create a Date object
+    const date = new Date(0);
+
+    // Set the birth date and reset the time
+    date.setFullYear(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+
+    // Check if the birth date actually exists
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return res.status(400).json({
+        error: "Birth date is not a real date",
+      });
+    }
+
+    // Get today's date and reset the time
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check if the birth date is in the future
+    if (date > today) {
+      return res.status(400).json({
+        error: "Birth date cannot be in the future",
+      });
+    }
+
+    const userId = req.session.userId;
 
     const result = await pool.query(
       `UPDATE children
@@ -365,9 +432,9 @@ app.put("/api/children/:childId", async (req, res) => {
       gender = $2,
       birth_date = $3
 
-      WHERE id = $4
+      WHERE id = $4 AND user_id = $5
       RETURNING *`,
-      [name, gender, birthDate, childId],
+      [name.trim(), gender, birthDate, childId, userId],
     );
 
     const updatedChild = result.rows[0];
