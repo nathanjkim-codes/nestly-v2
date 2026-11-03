@@ -1015,93 +1015,128 @@ app.post(
 );
 
 // UPDATE SLEEP RECORD
-app.put("/api/children/:childId/sleepRecords/:recordId", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
-    const recordId = Number(req.params.recordId);
-    const newRecord = req.body;
+app.put(
+  "/api/children/:childId/sleepRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-    // Extract the fields from the request body
-    const { date, day, duration, note } = newRecord;
+      // 2. Get the updated sleep record from request body
+      const newRecord = req.body;
 
-    // Check if childId is a positive integer
-    if (!Number.isInteger(childId) || childId <= 0) {
-      return res.status(400).json({
-        error: "Invalid child ID",
+      // 3. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
+
+      // 4. Validate recordId
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
+
+      // 5. Validate request body
+      if (
+        !newRecord ||
+        typeof newRecord !== "object" ||
+        Array.isArray(newRecord)
+      ) {
+        return res.status(400).json({
+          error: "Invalid request body",
+        });
+      }
+
+      // 6. Get the updated fields from request body
+      const { date, day, duration, note } = newRecord;
+
+      // 7. Validate date
+      if (!date || Number.isNaN(new Date(date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
+
+      // 8. Validate duration
+      if (
+        duration === "" ||
+        duration === null ||
+        duration === undefined ||
+        !Number.isFinite(Number(duration)) ||
+        Number(duration) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid duration",
+        });
+      }
+
+      // 9. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 10. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id
+         FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 11. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 12. Update the matching sleep record in PostgreSQL
+      const result = await pool.query(
+        `UPDATE sleep_records
+         SET date = $1,
+             day = $2,
+             duration = $3,
+             note = $4
+         WHERE id = $5 AND child_id = $6
+         RETURNING *`,
+        [date, day, duration, note ?? "", recordId, childId],
+      );
+
+      // 13. Get the updated record from PostgreSQL
+      const record = result.rows[0];
+
+      // 14. Return 404 if the sleep record does not exist
+      if (!record) {
+        return res.status(404).json({
+          error: "Sleep record not found",
+        });
+      }
+
+      // 15. Format the updated record for React
+      const updatedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        day: record.day,
+        duration: Number(record.duration),
+        note: record.note ?? "",
+      };
+
+      // 16. Return 200 OK with the updated record
+      return res.status(200).json(updatedRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 17. Handle server errors
+      return res.status(500).json({
+        error: "Failed to update sleep record",
       });
     }
-
-    // Check if recordId is a positive integer
-    if (!Number.isInteger(recordId) || recordId <= 0) {
-      return res.status(400).json({
-        error: "Invalid record ID",
-      });
-    }
-
-    // Check if the date exists and is valid
-    if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
-      return res.status(400).json({
-        error: "Invalid date",
-      });
-    }
-
-    // Check if duration is a positive, finite number
-    if (
-      newRecord.duration === "" ||
-      newRecord.duration === null ||
-      newRecord.duration === undefined ||
-      !Number.isFinite(Number(newRecord.duration)) ||
-      Number(newRecord.duration) <= 0
-    ) {
-      return res.status(400).json({
-        error: "Invalid duration",
-      });
-    }
-
-    // Update sleep record in PostgreSQL
-    const result = await pool.query(
-      `UPDATE sleep_records
-      SET
-      date = $1,
-      day = $2,
-      duration = $3,
-      note = $4
-      WHERE id = $5 AND child_id = $6
-      RETURNING *`,
-      [date, day, duration, note ?? "", recordId, childId],
-    );
-
-    const record = result.rows[0];
-
-    // Return 404 if no matching sleep record was found
-    if (!record) {
-      return res.status(404).json({
-        error: "Sleep record not found",
-      });
-    }
-
-    // Format PostgreSQL data for React
-    // Convert snake_case to camelCase and duration to a number
-    const updatedRecord = {
-      id: record.id,
-      childId: record.child_id,
-      date: record.date,
-      day: record.day,
-      duration: Number(record.duration),
-      note: record.note ?? "",
-    };
-
-    // Send the updated record back to React with status 200
-    res.status(200).json(updatedRecord);
-  } catch (error) {
-    console.error(error);
-
-    // Return 500 if the update fails unexpectedly
-    res.status(500).json({
-      error: "Failed to update sleep record",
-    });
-  }
-});
+  },
+);
 
 // DELETE SLEEP RECORD
 app.delete(
