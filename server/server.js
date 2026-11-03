@@ -1141,46 +1141,66 @@ app.put(
 // DELETE SLEEP RECORD
 app.delete(
   "/api/children/:childId/sleepRecords/:recordId",
+  requireAuth,
   async (req, res) => {
     try {
+      // 1. Get childId and recordId from URL
       const childId = Number(req.params.childId);
       const recordId = Number(req.params.recordId);
 
-      // Check if childId is a positive integer
+      // 2. Validate childId
       if (!Number.isInteger(childId) || childId <= 0) {
         return res.status(400).json({
           error: "Invalid child ID",
         });
       }
 
-      // Check if recordId is a positive integer
+      // 3. Validate recordId
       if (!Number.isInteger(recordId) || recordId <= 0) {
         return res.status(400).json({
           error: "Invalid record ID",
         });
       }
 
-      // Delete the matching sleep record from PostgreSQL
+      // 4. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 7. Delete the matching sleep record from PostgreSQL
       const result = await pool.query(
         `DELETE FROM sleep_records
-      WHERE id = $1 AND child_id = $2
-      RETURNING *`,
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
         [recordId, childId],
       );
 
-      // Return 404 if no matching sleep record was found
+      // 8. Return 404 if the sleep record does not exist
       if (result.rows.length === 0) {
         return res.status(404).json({
           error: "Sleep record not found",
         });
       }
-      // Return 204 if deletion succeeded
+
+      // 9. Return 204 No Content after successful deletion
       return res.sendStatus(204);
     } catch (error) {
       console.error(error);
 
-      // Return 500 if the delete fails unexpectedly
-      res.status(500).json({
+      // 10. Handle unexpected server errors
+      return res.status(500).json({
         error: "Failed to delete sleep record",
       });
     }
