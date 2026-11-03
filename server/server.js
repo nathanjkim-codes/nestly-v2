@@ -795,12 +795,45 @@ app.put(
 // DELETE GROWTH RECORD
 app.delete(
   "/api/children/:childId/growthRecords/:recordId",
+  requireAuth,
   async (req, res) => {
     try {
+      // 1. Get childId and recordId from URL
       const childId = Number(req.params.childId);
       const recordId = Number(req.params.recordId);
 
-      // Delete the matching growth record from PostgreSQL
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
+
+      // 3. Validate recordId
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record id",
+        });
+      }
+
+      // 4. Get logged-in user's ID from session
+      const userId = req.session.userId;
+
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 7. Delete the matching growth record
       const result = await pool.query(
         `DELETE FROM growth_records
          WHERE id = $1 AND child_id = $2
@@ -808,21 +841,20 @@ app.delete(
         [recordId, childId],
       );
 
-      // Return 404 if no matching growth record was found
+      // 8. Return 404 if no matching growth record was found
       if (result.rows.length === 0) {
         return res.status(404).json({
           error: "Record not found",
         });
       }
-      // Send status 204 when the record is successfully deleted
+
+      // 9. Return 204 when successfully deleted
       return res.sendStatus(204);
     } catch (error) {
-      //Handle errors
       console.error(error);
 
-      // Send status 500 if the server fails to delete the record
       return res.status(500).json({
-        error: "failed to delete record",
+        error: "Failed to delete record",
       });
     }
   },
