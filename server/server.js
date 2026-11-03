@@ -919,70 +919,100 @@ app.get(
 );
 
 // CREATE SLEEP RECORD
-app.post("/api/children/:childId/sleepRecords", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
-    const newRecord = req.body;
+app.post(
+  "/api/children/:childId/sleepRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-    if (!Number.isInteger(childId) || childId <= 0) {
-      return res.status(400).json({
-        error: "Invalid child ID",
+      // 2. Get the new sleep record from request body
+      const newRecord = req.body;
+
+      // 3. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
+
+      // 4. Validate date
+      if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
+
+      // 5. Validate duration
+      if (
+        newRecord.duration === "" ||
+        newRecord.duration === null ||
+        newRecord.duration === undefined ||
+        !Number.isFinite(Number(newRecord.duration)) ||
+        Number(newRecord.duration) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid duration",
+        });
+      }
+
+      // 6. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 7. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 8. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 9. Insert the sleep record into PostgreSQL
+      const result = await pool.query(
+        `INSERT INTO sleep_records
+         (child_id, date, day, duration, note)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [
+          childId,
+          newRecord.date,
+          newRecord.day,
+          newRecord.duration,
+          newRecord.note ?? "",
+        ],
+      );
+
+      // 10. Format the saved record for React
+      const record = result.rows[0];
+
+      const savedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        day: record.day,
+        duration: Number(record.duration),
+        note: record.note ?? "",
+      };
+
+      // 11. Return 201 Created
+      return res.status(201).json(savedRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 12. Handle server errors
+      return res.status(500).json({
+        error: "Failed to create sleep record",
       });
     }
-
-    if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
-      return res.status(400).json({
-        error: "Invalid date",
-      });
-    }
-
-    if (
-      newRecord.duration === "" ||
-      newRecord.duration === null ||
-      newRecord.duration === undefined ||
-      !Number.isFinite(Number(newRecord.duration)) ||
-      Number(newRecord.duration) <= 0
-    ) {
-      return res.status(400).json({
-        error: "Invalid duration",
-      });
-    }
-
-    const result = await pool.query(
-      `INSERT INTO sleep_records
-      (child_id, date, day, duration, note)
-      VALUES
-      ($1, $2, $3, $4, $5)
-      RETURNING *`,
-      [
-        childId,
-        newRecord.date,
-        newRecord.day,
-        newRecord.duration,
-        newRecord.note ?? "",
-      ],
-    );
-
-    const record = result.rows[0];
-
-    const savedRecord = {
-      id: record.id,
-      childId: record.child_id,
-      date: record.date,
-      day: record.day,
-      duration: Number(record.duration),
-      note: record.note ?? "",
-    };
-
-    res.status(201).json(savedRecord);
-  } catch (error) {
-    console.error(error);
-
-    res.status(500).json({
-      error: "Failed to create sleep record",
-    });
-  }
-});
+  },
+);
 
 // UPDATE SLEEP RECORD
 app.put("/api/children/:childId/sleepRecords/:recordId", async (req, res) => {
