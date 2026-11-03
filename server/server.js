@@ -864,39 +864,59 @@ app.delete(
 // SLEEP RECORDS REST API
 // ========================================
 
-// READ SLEEP RECORD
-app.get("/api/children/:childId/sleepRecords", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
+// READ SLEEP RECORDS
+app.get(
+  "/api/children/:childId/sleepRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-    // Fetch sleep records for the selected child from PostgreSQL
-    const result = await pool.query(
-      `SELECT * FROM sleep_records WHERE child_id = $1`,
-      [childId],
-    );
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
 
-    // Format the data for React
-    const formattedSleepRecords = result.rows.map((record) => {
-      return {
-        id: record.id,
-        childId: record.child_id,
-        date: record.date,
-        day: record.day,
-        duration: Number(record.duration),
-        note: record.note ?? "",
-      };
-    });
-    // Send formatted data to react
-    res.json(formattedSleepRecords);
-  } catch (error) {
-    console.error(error);
+      // 3. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-    // Send a 500 error response if fetching sleep records fails
-    res.status(500).json({
-      error: "Failed to fetch sleepRecords",
-    });
-  }
-});
+      // 4. Fetch only sleep records belonging to the user's child
+      const result = await pool.query(
+        `SELECT sleep_records.*
+         FROM sleep_records
+         JOIN children ON sleep_records.child_id = children.id
+         WHERE sleep_records.child_id = $1
+         AND children.user_id = $2`,
+        [childId, userId],
+      );
+
+      // 5. Format the data for React
+      const formattedSleepRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          day: record.day,
+          duration: Number(record.duration),
+          note: record.note ?? "",
+        };
+      });
+
+      // 6. Send formatted data to React
+      return res.status(200).json(formattedSleepRecords);
+    } catch (error) {
+      console.error(error);
+
+      // 7. Handle server errors
+      return res.status(500).json({
+        error: "Failed to fetch sleepRecords",
+      });
+    }
+  },
+);
 
 // CREATE SLEEP RECORD
 app.post("/api/children/:childId/sleepRecords", async (req, res) => {
