@@ -1557,26 +1557,44 @@ app.put(
 // DELETE FEEDING RECORD
 app.delete(
   "/api/children/:childId/feedingRecords/:recordId",
+  requireAuth,
   async (req, res) => {
     try {
+      // 1. Get childId and recordId from URL
       const childId = Number(req.params.childId);
       const recordId = Number(req.params.recordId);
 
-      // Validate child ID
+      // 2. Validate child ID
       if (!Number.isInteger(childId) || childId <= 0) {
         return res.status(400).json({
           error: "Invalid child ID",
         });
       }
 
-      // Validate record ID
+      // 3. Validate record ID
       if (!Number.isInteger(recordId) || recordId <= 0) {
         return res.status(400).json({
           error: "Invalid record ID",
         });
       }
 
-      // Delete feeding record from PostgreSQL
+      // 4. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 7.Delete matching feeding record from PostgreSQL
       const result = await pool.query(
         `DELETE FROM feeding_records
          WHERE id = $1 AND child_id = $2
@@ -1584,18 +1602,19 @@ app.delete(
         [recordId, childId],
       );
 
-      // Check if feeding record exists
+      // 8. Return 404 if the feeding record does not exist
       if (result.rows.length === 0) {
         return res.status(404).json({
           error: "Feeding record not found",
         });
       }
 
-      // Successfully deleted
+      // 9. Return 204 No content
       return res.sendStatus(204);
     } catch (error) {
       console.error(error);
 
+      // 10. Handle server errors
       return res.status(500).json({
         error: "Failed to delete feeding record",
       });
