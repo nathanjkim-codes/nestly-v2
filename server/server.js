@@ -1211,47 +1211,59 @@ app.delete(
 // ========================================
 
 // READ FEEDING RECORD
-app.get("/api/children/:childId/feedingRecords", async (req, res) => {
-  try {
-    const childId = Number(req.params.childId);
+app.get(
+  "/api/children/:childId/feedingRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-    // Check if childId is a positive integer
-    if (!Number.isInteger(childId) || childId <= 0) {
-      return res.status(400).json({
-        error: "Invalid child ID",
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
+
+      // 3. Get the logged in user's ID from the session
+      const userId = req.session.userId;
+
+      // 4. Fetch only feeding records belonging to the user's child
+      const result = await pool.query(
+        `SELECT feeding_records.*
+        FROM feeding_records
+        JOIN children ON feeding_records.child_id = children.id
+        WHERE feeding_records.child_id = $1 
+        AND children.user_id = $2 `,
+        [childId, userId],
+      );
+
+      // 5. Format the data for React
+      const formattedFeedingRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          type: record.type,
+          amount: Number(record.amount),
+          duration: record.duration == null ? null : Number(record.duration),
+          note: record.note ?? "",
+        };
+      });
+
+      // 6. Send formatted data to react
+      res.json(formattedFeedingRecords);
+    } catch (error) {
+      console.error(error);
+
+      // 7. Handle server errors
+      res.status(500).json({
+        error: "Failed to fetch feeding records",
       });
     }
-
-    // Fetch feeding records for the selected child from PostgreSQL
-    const result = await pool.query(
-      `SELECT * FROM feeding_records WHERE child_id = $1`,
-      [childId],
-    );
-
-    // Format the data for React
-    const formattedFeedingRecords = result.rows.map((record) => {
-      return {
-        id: record.id,
-        childId: record.child_id,
-        date: record.date,
-        type: record.type,
-        amount: Number(record.amount),
-        duration: record.duration == null ? null : Number(record.duration),
-        note: record.note ?? "",
-      };
-    });
-
-    // Send formatted data to react
-    res.json(formattedFeedingRecords);
-  } catch (error) {
-    console.error(error);
-
-    // Send a 500 error response if fetching feeding records fails
-    res.status(500).json({
-      error: "Failed to fetch feeding records",
-    });
-  }
-});
+  },
+);
 
 // CREATE FEEDING RECORD
 app.post("/api/children/:childId/feedingRecords", async (req, res) => {
