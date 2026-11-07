@@ -58,6 +58,7 @@ export function GrowthRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/growthRecords`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -88,6 +89,7 @@ export function GrowthRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${record.id}`,
         {
+          credentials: "include",
           method: "DELETE",
         },
       );
@@ -112,6 +114,7 @@ export function GrowthRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${updatedGrowthRecord.id}`,
         {
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
