@@ -63,6 +63,7 @@ export function SleepRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -100,6 +101,7 @@ export function SleepRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${record.id}`,
         {
+          credentials: "include",
           method: "DELETE",
         },
       );
@@ -130,6 +132,7 @@ export function SleepRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${updatedRecord.id}`,
         {
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
