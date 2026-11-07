@@ -2,6 +2,7 @@ import { useOutletContext } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 import { formatTime } from "../utils/formatTime";
 import { formatDecimal } from "../utils/formatDecimal";
+import { formatDuration } from "../utils/formatDuration";
 import { measurementUnits } from "../utils/measurementUnits";
 import { feedingConversion } from "../utils/measurementConversion";
 import { useState } from "react";
@@ -65,6 +66,7 @@ export function FeedingRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
         {
+          credentials: "include",
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -95,6 +97,7 @@ export function FeedingRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${record.id}`,
         {
+          credentials: "include",
           method: "DELETE",
         },
       );
@@ -119,6 +122,7 @@ export function FeedingRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${updatedRecord.id}`,
         {
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -271,7 +275,9 @@ export function FeedingRecordsPage() {
                     )} ${units.feeding}`}
                   </td>
                   <td>
-                    {record.duration == null ? "-" : `${record.duration} min`}
+                    {record.duration == null
+                      ? "-"
+                      : formatDuration(record.duration)}
                   </td>
                   <td>{record.note || "No note"}</td>
                   <td>
