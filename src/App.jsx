@@ -35,7 +35,9 @@ function App() {
   useEffect(() => {
     const fetchChildren = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/children");
+        const response = await fetch("http://localhost:3000/api/children", {
+          credentials: "include",
+        });
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -83,6 +85,9 @@ function App() {
         setGrowthRecordsError(null);
         const response = await fetch(
           `http://localhost:3000/api/children/${selectedChildId}/growthRecords`,
+          {
+            credentials: "include",
+          },
         );
 
         if (!response.ok) {
@@ -117,6 +122,9 @@ function App() {
         setSleepRecordsError(null);
         const response = await fetch(
           `HTTP://localhost:3000/api/children/${selectedChildId}/sleepRecords`,
+          {
+            credentials: "include",
+          },
         );
 
         if (!response.ok) {
@@ -155,6 +163,9 @@ function App() {
 
         const response = await fetch(
           `http://localhost:3000/api/children/${selectedChildId}/feedingRecords`,
+          {
+            credentials: "include",
+          },
         );
 
         if (!response.ok) {
