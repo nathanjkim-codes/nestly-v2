@@ -8,7 +8,12 @@ import session from "express-session";
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 
 app.use(
@@ -251,7 +256,7 @@ app.post("/api/children", requireAuth, async (req, res) => {
     const gender = newChild?.profile?.gender;
 
     // Check if the gender is allowed
-    if (!["Male", "Female"].includes(gender)) {
+    if (!["boy", "girl"].includes(gender)) {
       return res.status(400).json({
         error: "Invalid gender",
       });
@@ -388,7 +393,7 @@ app.put("/api/children/:childId", requireAuth, async (req, res) => {
     const gender = updatedData?.profile?.gender;
 
     // Check if the gender is allowed
-    if (!["Male", "Female"].includes(gender)) {
+    if (!["boy", "girl"].includes(gender)) {
       return res.status(400).json({
         error: "Invalid gender",
       });
@@ -778,8 +783,17 @@ app.put(
           error: "Growth record not found",
         });
       }
+
+      const formattedGrowthRecord = {
+        id: updatedRecord.id,
+        childId: updatedRecord.child_id,
+        date: updatedRecord.date,
+        height: Number(updatedRecord.height),
+        weight: Number(updatedRecord.weight),
+        note: updatedRecord.note ?? "",
+      };
       // Send the updated record back to React with status 200
-      res.status(200).json(updatedRecord);
+      res.status(200).json(formattedGrowthRecord);
     } catch (error) {
       //Handle errors
       console.error(error);
