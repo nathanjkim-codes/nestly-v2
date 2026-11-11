@@ -8,8 +8,14 @@ import FeedingRecordsPage from "./Pages/FeedingRecordsPage";
 import AnalyticsPage from "./Pages/AnalyticsPage";
 import ReportsPage from "./Pages/ReportsPage";
 import SettingsPage from "./Pages/SettingsPage";
+import { LoginForm } from "./Components/Auth/LoginForm";
 
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginForm />,
+  },
+
   {
     path: "/",
     element: <App />,
