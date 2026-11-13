@@ -9,6 +9,7 @@ import AnalyticsPage from "./Pages/AnalyticsPage";
 import ReportsPage from "./Pages/ReportsPage";
 import SettingsPage from "./Pages/SettingsPage";
 import { LoginForm } from "./Components/Auth/LoginForm";
+import { ProtectedRoute } from "./Components/Auth/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
