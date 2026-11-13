@@ -17,47 +17,52 @@ const router = createBrowserRouter([
   },
 
   {
-    path: "/",
-    element: <App />,
+    element: <ProtectedRoute />,
     children: [
       {
-        index: true,
-        element: <DashboardPage />,
-      },
+        path: "/",
+        element: <App />,
+        children: [
+          {
+            index: true,
+            element: <DashboardPage />,
+          },
 
-      {
-        path: "children",
-        element: <ChildrenPage />,
-      },
+          {
+            path: "children",
+            element: <ChildrenPage />,
+          },
 
-      {
-        path: "growth",
-        element: <GrowthRecordsPage />,
-      },
+          {
+            path: "growth",
+            element: <GrowthRecordsPage />,
+          },
 
-      {
-        path: "sleep",
-        element: <SleepRecordsPage />,
-      },
+          {
+            path: "sleep",
+            element: <SleepRecordsPage />,
+          },
 
-      {
-        path: "feeding",
-        element: <FeedingRecordsPage />,
-      },
+          {
+            path: "feeding",
+            element: <FeedingRecordsPage />,
+          },
 
-      {
-        path: "analytics",
-        element: <AnalyticsPage />,
-      },
+          {
+            path: "analytics",
+            element: <AnalyticsPage />,
+          },
 
-      {
-        path: "reports",
-        element: <ReportsPage />,
-      },
+          {
+            path: "reports",
+            element: <ReportsPage />,
+          },
 
-      {
-        path: "settings",
-        element: <SettingsPage />,
+          {
+            path: "settings",
+            element: <SettingsPage />,
+          },
+        ],
       },
     ],
   },
