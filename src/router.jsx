@@ -9,12 +9,18 @@ import AnalyticsPage from "./Pages/AnalyticsPage";
 import ReportsPage from "./Pages/ReportsPage";
 import SettingsPage from "./Pages/SettingsPage";
 import { LoginForm } from "./Components/Auth/LoginForm";
+import { SignupForm } from "./Components/Auth/SignupForm";
 import { ProtectedRoute } from "./Components/Auth/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginForm />,
+  },
+
+  {
+    path: "/signup",
+    element: <SignupForm />,
   },
 
   {
