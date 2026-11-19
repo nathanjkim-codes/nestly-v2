@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Auth.css";
 
 export function SignupForm() {
   const [email, setemail] = useState("");
@@ -6,6 +8,7 @@ export function SignupForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setemail(e.target.value);
@@ -48,6 +51,7 @@ export function SignupForm() {
       }
 
       setMessage("Account created successfully");
+      navigate("/login", { replace: true });
     } catch (error) {
       setError("Unable to connect to the server");
     } finally {
@@ -56,7 +60,7 @@ export function SignupForm() {
   };
 
   return (
-    <form className="signup-form" onSubmit={handleSubmit}>
+    <form className="auth-form" onSubmit={handleSubmit}>
       <div className="form-group">
         <label htmlFor="signup-email">Email:</label>
         <input
@@ -81,9 +85,9 @@ export function SignupForm() {
         />
       </div>
       {error && <p className="error-message">{error}</p>}
-      {message && <p className="sucess-message">{message}</p>}
+      {message && <p className="success-message">{message}</p>}
 
-      <button type="submit" disabled={loading}>
+      <button className="auth-button" type="submit" disabled={loading}>
         {loading ? "Signing up..." : "Sign up"}
       </button>
     </form>
