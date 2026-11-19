@@ -10,6 +10,12 @@ export function DashboardPage() {
     growthRecords,
     growthRecordsLoading,
     growthRecordsError,
+    sleepRecords,
+    sleepRecordsLoading,
+    sleepRecordsError,
+    feedingRecords,
+    feedingRecordsLoading,
+    feedingRecordsError,
   } = useOutletContext();
 
   return (
@@ -19,6 +25,12 @@ export function DashboardPage() {
       growthRecords={growthRecords}
       growthRecordsLoading={growthRecordsLoading}
       growthRecordsError={growthRecordsError}
+      sleepRecords={sleepRecords}
+      sleepRecordsLoading={sleepRecordsLoading}
+      sleepRecordsError={sleepRecordsError}
+      feedingRecords={feedingRecords}
+      feedingRecordsLoading={feedingRecordsLoading}
+      feedingRecordsError={feedingRecordsError}
       childrenLoading={childrenLoading}
       childrenError={childrenError}
     />
