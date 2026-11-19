@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function LoginForm() {
   const [email, setEmail] = useState("");
@@ -6,6 +7,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
+  const navigate = useNavigate();
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -42,6 +44,7 @@ export function LoginForm() {
         return;
       }
 
+      navigate("/", { replace: true });
       setMessage("Login successful");
     } catch (error) {
       setError("Unable to connect to the server");
