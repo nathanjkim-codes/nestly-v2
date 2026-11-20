@@ -60,36 +60,53 @@ export function SignupForm() {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <div className="form-group">
-        <label htmlFor="signup-email">Email:</label>
-        <input
-          value={email}
-          onChange={handleEmailChange}
-          type="email"
-          id="signup-email"
-          placeholder="Please enter email"
-          required
-        />
+    <div className="auth-page">
+      <div className="auth-brand">
+        <p className="brand-title">NESTLY</p>
+        <p className="brand-description">
+          Your family's growth, all in one place.
+        </p>
       </div>
 
-      <div className="form-group">
-        <label htmlFor="signup-password">Password:</label>
-        <input
-          value={password}
-          onChange={handlePasswordChange}
-          id="signup-password"
-          type="password"
-          placeholder="Please enter password"
-          required
-        />
-      </div>
-      {error && <p className="error-message">{error}</p>}
-      {message && <p className="success-message">{message}</p>}
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <div className="auth-heading">
+          <h2 className="auth-title">Create an account</h2>
+          <p className="auth-subtitle">Sign up to get started with Nestly</p>
+        </div>
+        <div className="form-group">
+          <label htmlFor="signup-email" className="login-label">
+            Email:
+          </label>
+          <input
+            value={email}
+            onChange={handleEmailChange}
+            type="email"
+            id="signup-email"
+            placeholder="Please enter email"
+            required
+          />
+        </div>
 
-      <button className="auth-button" type="submit" disabled={loading}>
-        {loading ? "Signing up..." : "Sign up"}
-      </button>
-    </form>
+        <div className="form-group">
+          <label htmlFor="signup-password" className="login-label">
+            Password:
+          </label>
+          <input
+            value={password}
+            onChange={handlePasswordChange}
+            id="signup-password"
+            type="password"
+            placeholder="Please enter password"
+            required
+          />
+        </div>
+        {error && <p className="error-message">{error}</p>}
+        {message && <p className="success-message">{message}</p>}
+
+        <button className="auth-button" type="submit" disabled={loading}>
+          {loading ? "Signing up..." : "Sign up"}
+        </button>
+      </form>
+    </div>
   );
 }
