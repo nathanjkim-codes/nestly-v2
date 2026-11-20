@@ -1,6 +1,6 @@
 import { formatDate } from "../utils/formatDate";
 import { calculateAge } from "../utils/calculateAge";
-import { ChildForm } from "../Components/ChildForm";
+import { ChildForm } from "../Components/Children/ChildForm";
 import { useState } from "react";
 import { useOutletContext } from "react-router-dom";
 
@@ -17,6 +17,7 @@ export function ChildrenPage() {
     try {
       const response = await fetch("http://localhost:3000/api/children", {
         method: "POST",
+        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,6 +44,7 @@ export function ChildrenPage() {
   const handleDeleteById = async (id) => {
     try {
       const response = await fetch(`http://localhost:3000/api/children/${id}`, {
+        credentials: "include",
         method: "DELETE",
       });
 
@@ -74,10 +76,11 @@ export function ChildrenPage() {
         `http://localhost:3000/api/children/${editChild.id}`,
         {
           method: "PUT",
+          credentials: "include",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(updatedProfile),
+          body: JSON.stringify({ profile: updatedProfile }),
         },
       );
 

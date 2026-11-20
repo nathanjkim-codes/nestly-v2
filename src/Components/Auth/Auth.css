@@ -1,0 +1,138 @@
+.auth-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  box-sizing: border-box;
+
+  background-color: #090e20;
+  font-family: Arial, sans-serif;
+}
+
+.auth-brand {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  gap: 12px;
+  margin-bottom: 32px;
+}
+
+.brand-title {
+  color: #ffffff;
+  font-size: 30px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.brand-description {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #141c33;
+
+  width: 100%;
+  max-width: 400px;
+  padding: 32px;
+  border-radius: 16px;
+  box-sizing: border-box;
+}
+
+.auth-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+}
+
+.auth-title {
+  color: #ffffff;
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.auth-subtitle {
+  color: #9ca3af;
+  font-size: 12px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.login-label {
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 400;
+  margin: 0;
+}
+
+.auth-form input {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+
+  background-color: #090e20;
+  color: #ffffff;
+  border: 1px solid #35435f;
+  border-radius: 8px;
+
+  font-size: 14px;
+}
+
+.auth-form input:focus {
+  outline: 2px solid #7294ff;
+  outline-offset: 2px;
+}
+
+.auth-button {
+  width: 100%;
+  padding: 12px;
+  background-color: #4668ed;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+}
+
+.auth-button:hover:not(:disabled) {
+  background-color: #5e7dff;
+}
+
+.auth-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.auth-footer {
+  color: #9ca3af;
+  font-size: 14px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+}
+
+.auth-footer a {
+  color: #7294ff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.auth-footer a:hover {
+  text-decoration: underline;
+}

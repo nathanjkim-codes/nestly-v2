@@ -1,1024 +1,1640 @@
 import express from "express";
 import cors from "cors";
-
-let children = [
-  {
-    id: 1,
-
-    profile: {
-      name: "Emma",
-      age: "2 months",
-      gender: "Girl",
-      birthDate: "6-3-2023",
-      profileImage: "...",
-    },
-
-    currentStats: {
-      height: "22 in",
-      weight: "26 lbs",
-      sleep: "12hrs",
-      feeding: "2 times",
-      mood: "Needs attention",
-    },
-
-    insight: {
-      title: "✨ AI Insight",
-      message: "Emma is growing well!🌱",
-      description: "Her sleep and nutrition patterns look balanced.",
-    },
-
-    growthRecords: [
-      {
-        id: 1,
-        date: "2023-07-23T07:30:00",
-        height: 22.5,
-        weight: 11,
-      },
-      {
-        id: 2,
-        date: "2023-08-15T07:30:00",
-        height: 25,
-        weight: 15,
-      },
-      {
-        id: 3,
-        date: "2023-09-23T07:30:00",
-        height: 29,
-        weight: 20,
-      },
-      {
-        id: 4,
-        date: "2023-10-15T07:30:00",
-        height: 30,
-        weight: 21,
-      },
-      {
-        id: 5,
-        date: "2023-11-17T07:30:00",
-        height: 31.5,
-        weight: 21,
-      },
-      {
-        id: 6,
-        date: "2023-12-15T07:30:00",
-        height: 31.5,
-        weight: 20,
-      },
-      {
-        id: 7,
-        date: "2024-01-10T07:30:00",
-        height: 32,
-        weight: 21,
-      },
-      {
-        id: 8,
-        date: "2024-02-09T07:30:00",
-        height: 32,
-        weight: 21,
-      },
-      {
-        id: 9,
-        date: "2024-03-16T07:30:00",
-        height: 32.25,
-        weight: 22,
-      },
-      {
-        id: 10,
-        date: "2024-04-19T07:30:00",
-        height: 32.5,
-        weight: 22,
-      },
-      {
-        id: 11,
-        date: "2024-05-20T07:30:00",
-        height: 32.5,
-        weight: 21,
-      },
-      {
-        id: 12,
-        date: "2024-06-16T07:30:00",
-        height: 33,
-        weight: 21,
-      },
-      {
-        id: 13,
-        date: "2024-07-15T07:30:00",
-        height: 33,
-        weight: 22,
-      },
-      {
-        id: 14,
-        date: "2026-05-01T07:30:00",
-        height: 33.5,
-        weight: 22.5,
-      },
-      {
-        id: 15,
-        date: "2026-06-01T07:30:00",
-        height: 34,
-        weight: 23,
-      },
-      {
-        id: 16,
-        date: "2026-07-15T07:30:00",
-        height: 34.5,
-        weight: 23.5,
-      },
-      {
-        id: 17,
-        date: "2026-08-03T07:30:00",
-        height: 35,
-        weight: 24,
-      },
-      {
-        id: 18,
-        date: "2026-08-08T07:30:00",
-        height: 35.25,
-        weight: 24.5,
-      },
-    ],
-    sleepRecords: [
-      {
-        id: 1,
-        date: "2023-07-09T09:00:00",
-        day: "Sun",
-        duration: 10,
-        note: "Skipped afternoon nap.",
-      },
-      {
-        id: 2,
-        date: "2023-07-10T09:00:00",
-        day: "Mon",
-        duration: 11,
-        note: "Slept through the night.",
-      },
-      {
-        id: 3,
-        date: "2023-07-11T09:00:00",
-        day: "Tue",
-        duration: 9,
-        note: "Slept through the night.",
-      },
-      {
-        id: 4,
-        date: "2023-07-12T09:00:00",
-        day: "Wed",
-        duration: 10,
-        note: "Skipped afternoon nap.",
-      },
-      {
-        id: 5,
-        date: "2023-07-13T09:00:00",
-        day: "Thu",
-        duration: 11,
-        note: "Slept through the night.",
-      },
-      {
-        id: 6,
-        date: "2023-07-14T09:00:00",
-        day: "Fri",
-        duration: 12,
-        note: "Long afternoon nap.",
-      },
-      {
-        id: 7,
-        date: "2023-07-15T09:00:00",
-        day: "Sat",
-        duration: 10,
-        note: "Fell asleep later than usual.",
-      },
-      {
-        id: 8,
-        date: "2023-07-23T09:00:00",
-        day: "Sun",
-        duration: 9.5,
-        note: "Skipped afternoon nap.",
-      },
-      {
-        id: 9,
-        date: "2023-07-24T09:00:00",
-        day: "Mon",
-        duration: 10,
-        note: "Restless sleep due to teething.",
-      },
-      {
-        id: 10,
-        date: "2023-07-25T09:00:00",
-        day: "Tue",
-        duration: 8.5,
-        note: "Fell asleep later than usual.",
-      },
-      {
-        id: 11,
-        date: "2023-07-26T09:00:00",
-        day: "Wed",
-        duration: 9,
-        note: "Long afternoon nap.",
-      },
-      {
-        id: 12,
-        date: "2023-07-27T09:00:00",
-        day: "Thu",
-        duration: 9.5,
-        note: "Slept through the night.",
-      },
-      {
-        id: 13,
-        date: "2023-07-28T09:00:00",
-        day: "Fri",
-        duration: 8,
-        note: "Woke up twice during the night.",
-      },
-      {
-        id: 14,
-        date: "2023-07-29T09:15:00",
-        day: "Sat",
-        duration: 9,
-        note: "",
-      },
-      {
-        id: 15,
-        date: "2026-07-20T20:00:00",
-        duration: 9.2,
-      },
-      {
-        id: 16,
-        date: "2026-08-03T20:00:00",
-        duration: 9.5,
-      },
-      {
-        id: 17,
-        date: "2026-08-06T20:00:00",
-        duration: 8.8,
-      },
-      {
-        id: 18,
-        date: "2026-08-09T20:00:00",
-        duration: 9.7,
-      },
-    ],
-    feedingRecords: [
-      {
-        id: 1,
-        date: "2023-05-18T08:00:00",
-        type: "Formula",
-        amount: 5.0,
-        unit: "oz",
-        note: "Drank everything",
-      },
-      {
-        id: 2,
-        date: "2023-05-18T12:30:00",
-        type: "Breastmilk",
-        amount: 4.0,
-        unit: "oz",
-        note: "After nap",
-      },
-      {
-        id: 3,
-        date: "2023-05-18T05:45:00",
-        type: "Formula",
-        amount: 5.5,
-        unit: "oz",
-        note: "Morning feeding",
-      },
-      {
-        id: 4,
-        date: "2023-05-17T07:15:00",
-        type: "Breastmilk",
-        amount: 3.5,
-        unit: "oz",
-        note: "Left side",
-      },
-      {
-        id: 5,
-        date: "2023-05-17T11:45:00",
-        type: "Formula",
-        amount: 4.5,
-        unit: "oz",
-        note: "Good appetite",
-      },
-      {
-        id: 6,
-        date: "2023-05-17T03:00:00",
-        type: "Formula",
-        amount: 5.0,
-        unit: "oz",
-        note: "Night feeding",
-      },
-      {
-        id: 7,
-        date: "2023-05-16T08:30:00",
-        type: "Breastmilk",
-        amount: 4.0,
-        unit: "oz",
-        note: "Both sides",
-      },
-      {
-        id: 8,
-        date: "2023-05-16T01:15:00",
-        type: "Formula",
-        amount: 4.5,
-        unit: "oz",
-        note: "Before bedtime",
-      },
-      {
-        id: 9,
-        date: "2026-05-10T08:00:00",
-        type: "Formula",
-        amount: 4.2,
-        unit: "oz",
-        note: "",
-      },
-      {
-        id: 10,
-        date: "2026-06-15T08:00:00",
-        type: "Breastmilk",
-        amount: 4.5,
-        unit: "oz",
-        note: "",
-      },
-      {
-        id: 11,
-        date: "2026-07-20T08:00:00",
-        type: "Formula",
-        amount: 4.8,
-        unit: "oz",
-        note: "",
-      },
-      {
-        id: 12,
-        date: "2026-08-04T08:00:00",
-        type: "Breastmilk",
-        amount: 5.0,
-        unit: "oz",
-        note: "",
-      },
-      {
-        id: 13,
-        date: "2026-08-08T08:00:00",
-        type: "Formula",
-        amount: 5.3,
-        unit: "oz",
-        note: "",
-      },
-      {
-        id: 14,
-        date: "2026-07-30T08:00:00",
-        type: "Formula",
-        amount: 4,
-        unit: "oz",
-        note: "TEMP TEST",
-      },
-    ],
-    vaccinations: [],
-    milestones: [],
-    reports: [],
-  },
-
-  {
-    id: 2,
-
-    profile: {
-      name: "Evelyn",
-      age: "6 months",
-      gender: "Girl",
-      birthDate: "3-23-2023",
-      profileImage: "...",
-    },
-
-    currentStats: {
-      height: "25.75 in",
-      weight: "18 lbs",
-      sleep: "14hrs",
-      feeding: "4 times",
-      mood: "Positive",
-    },
-
-    insight: {
-      title: "✨ AI Insight",
-      message: "Evelyn is growing well!🌱",
-      description: "Her sleep and nutrition patterns look balanced.",
-    },
-
-    growthRecords: [
-      {
-        id: 1,
-        date: "2023-04-15T07:30:00",
-        height: 26,
-        weight: 18,
-      },
-
-      {
-        id: 2,
-        date: "2023-05-10T07:30:00",
-        height: 29,
-        weight: 20,
-      },
-      {
-        id: 3,
-        date: "2023-06-07T07:30:00",
-        height: 32,
-        weight: 25,
-      },
-      {
-        id: 14,
-        date: "2026-05-05T07:30:00",
-        height: 32.5,
-        weight: 21.5,
-      },
-      {
-        id: 15,
-        date: "2026-06-15T07:30:00",
-        height: 33,
-        weight: 22,
-      },
-      {
-        id: 16,
-        date: "2026-07-20T07:30:00",
-        height: 33.5,
-        weight: 22.5,
-      },
-      {
-        id: 17,
-        date: "2026-08-05T07:30:00",
-        height: 34,
-        weight: 23,
-      },
-      {
-        id: 18,
-        date: "2026-08-09T07:30:00",
-        height: 34.25,
-        weight: 23.3,
-      },
-    ],
-
-    sleepRecords: [
-      {
-        id: 1,
-        date: "2023-04-15T09:00:00",
-        day: "Sat",
-        duration: 8.5,
-        note: "Woke up twice during the night.",
-      },
-      {
-        id: 2,
-        date: "2023-04-16T09:00:00",
-        day: "Sun",
-        duration: 9,
-        note: "Slept through the night.",
-      },
-      {
-        id: 3,
-        date: "2023-04-17T09:00:00",
-        day: "Mon",
-        duration: 10.5,
-        note: "Long afternoon nap.",
-      },
-      {
-        id: 4,
-        date: "2023-04-18T09:00:00",
-        day: "Tue",
-        duration: 9.5,
-        note: "Fell asleep later than usual.",
-      },
-      {
-        id: 5,
-        date: "2023-04-19T09:00:00",
-        day: "Wed",
-        duration: 9,
-        note: "Restless sleep due to teething.",
-      },
-      {
-        id: 6,
-        date: "2023-04-20T09:00:00",
-        day: "Thu",
-        duration: 10,
-        note: "Skipped afternoon nap.",
-      },
-      {
-        id: 7,
-        date: "2023-04-21T09:00:00",
-        day: "Fri",
-        duration: 8,
-        note: "",
-      },
-      {
-        id: 15,
-        date: "2026-07-22T20:30:00",
-        day: "Wednesday",
-        duration: 8.9,
-      },
-      {
-        id: 16,
-        date: "2026-08-02T20:30:00",
-        day: "Sunday",
-        duration: 9.1,
-      },
-      {
-        id: 17,
-        date: "2026-08-06T20:30:00",
-        day: "Thursday",
-        duration: 9.4,
-      },
-      {
-        id: 18,
-        date: "2026-08-09T20:30:00",
-        day: "Sunday",
-        duration: 9.0,
-      },
-    ],
-    feedingRecords: [
-      {
-        id: 1,
-        date: "2023-04-20T12:45:00",
-        type: "Bottle",
-        amount: 4.5,
-        unit: "oz",
-        duration: 20,
-        note: "Finished the bottle",
-      },
-      {
-        id: 2,
-        date: "2023-04-20T07:30:00",
-        type: "Breastmilk",
-        amount: 3.5,
-        unit: "oz",
-        duration: 18,
-        note: "Left side",
-      },
-      {
-        id: 3,
-        date: "2023-04-19T20:15:00",
-        type: "Formula",
-        amount: 5,
-        unit: "oz",
-        duration: 25,
-        note: "Before bedtime",
-      },
-      {
-        id: 4,
-        date: "2026-05-15T08:00:00",
-        type: "Formula",
-        amount: 3.8,
-        unit: "oz",
-        duration: 19,
-        note: "",
-      },
-      {
-        id: 5,
-        date: "2026-06-20T08:00:00",
-        type: "Breastmilk",
-        amount: 4.1,
-        unit: "oz",
-        duration: 18,
-        note: "",
-      },
-      {
-        id: 6,
-        date: "2026-07-22T08:00:00",
-        type: "Formula",
-        amount: 4.4,
-        unit: "oz",
-        duration: 20,
-        note: "",
-      },
-      {
-        id: 7,
-        date: "2026-08-05T08:00:00",
-        type: "Breastmilk",
-        amount: 4.6,
-        unit: "oz",
-        duration: 18,
-        note: "",
-      },
-      {
-        id: 8,
-        date: "2026-08-09T08:00:00",
-        type: "Formula",
-        amount: 4.9,
-        unit: "oz",
-        duration: 20,
-        note: "",
-      },
-    ],
-    vaccinations: [],
-    milestones: [],
-    reports: [],
-  },
-];
+import pool from "./db.js";
+import argon2 from "argon2";
+import session from "express-session";
 
 // SERVER SETUP
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
+
+app.use(
+  session({
+    name: "nestly.sid",
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      httpOnly: true,
+      sameSite: "lax",
+    },
+  }),
+);
+
+function requireAuth(req, res, next) {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      error: "Not authenticated",
+    });
+  }
+  next();
+}
+
+// ========================================
+// AUTHENTICATION API
+// ========================================
+
+// SIGNUP
+app.post("/api/auth/signup", async (req, res) => {
+  try {
+    // Get user input
+    const email = req.body.email;
+    const password = req.body.password;
+
+    // Check for missing input
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Email and password are required",
+      });
+    }
+
+    // Hash password
+    const passwordHash = await argon2.hash(password);
+
+    // Save user to database
+    await pool.query(
+      `INSERT INTO users(email, Password_hash)
+      VALUES ($1, $2)`,
+      [email, passwordHash],
+    );
+
+    // Signup successful
+    res.status(201).json({
+      message: "Account created successfully",
+    });
+
+    // Handle server errors
+  } catch (error) {
+    console.error(error);
+
+    // Check for duplicate email
+    if (error.code === "23505") {
+      return res.status(409).json({
+        error: "Email already exists",
+      });
+    }
+
+    res.status(500).json({
+      error: "Failed to sign up",
+    });
+  }
+});
+
+// LOGIN
+app.post("/api/auth/login", async (req, res) => {
+  try {
+    const email = req.body.email;
+    const password = req.body.password;
+
+    if (!email || !password) {
+      return res.status(400).json({
+        error: "Email and password are required",
+      });
+    }
+
+    const result = await pool.query(`SELECT * FROM users WHERE email = $1`, [
+      email,
+    ]);
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    const isValidPassword = await argon2.verify(user.password_hash, password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({
+        error: "Invalid email or password",
+      });
+    }
+
+    req.session.userId = user.id;
+
+    return res.status(200).json({
+      message: "Successfully logged in",
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to log in",
+    });
+  }
+});
+
+// Check current user session
+app.get("/api/auth/me", async (req, res) => {
+  try {
+    if (!req.session.userId) {
+      return res.status(401).json({
+        error: "Not authenticated",
+      });
+    }
+
+    const result = await pool.query(
+      `SELECT id, email FROM users WHERE id = $1`,
+      [req.session.userId],
+    );
+
+    const user = result.rows[0];
+
+    if (!user) {
+      return res.status(401).json({
+        error: "Not authenticated",
+      });
+    }
+
+    return res.status(200).json({
+      user: user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to get current user",
+    });
+  }
+});
+
+// LOGOUT
+app.post("/api/auth/logout", (req, res) => {
+  if (!req.session.userId) {
+    return res.status(401).json({
+      error: "Not authenticated",
+    });
+  }
+
+  req.session.destroy((error) => {
+    if (error) {
+      return res.status(500).json({
+        error: "Failed to log out",
+      });
+    }
+    res.clearCookie("nestly.sid");
+
+    res.status(200).json({
+      message: "Successfully logged out",
+    });
+  });
+});
 
 // ========================================
 // CHILDREN REST API
 // ========================================
 
 // READ CHILD
-app.get("/api/children", (req, res) => {
-  res.json(children);
+app.get("/api/children", requireAuth, async (req, res) => {
+  try {
+    const result = await pool.query(
+      "SELECT * FROM children WHERE user_id = $1",
+      [req.session.userId],
+    );
+
+    // Format the data for React
+    const formattedChildren = result.rows.map((child) => {
+      return {
+        id: child.id,
+
+        profile: {
+          name: child.name,
+          gender: child.gender,
+          birthDate: child.birth_date,
+          profileImage: child.profile_image,
+        },
+
+        currentStats: child.current_stats,
+        insight: child.insight,
+
+        // Temporary until connect records
+        growthRecords: [],
+        sleepRecords: [],
+        feedingRecords: [],
+      };
+    });
+
+    // Send formatted data to React
+    res.json(formattedChildren);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+
+    res.status(500).json({
+      error: "Failed to fetch children",
+    });
+  }
 });
 
 // CREATE CHILD
-app.post("/api/children", (req, res) => {
-  const newChild = req.body;
+app.post("/api/children", requireAuth, async (req, res) => {
+  try {
+    // Get child data from the request body
+    const newChild = req.body;
 
-  children.push(newChild);
+    // Get the child's name
+    const name = newChild?.profile?.name;
 
-  res.json(newChild);
+    // Check if the name is a valid, non-empty string
+    if (typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({
+        error: "Child name is required",
+      });
+    }
+
+    // Get the child's gender
+    const gender = newChild?.profile?.gender;
+
+    // Check if the gender is allowed
+    if (!["boy", "girl"].includes(gender)) {
+      return res.status(400).json({
+        error: "Invalid gender",
+      });
+    }
+
+    // Get the child's birth date
+    const birthDate = newChild?.profile?.birthDate;
+
+    // Check if the birth date follows YYYY-MM-DD format
+    if (
+      typeof birthDate !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)
+    ) {
+      return res.status(400).json({
+        error: "Birth date must be YYYY-MM-DD",
+      });
+    }
+
+    // Convert the birth date into year, month, and day
+    const [year, month, day] = birthDate.split("-").map(Number);
+
+    // Create a Date object
+    const date = new Date(0);
+
+    // Set the birth date and reset the time
+    date.setFullYear(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+
+    // Check if the birth date actually exists
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return res.status(400).json({
+        error: "Birth date is not a real date",
+      });
+    }
+
+    // Get today's date and reset the time
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check if the birth date is in the future
+    if (date > today) {
+      return res.status(400).json({
+        error: "Birth date cannot be in the future",
+      });
+    }
+
+    // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
+
+    // Insert the new child into PostgreSQL
+    const result = await pool.query(
+      `INSERT INTO children (name, gender, birth_date, user_id)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *`,
+      [name.trim(), gender, birthDate, userId],
+    );
+
+    // Get the newly created child
+    const createdChild = result.rows[0];
+
+    // Format the data for React
+    const formattedChild = {
+      id: createdChild.id,
+
+      profile: {
+        name: createdChild.name,
+        gender: createdChild.gender,
+        birthDate: createdChild.birth_date,
+        profileImage: createdChild.profile_image,
+      },
+
+      currentStats: createdChild.current_stats,
+      insight: createdChild.insight,
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
+    };
+
+    // Send the created child to React
+    res.status(201).json(formattedChild);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+
+    // Send a 500 error response if creating a child fails
+    res.status(500).json({
+      error: "Failed to create child",
+    });
+  }
 });
 
 // UPDATE CHILD
-app.put("/api/children/:childId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const updatedData = req.body;
+app.put("/api/children/:childId", requireAuth, async (req, res) => {
+  try {
+    // Get the child ID from the URL
+    const childId = Number(req.params.childId);
 
-  let updatedChild;
+    // Check if the child ID is a positive integer
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child id",
+      });
+    }
+    // Get the updated child data from the request body
+    const updatedData = req.body;
 
-  const updatedChildren = children.map((currentChild) => {
-    if (currentChild.id === childId) {
-      updatedChild = {
-        ...currentChild,
-        profile: {
-          ...currentChild.profile,
-          ...updatedData,
-        },
-      };
-
-      return updatedChild;
+    // Check if the request body is a valid object
+    if (
+      !updatedData ||
+      typeof updatedData !== "object" ||
+      Array.isArray(updatedData)
+    ) {
+      return res.status(400).json({
+        error: "Invalid data",
+      });
     }
 
-    return currentChild;
-  });
+    // Get the child's name
+    const name = updatedData?.profile?.name;
 
-  if (!updatedChild) {
-    return res.status(404).json({
-      error: "Child not found",
+    // Check if the name is a valid, non-empty string
+    if (typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({
+        error: "Child name is required",
+      });
+    }
+
+    // Get the child's gender
+    const gender = updatedData?.profile?.gender;
+
+    // Check if the gender is allowed
+    if (!["boy", "girl"].includes(gender)) {
+      return res.status(400).json({
+        error: "Invalid gender",
+      });
+    }
+
+    // Get the child's birth date
+    const birthDate = updatedData?.profile?.birthDate;
+
+    // Check if the birth date follows YYYY-MM-DD format
+    if (
+      typeof birthDate !== "string" ||
+      !/^\d{4}-\d{2}-\d{2}$/.test(birthDate)
+    ) {
+      return res.status(400).json({
+        error: "Birth date must be YYYY-MM-DD",
+      });
+    }
+
+    // Convert the birth date into year, month, and day
+    const [year, month, day] = birthDate.split("-").map(Number);
+
+    // Create a Date object
+    const date = new Date(0);
+
+    // Set the birth date and reset the time
+    date.setFullYear(year, month - 1, day);
+    date.setHours(0, 0, 0, 0);
+
+    // Check if the birth date actually exists
+    if (
+      date.getFullYear() !== year ||
+      date.getMonth() !== month - 1 ||
+      date.getDate() !== day
+    ) {
+      return res.status(400).json({
+        error: "Birth date is not a real date",
+      });
+    }
+
+    // Get today's date and reset the time
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Check if the birth date is in the future
+    if (date > today) {
+      return res.status(400).json({
+        error: "Birth date cannot be in the future",
+      });
+    }
+
+    // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
+
+    // Update the child's information in PostgreSQL
+    const result = await pool.query(
+      `UPDATE children
+      SET 
+      name = $1,
+      gender = $2,
+      birth_date = $3
+
+      WHERE id = $4 AND user_id = $5
+      RETURNING *`,
+      [name.trim(), gender, birthDate, childId, userId],
+    );
+
+    // Get the updated child
+    const updatedChild = result.rows[0];
+
+    // Check if the child exists and belongs to the logged-in user
+    if (!updatedChild) {
+      return res.status(404).json({
+        error: "Child not found",
+      });
+    }
+
+    // Format the data for React
+    const formattedChild = {
+      id: updatedChild.id,
+      profile: {
+        name: updatedChild.name,
+        gender: updatedChild.gender,
+        birthDate: updatedChild.birth_date,
+        profileImage: updatedChild.profile_image,
+      },
+      currentStats: updatedChild.current_stats,
+      insight: updatedChild.insight,
+
+      growthRecords: [],
+      sleepRecords: [],
+      feedingRecords: [],
+    };
+
+    // Send the updated child to React
+    res.status(200).json(formattedChild);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+
+    // Send a 500 error response if updating a child fails
+    res.status(500).json({
+      error: "Failed to update child",
     });
   }
-
-  children = updatedChildren;
-  res.json(updatedChild);
 });
 
 // DELETE CHILD
-app.delete("/api/children/:childId", (req, res) => {
-  const childId = Number(req.params.childId);
+app.delete("/api/children/:childId", requireAuth, async (req, res) => {
+  try {
+    // Get the child ID from the URL
+    const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return child.id === childId;
-  });
+    // Check if the child ID is a positive integer
+    if (!Number.isInteger(childId) || childId <= 0) {
+      return res.status(400).json({
+        error: "Invalid child id",
+      });
+    }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
+    // Get the logged-in user's ID from the session
+    const userId = req.session.userId;
+
+    // Delete the child from PostgreSQL
+    const result = await pool.query(
+      `DELETE FROM children
+      WHERE id = $1 AND user_id =$2
+      RETURNING *`,
+      [childId, userId],
+    );
+
+    // Check if the child exists and belongs to the logged-in user
+    if (result.rows.length === 0) {
+      return res.status(404).json({
+        error: "Child not found",
+      });
+    }
+
+    // Send a 204 response if deleting the child succeeds
+    return res.sendStatus(204);
+  } catch (error) {
+    // Handle errors
+    console.error(error);
+
+    // Send a 500 error response if deleting a child fails
+    return res.status(500).json({
+      error: "Failed to delete child",
     });
   }
-
-  const updatedChildren = children.filter((child) => {
-    return childId !== child.id;
-  });
-
-  children = updatedChildren;
-  res.sendStatus(204);
 });
-
 // ========================================
 // GROWTH RECORDS REST API
 // ========================================
 
 // READ GROWTH RECORD
-app.get("/api/children/:childId/growthRecords", (req, res) => {
-  const childId = Number(req.params.childId);
+app.get(
+  "/api/children/:childId/growthRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // Get the child ID from the URL
+      const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // Check if the child ID is a positive integer
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  res.json(child.growthRecords);
-});
+      // Fetch growth records that belong to the logged-in user's child
+      const result = await pool.query(
+        `SELECT growth_records.* 
+        FROM growth_records 
+        JOIN children
+        ON growth_records.child_id = children.id
+        WHERE growth_records.child_id = $1 
+        AND children.user_id = $2`,
+        [childId, userId],
+      );
+
+      // Format the data for React
+      const formattedGrowthRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          height: Number(record.height),
+          weight: Number(record.weight),
+          note: record.note ?? "",
+        };
+      });
+      // Send formatted data to react
+      res.json(formattedGrowthRecords);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
+
+      // Send a 500 error response if fetching growth records fails
+      res.status(500).json({
+        error: "Failed to fetch GrowthRecords",
+      });
+    }
+  },
+);
 
 // CREATE GROWTH RECORD
-app.post("/api/children/:childId/growthRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+app.post(
+  "/api/children/:childId/growthRecords/",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // Get the child ID from the URL
+      const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      const newRecord = req.body;
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Validate child id
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  child.growthRecords.push(newRecord);
-  res.json(newRecord);
-});
+      // Validate date
+      if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
+
+      // Validate height
+      if (
+        newRecord.height === "" ||
+        newRecord.height === null ||
+        newRecord.height === undefined ||
+        !Number.isFinite(Number(newRecord.height)) ||
+        Number(newRecord.height) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid height",
+        });
+      }
+
+      // Validate weight
+      if (
+        newRecord.weight === "" ||
+        newRecord.weight === null ||
+        newRecord.weight === undefined ||
+        !Number.isFinite(Number(newRecord.weight)) ||
+        Number(newRecord.weight) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid weight",
+        });
+      }
+
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id
+        FROM children
+        WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // Stop if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // Insert the new growth record into PostgreSQL
+      const result = await pool.query(
+        `INSERT INTO growth_records 
+      (child_id, date, height, weight, note )
+      VALUES
+      ($1, $2, $3, $4, $5)
+      RETURNING *`,
+        [
+          childId,
+          newRecord.date,
+          newRecord.height,
+          newRecord.weight,
+          newRecord.note ?? "",
+        ],
+      );
+      // Get the newly saved record from PostgreSQL
+      const record = result.rows[0];
+
+      const savedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        height: Number(record.height),
+        weight: Number(record.weight),
+        note: record.note ?? "",
+      };
+      // Send the saved record back to React with status 201
+      res.status(201).json(savedRecord);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
+
+      // Send a 500 error response if fetching growth records fails
+      res.status(500).json({
+        error: "Failed to create growthRecords",
+      });
+    }
+  },
+);
 
 // UPDATE GROWTH RECORD
-app.put("/api/children/:childId/growthRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
-  const updatedData = req.body;
+app.put(
+  "/api/children/:childId/growthRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      const childId = Number(req.params.childId);
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
+      const recordId = Number(req.params.recordId);
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record id",
+        });
+      }
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // Get the updated growth record data from the request body
+      const { date, height, weight, note } = req.body;
 
-  let updatedRecord;
+      // Validate height
+      if (!Number.isFinite(height) || height <= 0) {
+        return res.status(400).json({
+          error: "Height must be a positive number",
+        });
+      }
+      // Validate weight
+      if (!Number.isFinite(weight) || weight <= 0) {
+        return res.status(400).json({
+          error: "Weight must be a positive number",
+        });
+      }
 
-  const updatedGrowthRecords = child.growthRecords.map((currentRecord) => {
-    if (currentRecord.id === recordId) {
-      updatedRecord = {
-        ...currentRecord,
-        ...updatedData,
+      const childResult = await pool.query(
+        `SELECT id
+        FROM children
+        WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+      const result = await pool.query(
+        `UPDATE growth_records
+      SET
+      date = $1,
+      height = $2,
+      weight = $3,
+      note = $4
+      
+      WHERE id = $5 AND child_id = $6
+      RETURNING *`,
+        [date, height, weight, note, recordId, childId],
+      );
+
+      // Get the updated record from PostgreSQL
+      const updatedRecord = result.rows[0];
+
+      // Return 404 if the growth record does not exist
+      if (!updatedRecord) {
+        return res.status(404).json({
+          error: "Growth record not found",
+        });
+      }
+
+      const formattedGrowthRecord = {
+        id: updatedRecord.id,
+        childId: updatedRecord.child_id,
+        date: updatedRecord.date,
+        height: Number(updatedRecord.height),
+        weight: Number(updatedRecord.weight),
+        note: updatedRecord.note ?? "",
       };
+      // Send the updated record back to React with status 200
+      res.status(200).json(formattedGrowthRecord);
+    } catch (error) {
+      //Handle errors
+      console.error(error);
 
-      return updatedRecord;
+      // Send status 500 if the server fails to update the record
+      res.status(500).json({
+        error: "Fail to update growthRecords",
+      });
     }
-
-    return currentRecord;
-  });
-
-  if (!updatedRecord) {
-    return res.status(404).json({
-      error: "Growth record not found",
-    });
-  }
-
-  child.growthRecords = updatedGrowthRecords;
-  res.json(updatedRecord);
-});
+  },
+);
 
 // DELETE GROWTH RECORD
-app.delete("/api/children/:childId/growthRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+app.delete(
+  "/api/children/:childId/growthRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Validate recordId
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record id",
+        });
+      }
 
-  const record = child.growthRecords.find((currentRecord) => {
-    return currentRecord.id === recordId;
-  });
+      // 4. Get logged-in user's ID from session
+      const userId = req.session.userId;
 
-  if (!record) {
-    return res.status(404).json({
-      error: "Growth record not found",
-    });
-  }
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
 
-  const updatedGrowthRecords = child.growthRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
 
-  child.growthRecords = updatedGrowthRecords;
-  res.sendStatus(204);
-});
+      // 7. Delete the matching growth record
+      const result = await pool.query(
+        `DELETE FROM growth_records
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
+        [recordId, childId],
+      );
+
+      // 8. Return 404 if no matching growth record was found
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Record not found",
+        });
+      }
+
+      // 9. Return 204 when successfully deleted
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+
+      return res.status(500).json({
+        error: "Failed to delete record",
+      });
+    }
+  },
+);
 
 // ========================================
 // SLEEP RECORDS REST API
 // ========================================
 
-// READ SLEEP RECORD
-app.get("/api/children/:childId/sleepRecords", (req, res) => {
-  const childId = Number(req.params.childId);
+// READ SLEEP RECORDS
+app.get(
+  "/api/children/:childId/sleepRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child id",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  res.json(child.sleepRecords);
-});
+      // 4. Fetch only sleep records belonging to the user's child
+      const result = await pool.query(
+        `SELECT sleep_records.*
+         FROM sleep_records
+         JOIN children ON sleep_records.child_id = children.id
+         WHERE sleep_records.child_id = $1
+         AND children.user_id = $2`,
+        [childId, userId],
+      );
+
+      // 5. Format the data for React
+      const formattedSleepRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          day: record.day,
+          duration: Number(record.duration),
+          note: record.note ?? "",
+        };
+      });
+
+      // 6. Send formatted data to React
+      return res.status(200).json(formattedSleepRecords);
+    } catch (error) {
+      console.error(error);
+
+      // 7. Handle server errors
+      return res.status(500).json({
+        error: "Failed to fetch sleepRecords",
+      });
+    }
+  },
+);
 
 // CREATE SLEEP RECORD
-app.post("/api/children/:childId/sleepRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+app.post(
+  "/api/children/:childId/sleepRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Get the new sleep record from request body
+      const newRecord = req.body;
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  child.sleepRecords.push(newRecord);
-  res.json(newRecord);
-});
+      // 4. Validate date
+      if (!newRecord.date || Number.isNaN(new Date(newRecord.date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
 
-// UPDATE SLEEP RECORD
-app.put("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
-  const updatedData = req.body;
+      // 5. Validate duration
+      if (
+        newRecord.duration === "" ||
+        newRecord.duration === null ||
+        newRecord.duration === undefined ||
+        !Number.isFinite(Number(newRecord.duration)) ||
+        Number(newRecord.duration) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid duration",
+        });
+      }
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 6. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 7. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
 
-  let updatedRecord;
+      // 8. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
 
-  const updatedSleepRecords = child.sleepRecords.map((currentRecord) => {
-    if (currentRecord.id === recordId) {
-      updatedRecord = {
-        ...currentRecord,
-        ...updatedData,
+      // 9. Insert the sleep record into PostgreSQL
+      const result = await pool.query(
+        `INSERT INTO sleep_records
+         (child_id, date, day, duration, note)
+         VALUES ($1, $2, $3, $4, $5)
+         RETURNING *`,
+        [
+          childId,
+          newRecord.date,
+          newRecord.day,
+          newRecord.duration,
+          newRecord.note ?? "",
+        ],
+      );
+
+      // 10. Format the saved record for React
+      const record = result.rows[0];
+
+      const savedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        day: record.day,
+        duration: Number(record.duration),
+        note: record.note ?? "",
       };
 
-      return updatedRecord;
+      // 11. Return 201 Created
+      return res.status(201).json(savedRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 12. Handle server errors
+      return res.status(500).json({
+        error: "Failed to create sleep record",
+      });
     }
+  },
+);
 
-    return currentRecord;
-  });
+// UPDATE SLEEP RECORD
+app.put(
+  "/api/children/:childId/sleepRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  if (!updatedRecord) {
-    return res.status(404).json({
-      error: "Sleep record not found",
-    });
-  }
+      // 2. Get the updated sleep record from request body
+      const newRecord = req.body;
 
-  child.sleepRecords = updatedSleepRecords;
-  res.json(updatedRecord);
-});
+      // 3. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
+
+      // 4. Validate recordId
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
+
+      // 5. Validate request body
+      if (
+        !newRecord ||
+        typeof newRecord !== "object" ||
+        Array.isArray(newRecord)
+      ) {
+        return res.status(400).json({
+          error: "Invalid request body",
+        });
+      }
+
+      // 6. Get the updated fields from request body
+      const { date, day, duration, note } = newRecord;
+
+      // 7. Validate date
+      if (!date || Number.isNaN(new Date(date).getTime())) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
+
+      // 8. Validate duration
+      if (
+        duration === "" ||
+        duration === null ||
+        duration === undefined ||
+        !Number.isFinite(Number(duration)) ||
+        Number(duration) <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid duration",
+        });
+      }
+
+      // 9. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 10. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id
+         FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 11. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 12. Update the matching sleep record in PostgreSQL
+      const result = await pool.query(
+        `UPDATE sleep_records
+         SET date = $1,
+             day = $2,
+             duration = $3,
+             note = $4
+         WHERE id = $5 AND child_id = $6
+         RETURNING *`,
+        [date, day, duration, note ?? "", recordId, childId],
+      );
+
+      // 13. Get the updated record from PostgreSQL
+      const record = result.rows[0];
+
+      // 14. Return 404 if the sleep record does not exist
+      if (!record) {
+        return res.status(404).json({
+          error: "Sleep record not found",
+        });
+      }
+
+      // 15. Format the updated record for React
+      const updatedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        day: record.day,
+        duration: Number(record.duration),
+        note: record.note ?? "",
+      };
+
+      // 16. Return 200 OK with the updated record
+      return res.status(200).json(updatedRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 17. Handle server errors
+      return res.status(500).json({
+        error: "Failed to update sleep record",
+      });
+    }
+  },
+);
 
 // DELETE SLEEP RECORD
-app.delete("/api/children/:childId/sleepRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+app.delete(
+  "/api/children/:childId/sleepRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Validate recordId
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
 
-  const record = child.sleepRecords.find((currentRecord) => {
-    return currentRecord.id === recordId;
-  });
+      // 4. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  if (!record) {
-    return res.status(404).json({
-      error: "Sleep record not found",
-    });
-  }
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children
+         WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
 
-  const updatedSleepRecords = child.sleepRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
 
-  child.sleepRecords = updatedSleepRecords;
-  res.sendStatus(204);
-});
+      // 7. Delete the matching sleep record from PostgreSQL
+      const result = await pool.query(
+        `DELETE FROM sleep_records
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
+        [recordId, childId],
+      );
 
+      // 8. Return 404 if the sleep record does not exist
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Sleep record not found",
+        });
+      }
+
+      // 9. Return 204 No Content after successful deletion
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+
+      // 10. Handle unexpected server errors
+      return res.status(500).json({
+        error: "Failed to delete sleep record",
+      });
+    }
+  },
+);
 // ========================================
 // FEEDING RECORDS REST API
 // ========================================
 
 // READ FEEDING RECORD
-app.get("/api/children/:childId/feedingRecords", (req, res) => {
-  const childId = Number(req.params.childId);
+app.get(
+  "/api/children/:childId/feedingRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL
+      const childId = Number(req.params.childId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate childId
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Get the logged in user's ID from the session
+      const userId = req.session.userId;
 
-  res.json(child.feedingRecords);
-});
+      // 4. Fetch only feeding records belonging to the user's child
+      const result = await pool.query(
+        `SELECT feeding_records.*
+        FROM feeding_records
+        JOIN children ON feeding_records.child_id = children.id
+        WHERE feeding_records.child_id = $1 
+        AND children.user_id = $2 `,
+        [childId, userId],
+      );
+
+      // 5. Format the data for React
+      const formattedFeedingRecords = result.rows.map((record) => {
+        return {
+          id: record.id,
+          childId: record.child_id,
+          date: record.date,
+          type: record.type,
+          amount: Number(record.amount),
+          duration: record.duration == null ? null : Number(record.duration),
+          note: record.note ?? "",
+        };
+      });
+
+      // 6. Send formatted data to react
+      res.json(formattedFeedingRecords);
+    } catch (error) {
+      console.error(error);
+
+      // 7. Handle server errors
+      res.status(500).json({
+        error: "Failed to fetch feeding records",
+      });
+    }
+  },
+);
 
 // CREATE FEEDING RECORD
-app.post("/api/children/:childId/feedingRecords", (req, res) => {
-  const childId = Number(req.params.childId);
-  const newRecord = req.body;
+app.post(
+  "/api/children/:childId/feedingRecords",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId from URL and new record from request body
+      const childId = Number(req.params.childId);
+      const newRecord = req.body;
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate child ID
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Validate request body
+      if (
+        !newRecord ||
+        typeof newRecord !== "object" ||
+        Array.isArray(newRecord)
+      ) {
+        return res.status(400).json({
+          error: "Invalid request body",
+        });
+      }
 
-  child.feedingRecords.push(newRecord);
-  res.json(newRecord);
-});
+      // 4. Validate date
+      if (
+        !newRecord?.date ||
+        Number.isNaN(new Date(newRecord.date).getTime())
+      ) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
 
-// UPDATE FEEDING RECORD
-app.put("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
-  const updatedData = req.body;
+      // 5. Validate type
+      if (!newRecord.type || typeof newRecord.type !== "string") {
+        return res.status(400).json({
+          error: "Invalid feeding type",
+        });
+      }
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 6. Validate amount
+      if (
+        newRecord.amount == null ||
+        newRecord.amount === "" ||
+        !Number.isFinite(newRecord.amount) ||
+        newRecord.amount <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid amount",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 7. Validate duration
+      if (
+        newRecord.duration != null &&
+        (!Number.isInteger(newRecord.duration) || newRecord.duration <= 0)
+      ) {
+        return res.status(400).json({ error: "Invalid duration" });
+      }
 
-  let updatedRecord;
+      // 8. Validate note
+      if (newRecord.note != null && typeof newRecord.note !== "string") {
+        return res.status(400).json({
+          error: "Invalid note",
+        });
+      }
 
-  const updatedFeedingRecords = child.feedingRecords.map((currentRecord) => {
-    if (currentRecord.id === recordId) {
-      updatedRecord = {
-        ...currentRecord,
-        ...updatedData,
+      // 9. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 10. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        "SELECT id FROM children WHERE id = $1 AND user_id = $2",
+        [childId, userId],
+      );
+
+      // 11. Check if child exists
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 12. Insert feeding record into PostgreSQL
+      const result = await pool.query(
+        `INSERT INTO feeding_records
+       (child_id, date, type, amount, duration, note)
+       VALUES ($1, $2, $3, $4, $5, $6)
+       RETURNING *`,
+        [
+          childId,
+          newRecord.date,
+          newRecord.type,
+          newRecord.amount,
+          newRecord.duration ?? null,
+          newRecord.note ?? "",
+        ],
+      );
+
+      // 13. Format data for React
+      const record = result.rows[0];
+
+      const createdRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        type: record.type,
+        amount: Number(record.amount),
+        duration: record.duration == null ? null : Number(record.duration),
+        note: record.note ?? "",
       };
 
-      return updatedRecord;
+      // 14. Send created record
+      return res.status(201).json(createdRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 15. Handle server errors
+      return res.status(500).json({
+        error: "Failed to create feeding record",
+      });
     }
+  },
+);
 
-    return currentRecord;
-  });
+// UPDATE FEEDING RECORD
+app.put(
+  "/api/children/:childId/feedingRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  if (!updatedRecord) {
-    return res.status(404).json({
-      error: "Feeding record not found",
-    });
-  }
+      // 2. Get the updated feeding record from request body
+      const updatedRecord = req.body;
 
-  child.feedingRecords = updatedFeedingRecords;
-  res.json(updatedRecord);
-});
+      // 3. Validate child ID
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
+
+      // 4. Validate record ID
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
+
+      // 5. Validate request body
+      if (
+        !updatedRecord ||
+        typeof updatedRecord !== "object" ||
+        Array.isArray(updatedRecord)
+      ) {
+        return res.status(400).json({
+          error: "Invalid request body",
+        });
+      }
+
+      // 6. Validate date
+      if (
+        !updatedRecord?.date ||
+        Number.isNaN(new Date(updatedRecord.date).getTime())
+      ) {
+        return res.status(400).json({
+          error: "Invalid date",
+        });
+      }
+
+      // 7. Validate type
+      if (!updatedRecord.type || typeof updatedRecord.type !== "string") {
+        return res.status(400).json({
+          error: "Invalid feeding type",
+        });
+      }
+
+      // 8. Validate amount
+      if (
+        updatedRecord.amount == null ||
+        updatedRecord.amount === "" ||
+        !Number.isFinite(updatedRecord.amount) ||
+        updatedRecord.amount <= 0
+      ) {
+        return res.status(400).json({
+          error: "Invalid amount",
+        });
+      }
+
+      // 9. Validate duration
+      if (
+        updatedRecord.duration != null &&
+        (!Number.isInteger(updatedRecord.duration) ||
+          updatedRecord.duration <= 0)
+      ) {
+        return res.status(400).json({
+          error: "Invalid duration",
+        });
+      }
+
+      // 10. Validate note
+      if (
+        updatedRecord.note != null &&
+        typeof updatedRecord.note !== "string"
+      ) {
+        return res.status(400).json({
+          error: "Invalid note",
+        });
+      }
+
+      // 11. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
+
+      // 12. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 13. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 14. Update the matching feeding record in PostgreSQL
+      const result = await pool.query(
+        `UPDATE feeding_records
+   SET date = $1,
+       type = $2,
+       amount = $3,
+       duration = $4,
+       note = $5
+   WHERE id = $6 AND child_id = $7
+   RETURNING *`,
+        [
+          updatedRecord.date,
+          updatedRecord.type,
+          updatedRecord.amount,
+          updatedRecord.duration ?? null,
+          updatedRecord.note ?? "",
+          recordId,
+          childId,
+        ],
+      );
+
+      // 15. Get the updated record from PostgreSQL
+      const record = result.rows[0];
+
+      // 16. Return 404 if the feeding record does not exist
+      if (!record) {
+        return res.status(404).json({
+          error: "Feeding record not found",
+        });
+      }
+
+      // 17. Format the updated record for React
+      const formattedRecord = {
+        id: record.id,
+        childId: record.child_id,
+        date: record.date,
+        type: record.type,
+        amount: Number(record.amount),
+        duration: record.duration == null ? null : Number(record.duration),
+        note: record.note ?? "",
+      };
+
+      // 18. Return 200 OK with the updated record
+      return res.status(200).json(formattedRecord);
+    } catch (error) {
+      console.error(error);
+
+      // 19. Handle server errors
+      return res.status(500).json({
+        error: "Failed to update feeding record",
+      });
+    }
+  },
+);
 
 // DELETE FEEDING RECORD
-app.delete("/api/children/:childId/feedingRecords/:recordId", (req, res) => {
-  const childId = Number(req.params.childId);
-  const recordId = Number(req.params.recordId);
+app.delete(
+  "/api/children/:childId/feedingRecords/:recordId",
+  requireAuth,
+  async (req, res) => {
+    try {
+      // 1. Get childId and recordId from URL
+      const childId = Number(req.params.childId);
+      const recordId = Number(req.params.recordId);
 
-  const child = children.find((child) => {
-    return childId === child.id;
-  });
+      // 2. Validate child ID
+      if (!Number.isInteger(childId) || childId <= 0) {
+        return res.status(400).json({
+          error: "Invalid child ID",
+        });
+      }
 
-  if (!child) {
-    return res.status(404).json({
-      error: "Child not found",
-    });
-  }
+      // 3. Validate record ID
+      if (!Number.isInteger(recordId) || recordId <= 0) {
+        return res.status(400).json({
+          error: "Invalid record ID",
+        });
+      }
 
-  const updatedFeedingRecords = child.feedingRecords.filter((currentRecord) => {
-    return recordId !== currentRecord.id;
-  });
+      // 4. Get the logged-in user's ID from the session
+      const userId = req.session.userId;
 
-  child.feedingRecords = updatedFeedingRecords;
-  res.sendStatus(204);
-});
+      // 5. Check if the child belongs to the logged-in user
+      const childResult = await pool.query(
+        `SELECT id FROM children WHERE id = $1 AND user_id = $2`,
+        [childId, userId],
+      );
+
+      // 6. Return 404 if the child does not belong to the user
+      if (childResult.rows.length === 0) {
+        return res.status(404).json({
+          error: "Child not found",
+        });
+      }
+
+      // 7.Delete matching feeding record from PostgreSQL
+      const result = await pool.query(
+        `DELETE FROM feeding_records
+         WHERE id = $1 AND child_id = $2
+         RETURNING *`,
+        [recordId, childId],
+      );
+
+      // 8. Return 404 if the feeding record does not exist
+      if (result.rows.length === 0) {
+        return res.status(404).json({
+          error: "Feeding record not found",
+        });
+      }
+
+      // 9. Return 204 No content
+      return res.sendStatus(204);
+    } catch (error) {
+      console.error(error);
+
+      // 10. Handle server errors
+      return res.status(500).json({
+        error: "Failed to delete feeding record",
+      });
+    }
+  },
+);
 // ========================================
 // START SERVER
 // ========================================

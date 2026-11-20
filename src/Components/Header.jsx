@@ -1,8 +1,19 @@
 import ChildSelector from "./ChildSelector.jsx";
 
-function Header({ children, setSelectedChildId, selectedChild }) {
-  if (!selectedChild) {
+function Header({
+  children,
+  setSelectedChildId,
+  selectedChild,
+  childrenLoading,
+}) {
+  // Show loading while fetching data
+  if (childrenLoading) {
     return <div>Loading...</div>;
+  }
+
+  // Show empty state when no child is selected
+  if (!selectedChild) {
+    return null;
   }
   return (
     <div className="header">
