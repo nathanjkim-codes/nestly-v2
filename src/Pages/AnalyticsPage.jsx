@@ -21,7 +21,7 @@ import {
 } from "recharts";
 
 export function AnalyticsPage() {
-  const [dateRange, setDateRange] = useState("30");
+  const [dateRange, setDateRange] = useState("all");
 
   const {
     selectedChild,
