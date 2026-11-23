@@ -16,15 +16,59 @@ import {
 } from "../utils/dateUtils.js";
 import { formatDecimalHours } from "../utils/formatDecimalHours.js";
 
-function Dashboard({ selectedChild, selectedUnit }) {
-  if (!selectedChild) {
-    return <div>Loading...</div>;
+function Dashboard({
+  selectedChild,
+  selectedUnit,
+  childrenLoading,
+  childrenError,
+  growthRecords,
+  growthRecordsLoading,
+  growthRecordsError,
+  sleepRecords,
+  sleepRecordsLoading,
+  sleepRecordsError,
+  feedingRecords,
+  feedingRecordsLoading,
+  feedingRecordsError,
+}) {
+  // Check if data is still loading
+  if (childrenLoading) {
+    return <div>Loading children...</div>;
   }
 
-  const currentStats = selectedChild.currentStats;
-  const growthRecords = selectedChild.growthRecords;
-  const sleepRecords = selectedChild.sleepRecords;
-  const feedingRecords = selectedChild.feedingRecords;
+  // Check if fetch failed
+  if (childrenError) {
+    return <div>{childrenError}</div>;
+  }
+
+  // Check if no child is available
+  if (!selectedChild) {
+    return <div>No children yet.</div>;
+  }
+
+  if (growthRecordsLoading) {
+    return <div>Loading growth records...</div>;
+  }
+
+  if (growthRecordsError) {
+    return <div>{growthRecordsError}</div>;
+  }
+
+  if (sleepRecordsLoading) {
+    return <div>Loading sleep records...</div>;
+  }
+
+  if (sleepRecordsError) {
+    return <div>{sleepRecordsError}</div>;
+  }
+
+  if (feedingRecordsLoading) {
+    return <div>Loading feeding records...</div>;
+  }
+
+  if (feedingRecordsError) {
+    return <div>{feedingRecordsError}</div>;
+  }
 
   const units = measurementUnits(selectedUnit);
 
@@ -268,9 +312,11 @@ function Dashboard({ selectedChild, selectedUnit }) {
             heightConversion(latestGrowthRecord.height, selectedUnit),
           )} ${units.height}`
         : "No data",
-      trend: hasPreviousGrowthRecord
-        ? `${monthlyHeightTrend} ${formatDecimal(heightConversion(Math.abs(monthlyHeightDifference), selectedUnit))} ${units.height} vs last month`
-        : "No data",
+      trend: !hasGrowthRecord
+        ? "No records yet"
+        : hasPreviousGrowthRecord
+          ? `${monthlyHeightTrend} ${formatDecimal(heightConversion(Math.abs(monthlyHeightDifference), selectedUnit))} ${units.height} vs last month`
+          : "No previous month data",
     },
 
     {
@@ -282,9 +328,11 @@ function Dashboard({ selectedChild, selectedUnit }) {
             weightConversion(latestGrowthRecord.weight, selectedUnit),
           )} ${units.weight}`
         : "No data",
-      trend: hasPreviousGrowthRecord
-        ? `${monthlyWeightTrend} ${formatDecimal(weightConversion(Math.abs(monthlyWeightDifference), selectedUnit))} ${units.weight} vs last month`
-        : "No data",
+      trend: !hasGrowthRecord
+        ? "No records yet"
+        : hasPreviousGrowthRecord
+          ? `${monthlyWeightTrend} ${formatDecimal(weightConversion(Math.abs(monthlyWeightDifference), selectedUnit))} ${units.weight} vs last month`
+          : "No previous month data",
     },
 
     {
@@ -292,9 +340,11 @@ function Dashboard({ selectedChild, selectedUnit }) {
       icon: "🌙",
       title: "Sleep",
       value: hasSleepRecord ? `${latestSleepRecord.duration} hrs` : "No data",
-      trend: hasPreviousSleepWeekRecords
-        ? `${weeklySleepTrend} ${formatDecimalHours(Math.abs(weeklySleepDifference))} vs last week`
-        : "No data",
+      trend: !hasSleepRecord
+        ? "No records yet"
+        : hasPreviousSleepWeekRecords
+          ? `${weeklySleepTrend} ${formatDecimalHours(Math.abs(weeklySleepDifference))} vs last week`
+          : "No previous week data",
     },
 
     {
@@ -306,17 +356,11 @@ function Dashboard({ selectedChild, selectedUnit }) {
             feedingConversion(latestFeedingRecord.amount, selectedUnit),
           )} ${units.feeding}`
         : "No data",
-      trend: hasPreviousFeedingWeekRecords
-        ? `${weeklyFeedingTrend} ${formatDecimal(feedingConversion(Math.abs(weeklyFeedingDifference), selectedUnit))} ${units.feeding} vs last week`
-        : "No data",
-    },
-
-    {
-      id: "mood",
-      icon: "😊",
-      title: "Mood",
-      value: currentStats.mood,
-      trend: "Mostly positive",
+      trend: !hasFeedingRecord
+        ? "No records yet"
+        : hasPreviousFeedingWeekRecords
+          ? `${weeklyFeedingTrend} ${formatDecimal(feedingConversion(Math.abs(weeklyFeedingDifference), selectedUnit))} ${units.feeding} vs last week`
+          : "No previous week data",
     },
   ];
 

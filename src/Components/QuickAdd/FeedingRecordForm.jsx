@@ -9,21 +9,23 @@ export function FeedingRecordForm({
     e.preventDefault();
 
     const dateTime = `${dateInput}T${timeInput}`;
+    const duration = durationInput === "" ? null : Number(durationInput);
     if (editFeedingRecord) {
       const updatedFeedingRecord = {
         id: editFeedingRecord.id,
         date: dateTime,
         type: typeInput,
         amount: Number(amountInput),
+        duration: duration,
         note: noteInput,
       };
       handleUpdateRecord(updatedFeedingRecord);
     } else {
       const newRecord = {
-        id: crypto.randomUUID(),
         date: dateTime,
         type: typeInput,
         amount: Number(amountInput),
+        duration: duration,
         note: noteInput,
       };
       handleAddRecord(newRecord);
@@ -34,6 +36,7 @@ export function FeedingRecordForm({
   const [timeInput, setTimeInput] = useState("");
   const [typeInput, setTypeInput] = useState("");
   const [amountInput, setAmountInput] = useState("");
+  const [durationInput, setDurationInput] = useState("");
   const [noteInput, setNoteInput] = useState("");
 
   const handleDateChange = (e) => {
@@ -52,6 +55,10 @@ export function FeedingRecordForm({
     setAmountInput(e.target.value);
   };
 
+  const handleDurationChange = (e) => {
+    setDurationInput(e.target.value);
+  };
+
   const handleNoteChange = (e) => {
     setNoteInput(e.target.value);
   };
@@ -64,6 +71,7 @@ export function FeedingRecordForm({
       setTimeInput(time);
       setTypeInput(editFeedingRecord.type);
       setAmountInput(editFeedingRecord.amount);
+      setDurationInput(editFeedingRecord.duration ?? "");
       setNoteInput(editFeedingRecord.note);
     }
   }, [editFeedingRecord]);
@@ -119,6 +127,18 @@ export function FeedingRecordForm({
           value={amountInput}
           onChange={handleAmountChange}
           required
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="feeding-duration">Duration:</label>
+        <input
+          type="number"
+          id="feeding-duration"
+          value={durationInput}
+          onChange={handleDurationChange}
+          min="1"
+          step="1"
         />
       </div>
 

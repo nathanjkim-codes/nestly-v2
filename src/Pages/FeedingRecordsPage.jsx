@@ -2,24 +2,39 @@ import { useOutletContext } from "react-router-dom";
 import { formatDate } from "../utils/formatDate";
 import { formatTime } from "../utils/formatTime";
 import { formatDecimal } from "../utils/formatDecimal";
+import { formatDuration } from "../utils/formatDuration";
 import { measurementUnits } from "../utils/measurementUnits";
 import { feedingConversion } from "../utils/measurementConversion";
 import { useState } from "react";
 import { FeedingRecordForm } from "../Components/QuickAdd/FeedingRecordForm";
 
 export function FeedingRecordsPage() {
-  const { selectedChild, selectedUnit, children, setChildren } =
-    useOutletContext();
+  const {
+    selectedChild,
+    selectedUnit,
+    children,
+    setChildren,
+    feedingRecords,
+    setFeedingRecords,
+    feedingRecordsLoading,
+    feedingRecordsError,
+  } = useOutletContext();
   const [isFeedingFormOpen, setIsFeedingFormOpen] = useState(false);
   const [editFeedingRecord, setEditFeedingRecord] = useState(null);
 
+  if (feedingRecordsLoading) {
+    return <div>Loading feeding records...</div>;
+  }
+
+  if (feedingRecordsError) {
+    return <div>{feedingRecordsError}</div>;
+  }
+
   if (!selectedChild) {
-    return <div>Loading...</div>;
+    return <div>No children yet. Add a child to get started.</div>;
   }
 
   const units = measurementUnits(selectedUnit);
-
-  const feedingRecords = selectedChild.feedingRecords;
 
   const sortedFeedingRecords = [...feedingRecords].sort(
     (a, b) => new Date(b.date) - new Date(a.date),
@@ -47,40 +62,33 @@ export function FeedingRecordsPage() {
 
   // CREATE FEEDING RECORD
   const handleAddRecord = async (newRecord) => {
-    const response = await fetch(
-      `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
+        {
+          credentials: "include",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newRecord),
         },
-        body: JSON.stringify(newRecord),
-      },
-    );
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status:${response.status}`);
-    }
+      );
 
-    const createdRecord = await response.json();
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
 
-    setChildren((currentChildren) => {
-      const updatedChildren = currentChildren.map((child) => {
-        if (child.id === selectedChild.id) {
-          const updatedFeedingRecords = [
-            ...child.feedingRecords,
-            createdRecord,
-          ];
-          const updatedChild = {
-            ...child,
-            feedingRecords: updatedFeedingRecords,
-          };
-          return updatedChild;
-        }
-        return child;
+      const createdRecord = await response.json();
+
+      setFeedingRecords((currentRecords) => {
+        return [...currentRecords, createdRecord];
       });
-      return updatedChildren;
-    });
-    setIsFeedingFormOpen(false);
+
+      setIsFeedingFormOpen(false);
+    } catch (error) {
+      console.error("Create failed:", error);
+    }
   };
 
   // DELETE FEEDING RECORD
@@ -89,6 +97,7 @@ export function FeedingRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${record.id}`,
         {
+          credentials: "include",
           method: "DELETE",
         },
       );
@@ -97,27 +106,10 @@ export function FeedingRecordsPage() {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedFeedingRecords = child.feedingRecords.filter(
-              (currentRecord) => {
-                return currentRecord.id !== record.id;
-              },
-            );
-
-            const updatedChild = {
-              ...child,
-              feedingRecords: updatedFeedingRecords,
-            };
-
-            return updatedChild;
-          }
-
-          return child;
+      setFeedingRecords((currentRecords) => {
+        return currentRecords.filter((currentRecord) => {
+          return currentRecord.id !== record.id;
         });
-
-        return updatedChildren;
       });
     } catch (error) {
       console.error("Delete failed:", error);
@@ -130,6 +122,7 @@ export function FeedingRecordsPage() {
       const response = await fetch(
         `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${updatedRecord.id}`,
         {
+          credentials: "include",
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
@@ -144,31 +137,14 @@ export function FeedingRecordsPage() {
 
       const savedRecord = await response.json();
 
-      setChildren((currentChildren) => {
-        const updatedChildren = currentChildren.map((child) => {
-          if (child.id === selectedChild.id) {
-            const updatedFeedingRecords = child.feedingRecords.map(
-              (currentRecord) => {
-                if (currentRecord.id === savedRecord.id) {
-                  return savedRecord;
-                }
-
-                return currentRecord;
-              },
-            );
-
-            const updatedChild = {
-              ...child,
-              feedingRecords: updatedFeedingRecords,
-            };
-
-            return updatedChild;
+      setFeedingRecords((currentRecords) => {
+        return currentRecords.map((currentRecord) => {
+          if (currentRecord.id === savedRecord.id) {
+            return savedRecord;
           }
 
-          return child;
+          return currentRecord;
         });
-
-        return updatedChildren;
       });
 
       setIsFeedingFormOpen(false);
@@ -298,7 +274,11 @@ export function FeedingRecordsPage() {
                       feedingConversion(record.amount, selectedUnit),
                     )} ${units.feeding}`}
                   </td>
-                  <td>{record.duration} min</td>
+                  <td>
+                    {record.duration == null
+                      ? "-"
+                      : formatDuration(record.duration)}
+                  </td>
                   <td>{record.note || "No note"}</td>
                   <td>
                     <div className="page-cell-actions">
