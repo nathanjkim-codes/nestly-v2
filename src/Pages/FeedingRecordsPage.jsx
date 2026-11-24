@@ -282,7 +282,6 @@ export function FeedingRecordsPage() {
                   <td>{record.note || "No note"}</td>
                   <td>
                     <div className="page-cell-actions">
-                      <button className="page-view-btn">View</button>
                       <button
                         className="page-edit-btn"
                         onClick={() => handleOpenEditRecord(record)}

@@ -187,7 +187,6 @@ export function ChildrenPage() {
 
                   <td>
                     <div className="page-cell-actions">
-                      <button className="page-view-btn">View</button>
                       <button
                         className="page-edit-btn"
                         onClick={() => handleOpenEditChild(child)}

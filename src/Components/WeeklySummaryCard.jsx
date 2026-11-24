@@ -72,7 +72,6 @@ function WeeklySummaryCard({ growthRecords, sleepRecords }) {
     <div className="dashboard-card weekly-summary-card">
       <div className="card-header">
         <h3 className="card-title">Weekly Summary</h3>
-        <button className="card-action-button">View Report</button>
       </div>
       <div className="summary-list">
         <div className="summary-item">

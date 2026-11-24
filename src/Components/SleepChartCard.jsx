@@ -9,6 +9,7 @@ import {
 } from "recharts";
 
 import { formatDecimalHours } from "../utils/formatDecimalHours";
+import { Link } from "react-router-dom";
 
 function SleepChartCard({ sleepRecords }) {
   const hasSleepRecords = sleepRecords.length >= 1;
@@ -62,7 +63,9 @@ function SleepChartCard({ sleepRecords }) {
     <div className="dashboard-card sleep-chart-card">
       <div className="chart-header">
         <h3 className="card-title">Sleep This Week</h3>
-        <button className="card-action-button">View all</button>
+        <Link to="/sleep" className="card-action-button">
+          View all
+        </Link>
       </div>
       {hasSleepRecords ? (
         <>
