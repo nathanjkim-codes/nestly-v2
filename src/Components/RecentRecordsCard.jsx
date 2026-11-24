@@ -89,7 +89,6 @@ function RecentRecordsCard({ growthRecords, sleepRecords, feedingRecords }) {
     <div className="dashboard-card recent-records-card">
       <div className="chart-header">
         <h3 className="card-title">Recent Records</h3>
-        <button className="card-action-button">View all</button>
       </div>
 
       <div className="records-list">

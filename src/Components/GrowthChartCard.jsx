@@ -13,6 +13,7 @@ import {
   CartesianGrid,
   Tooltip,
 } from "recharts";
+import { Link } from "react-router-dom";
 
 function GrowthChartCard({ growthRecords, selectedUnit }) {
   const units = measurementUnits(selectedUnit);
@@ -113,7 +114,9 @@ function GrowthChartCard({ growthRecords, selectedUnit }) {
     <div className="dashboard-card growth-chart-card">
       <div className="chart-header">
         <h3 className="card-title">Growth Over Time</h3>
-        <button className="card-action-button">View all</button>
+        <Link to="/growth" className="card-action-button">
+          View all
+        </Link>
       </div>
       {hasGrowthRecords ? (
         <>
