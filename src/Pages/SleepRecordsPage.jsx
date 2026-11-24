@@ -61,7 +61,7 @@ export function SleepRecordsPage() {
     try {
       // 1. Send new form data to Express → PostgreSQL
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/sleepRecords`,
         {
           credentials: "include",
           method: "POST",
@@ -99,7 +99,7 @@ export function SleepRecordsPage() {
     try {
       // 1. Send DELETE request to Express → PostgreSQL
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${record.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/sleepRecords/${record.id}`,
         {
           credentials: "include",
           method: "DELETE",
@@ -130,7 +130,7 @@ export function SleepRecordsPage() {
     try {
       // 1. Send updated form data to Express → PostgreSQL
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/sleepRecords/${updatedRecord.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/sleepRecords/${updatedRecord.id}`,
         {
           credentials: "include",
           method: "PUT",

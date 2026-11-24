@@ -31,14 +31,17 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/login", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/login`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      });
+      );
 
       if (!response.ok) {
         setError("Invalid email or password");

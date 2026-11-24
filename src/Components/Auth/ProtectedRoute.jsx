@@ -9,9 +9,12 @@ export function ProtectedRoute() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/auth/me", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/auth/me`,
+          {
+            credentials: "include",
+          },
+        );
 
         if (response.status === 401) {
           setAuthenticated(false);

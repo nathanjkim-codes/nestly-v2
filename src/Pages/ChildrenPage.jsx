@@ -15,14 +15,17 @@ export function ChildrenPage() {
   // CREATE
   const handleAddChild = async (newChild) => {
     try {
-      const response = await fetch("http://localhost:3000/api/children", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/children`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newChild),
         },
-        body: JSON.stringify(newChild),
-      });
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -43,10 +46,13 @@ export function ChildrenPage() {
   // DELETE
   const handleDeleteById = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/children/${id}`, {
-        credentials: "include",
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/children/${id}`,
+        {
+          credentials: "include",
+          method: "DELETE",
+        },
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
@@ -73,7 +79,7 @@ export function ChildrenPage() {
   const handleUpdateChild = async (updatedProfile) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${editChild.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${editChild.id}`,
         {
           method: "PUT",
           credentials: "include",
