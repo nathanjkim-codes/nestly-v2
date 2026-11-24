@@ -24,21 +24,24 @@ export function SignupForm() {
     setMessage("");
 
     if (!email || !password) {
-      setError("Please fill in all field");
+      setError("Please fill in all fields");
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch("http://localhost:3000/api/auth/signup", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/auth/signup`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
         },
-        body: JSON.stringify({ email, password }),
-      });
+      );
 
       if (response.status === 409) {
         setError("Email is already registered");

@@ -64,7 +64,7 @@ export function FeedingRecordsPage() {
   const handleAddRecord = async (newRecord) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/feedingRecords`,
         {
           credentials: "include",
           method: "POST",
@@ -95,7 +95,7 @@ export function FeedingRecordsPage() {
   const handleDeleteRecord = async (record) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${record.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/feedingRecords/${record.id}`,
         {
           credentials: "include",
           method: "DELETE",
@@ -120,7 +120,7 @@ export function FeedingRecordsPage() {
   const handleUpdateRecord = async (updatedRecord) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/feedingRecords/${updatedRecord.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/feedingRecords/${updatedRecord.id}`,
         {
           credentials: "include",
           method: "PUT",

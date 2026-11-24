@@ -35,9 +35,12 @@ function App() {
   useEffect(() => {
     const fetchChildren = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/children", {
-          credentials: "include",
-        });
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/children`,
+          {
+            credentials: "include",
+          },
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! Status: ${response.status}`);
@@ -84,7 +87,7 @@ function App() {
         setGrowthRecordsLoading(true);
         setGrowthRecordsError(null);
         const response = await fetch(
-          `http://localhost:3000/api/children/${selectedChildId}/growthRecords`,
+          `${import.meta.env.VITE_API_URL}/api/children/${selectedChildId}/growthRecords`,
           {
             credentials: "include",
           },
@@ -121,7 +124,7 @@ function App() {
         setSleepRecordsLoading(true);
         setSleepRecordsError(null);
         const response = await fetch(
-          `HTTP://localhost:3000/api/children/${selectedChildId}/sleepRecords`,
+          `${import.meta.env.VITE_API_URL}/api/children/${selectedChildId}/sleepRecords`,
           {
             credentials: "include",
           },
@@ -162,7 +165,7 @@ function App() {
         setFeedingRecordsError(null);
 
         const response = await fetch(
-          `http://localhost:3000/api/children/${selectedChildId}/feedingRecords`,
+          `${import.meta.env.VITE_API_URL}/api/children/${selectedChildId}/feedingRecords`,
           {
             credentials: "include",
           },

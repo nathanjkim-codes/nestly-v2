@@ -56,7 +56,7 @@ export function GrowthRecordsPage() {
   const handleAddRecord = async (newRecord) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/growthRecords`,
         {
           credentials: "include",
           method: "POST",
@@ -87,7 +87,7 @@ export function GrowthRecordsPage() {
   const handleDeleteRecord = async (record) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${record.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/growthRecords/${record.id}`,
         {
           credentials: "include",
           method: "DELETE",
@@ -112,7 +112,7 @@ export function GrowthRecordsPage() {
   const handleUpdateRecord = async (updatedGrowthRecord) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/children/${selectedChild.id}/growthRecords/${updatedGrowthRecord.id}`,
+        `${import.meta.env.VITE_API_URL}/api/children/${selectedChild.id}/growthRecords/${updatedGrowthRecord.id}`,
         {
           credentials: "include",
           method: "PUT",
